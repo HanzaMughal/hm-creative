@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HM Creative — Digital Ads by Hamza Mughal</title>
+  <meta name="description" content="HM Creative — Premium digital advertising and creative portfolio by Hamza Mughal. Elevating brands with stunning visual storytelling." />
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Firebase CDN (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar" id="navbar">
+  <div class="container nav-inner">
+    <a href="index.html" class="nav-logo">HM <span>Creative</span></a>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <!-- Auth state: shown dynamically -->
+      <div id="navAuthArea"></div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <div class="hero-bg">
+    <div class="hero-grid"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+  </div>
+
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="fas fa-circle"></i> Available for Projects
+      </div>
+
+      <h1 class="hero-name">
+        I'm <span class="gold">Hamza Mughal</span><br />
+        Digital Ads Creator
+      </h1>
+
+      <p class="hero-tagline">
+        Crafting <strong>high-impact digital advertising</strong> that stops
+        the scroll and drives real results — from social media campaigns to
+        full brand identities.
+      </p>
+
+      <div class="hero-cta">
+        <a href="#portfolio" class="btn btn-gold">
+          <i class="fas fa-eye"></i> View My Work
+        </a>
+        <button class="btn btn-outline" id="heroChat">
+          <i class="fas fa-comment-dots"></i> Let's Chat
+        </button>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span class="stat-number" data-target="150">0</span>
+          <span class="stat-label">Projects Done</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="60">0</span>
+          <span class="stat-label">Happy Clients</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="5">0</span>
+          <span class="stat-label">Years Experience</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <i class="fas fa-chevron-down"></i>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <!-- Image -->
+      <div class="about-img-wrap">
+        <div class="about-img-frame">
+          <img
+            src="images/hamza.png"
+            alt="Hamza Mughal — Digital Ads Creator"
+            class="about-photo"
+            loading="eager"
+          />
+        </div>
+        <div class="about-badge">
+          <strong>5+</strong> Years of Excellence
+        </div>
+      </div>
+
+      <!-- Text -->
+      <div class="about-text">
+        <p class="section-title">About <span>Me</span></p>
+        <div class="gold-line"></div>
+        <p>
+          Hey, I'm Hamza — a passionate digital ads creator based in Pakistan.
+          I specialize in creating visually stunning and strategically effective
+          advertising content that helps brands stand out in the digital landscape.
+        </p>
+        <p>
+          From eye-catching social media ads to compelling video content and
+          full brand campaigns, I bring ideas to life with creativity, precision,
+          and data-driven thinking.
+        </p>
+
+        <div class="skills-grid">
+          <span class="skill-tag">Social Media Ads</span>
+          <span class="skill-tag">Video Production</span>
+          <span class="skill-tag">Brand Identity</span>
+          <span class="skill-tag">Motion Graphics</span>
+          <span class="skill-tag">Facebook Ads</span>
+          <span class="skill-tag">Instagram Reels</span>
+          <span class="skill-tag">Content Strategy</span>
+          <span class="skill-tag">Graphic Design</span>
+        </div>
+
+        <a href="#contact" class="btn btn-gold">
+          <i class="fas fa-paper-plane"></i> Work With Me
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PORTFOLIO ── -->
+<section class="portfolio" id="portfolio">
+  <div class="container">
+    <div class="portfolio-header">
+      <div>
+        <h2 class="section-title">My <span>Portfolio</span></h2>
+        <div class="gold-line"></div>
+        <p class="section-subtitle" style="margin-bottom:0">
+          A curated selection of my best work
+        </p>
+      </div>
+      <div class="filter-tabs" id="filterTabs">
+        <button class="filter-tab active" data-cat="all">All</button>
+      </div>
+    </div>
+
+    <div class="portfolio-grid" id="portfolioGrid">
+      <!-- skeleton loaders -->
+      <div class="skeleton-card">
+        <div class="skeleton skeleton-media"></div>
+        <div class="skeleton-body">
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-desc"></div>
+          <div class="skeleton skeleton-desc2"></div>
+        </div>
+      </div>
+      <div class="skeleton-card">
+        <div class="skeleton skeleton-media"></div>
+        <div class="skeleton-body">
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-desc"></div>
+          <div class="skeleton skeleton-desc2"></div>
+        </div>
+      </div>
+      <div class="skeleton-card">
+        <div class="skeleton skeleton-media"></div>
+        <div class="skeleton-body">
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-desc"></div>
+          <div class="skeleton skeleton-desc2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SOCIAL LINKS ── -->
+<section class="socials" id="socials">
+  <div class="container">
+    <div class="socials-inner">
+      <p class="socials-title">Find me on</p>
+      <div class="social-icons" id="socialIcons">
+        <!-- loaded from Firestore -->
+        <div class="skeleton" style="width:52px;height:52px;border-radius:14px;"></div>
+        <div class="skeleton" style="width:52px;height:52px;border-radius:14px;"></div>
+        <div class="skeleton" style="width:52px;height:52px;border-radius:14px;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CHAT CTA ── -->
+<section class="chat-cta" id="chat-cta">
+  <div class="container">
+    <div class="chat-cta-inner">
+      <h2><span>Chat</span> With Me</h2>
+      <p>
+        Have a project in mind? Send me a message directly — I usually reply
+        within a few hours.
+        <br /><span class="chat-pulse"></span><em>Online &amp; ready to help</em>
+      </p>
+      <button class="btn btn-gold" id="chatCTABtn">
+        <i class="fas fa-comment-dots"></i> Start Conversation
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h2>Get In <span>Touch</span></h2>
+        <div class="gold-line"></div>
+        <p>
+          Ready to elevate your brand? Let's create something extraordinary
+          together. Drop me a message and I'll get back to you soon!
+        </p>
+        <div class="contact-items">
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <span>hamza@hmcreative.com</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Pakistan</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-clock"></i>
+            <span>Mon – Sat, 9 AM – 10 PM PKT</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-form">
+        <div class="glass-card">
+          <form id="contactForm">
+            <div class="form-group">
+              <label for="cName">Your Name</label>
+              <input type="text" id="cName" placeholder="Hamza Mughal" required />
+            </div>
+            <div class="form-group">
+              <label for="cEmail">Email Address</label>
+              <input type="email" id="cEmail" placeholder="you@example.com" required />
+            </div>
+            <div class="form-group">
+              <label for="cMessage">Message</label>
+              <textarea id="cMessage" rows="4" placeholder="Tell me about your project…" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-gold full-btn" id="contactSendBtn">
+              <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CATEGORIES ── -->
+<section class="categories-section" id="categories">
+  <div class="container">
+    <div class="text-center" style="margin-bottom:2.5rem;">
+      <h2 class="section-title">What I <span>Offer</span></h2>
+      <div class="gold-line" style="margin:0.75rem auto 0;"></div>
+      <p class="section-subtitle">Specialized services tailored for your brand</p>
+    </div>
+    <div class="categories-grid" id="categoriesGrid">
+      <!-- Skeleton loaders -->
+      <div class="cat-skeleton"><div class="skeleton" style="height:120px;border-radius:16px;"></div></div>
+      <div class="cat-skeleton"><div class="skeleton" style="height:120px;border-radius:16px;"></div></div>
+      <div class="cat-skeleton"><div class="skeleton" style="height:120px;border-radius:16px;"></div></div>
+      <div class="cat-skeleton"><div class="skeleton" style="height:120px;border-radius:16px;"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo">HM <span>Creative</span></div>
+      <p class="footer-copy">
+        © <span id="footerYear"></span> HM Creative. All rights reserved.
+        Crafted with ♥ by Hamza Mughal.
+      </p>
+      <div class="footer-links">
+        <a href="#about">About</a>
+        <a href="#portfolio">Work</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- ── SCRIPTS ── -->
+<script>
+/* ── Navbar scroll ── */
+window.addEventListener("scroll", () => {
+  document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 50);
+});
+
+/* ── Mobile nav toggle ── */
+const navToggle = document.getElementById("navToggle");
+const navLinks  = document.getElementById("navLinks");
+navToggle.addEventListener("click", () => {
+  navToggle.classList.toggle("open");
+  navLinks.classList.toggle("open");
+});
+navLinks.querySelectorAll("a").forEach(a =>
+  a.addEventListener("click", () => {
+    navToggle.classList.remove("open");
+    navLinks.classList.remove("open");
+  })
+);
+
+/* ── Counter animation ── */
+function animateCounters() {
+  document.querySelectorAll(".stat-number[data-target]").forEach((el) => {
+    const target = +el.dataset.target;
+    let current  = 0;
+    const step   = Math.ceil(target / 60);
+    const timer  = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = current + "+";
+      if (current >= target) clearInterval(timer);
+    }, 25);
+  });
+}
+
+const heroObserver = new IntersectionObserver(([e]) => {
+  if (e.isIntersecting) { animateCounters(); heroObserver.disconnect(); }
+}, { threshold: 0.3 });
+heroObserver.observe(document.querySelector(".stats-bar"));
+
+/* ── Footer year ── */
+document.getElementById("footerYear").textContent = new Date().getFullYear();
+
+/* ── Toast helper ── */
+function showToast(msg, type = "success") {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className   = `toast show ${type}`;
+  setTimeout(() => t.classList.remove("show"), 3500);
+}
+
+/* ── Auth state — Nav & Chat buttons ── */
+const navAuthArea = document.getElementById("navAuthArea");
+let currentUser   = null;
+
+auth.onAuthStateChanged(async (user) => {
+  currentUser = user;
+  if (user) {
+    let displayName = user.displayName;
+    try {
+      const userSnap = await db.collection("users").doc(user.uid).get();
+      if (userSnap.exists && userSnap.data().name) {
+        displayName = userSnap.data().name;
+      }
+    } catch (e) {
+      console.warn("Could not fetch user name from Firestore:", e);
+    }
+
+    const photoSrc = user.photoURL ||
+      `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName || "U")}&background=f5a623&color=000&bold=true`;
+    navAuthArea.innerHTML = `
+      <div class="nav-user">
+        <img src="${photoSrc}" alt="${displayName || 'User'}" />
+        <span>${(displayName || user.email || "User").split(" ")[0]}</span>
+      </div>`;
+    
+    // Start listening for admin replies
+    listenForAdminReplies(user.uid);
+  } else {
+    navAuthArea.innerHTML = `
+      <a href="login.html" class="btn btn-ghost" style="padding:0.45rem 1.1rem;font-size:0.82rem;">
+        <i class="fas fa-sign-in-alt"></i> Login
+      </a>`;
+  }
+});
+
+let repliesListener = null;
+let lastMsgCount = -1;
+function listenForAdminReplies(uid) {
+  if (repliesListener) return;
+  repliesListener = rtdb.ref(`chats/${uid}/messages`);
+  repliesListener.on("value", (snap) => {
+    const msgs = [];
+    snap.forEach(child => msgs.push(child.val()));
+    
+    if (lastMsgCount !== -1 && msgs.length > lastMsgCount) {
+      const lastMsg = msgs[msgs.length - 1];
+      // Only play sound and notify if the message is from the admin
+      if (lastMsg.senderId !== uid) {
+        playNotificationSound();
+        showToast(`Hamza: "${lastMsg.text.substring(0, 32)}${lastMsg.text.length > 32 ? '...' : ''}"`, "success");
+        // Click to go directly to chat page
+        const t = document.getElementById("toast");
+        if (t) {
+          t.style.pointerEvents = "auto";
+          t.style.cursor = "pointer";
+          t.onclick = () => { window.location.href = "chat.html"; };
+        }
+      }
+    }
+    lastMsgCount = msgs.length;
+  });
+}
+
+/* ── Chat button routing ── */
+function gotoChat() {
+  if (currentUser) {
+    window.location.href = "chat.html";
+  } else {
+    // store intended destination
+    sessionStorage.setItem("redirectAfterLogin", "chat.html");
+    window.location.href = "login.html";
+  }
+}
+
+document.getElementById("heroChat")?.addEventListener("click", gotoChat);
+document.getElementById("chatCTABtn")?.addEventListener("click", gotoChat);
+
+/* ── Load Portfolio from Firestore ── */
+let allProjects = [];
+let activeCategory = "all";
+
+async function loadPortfolio() {
+  const grid = document.getElementById("portfolioGrid");
+  const tabs  = document.getElementById("filterTabs");
+
+  try {
+    const snap = await db.collection("projects").orderBy("createdAt", "desc").get();
+    allProjects = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+    // Build category tabs from projects (deduped)
+    const categories = [...new Set(allProjects.map(p => p.category).filter(Boolean))];
+    // Remove any existing dynamic tabs first
+    tabs.querySelectorAll(".filter-tab:not([data-cat='all'])").forEach(t => t.remove());
+    categories.forEach(cat => {
+      const btn = document.createElement("button");
+      btn.className   = "filter-tab";
+      btn.dataset.cat = cat;
+      btn.textContent = cat;
+      tabs.appendChild(btn);
+    });
+
+    renderProjects("all");
+  } catch (err) {
+    console.error("Portfolio load error:", err);
+    document.getElementById("portfolioGrid").innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-exclamation-circle"></i>
+        <p>Could not load projects. Please try again later.</p>
+      </div>`;
+  }
+}
+
+/* ── Category icon map ── */
+const CAT_ICONS = {
+  "Video Ads":    { icon: "fas fa-video",         color: "#f5a623" },
+  "Graphic Ads":  { icon: "fas fa-palette",        color: "#e879f9" },
+  "Social Media": { icon: "fas fa-hashtag",         color: "#38bdf8" },
+  "Web/App":      { icon: "fas fa-globe",           color: "#4ade80" },
+  "Motion":       { icon: "fas fa-film",            color: "#fb923c" },
+  "Branding":     { icon: "fas fa-star",            color: "#facc15" },
+  "Photography":  { icon: "fas fa-camera",          color: "#f87171" },
+  "Content":      { icon: "fas fa-pen-nib",         color: "#a78bfa" },
+};
+
+/* ── Load Categories from Firestore ── */
+async function loadCategories() {
+  const grid = document.getElementById("categoriesGrid");
+  try {
+    const snap = await db.collection("categories").orderBy("order", "asc").get();
+    if (snap.empty) {
+      grid.innerHTML = `<div class="cat-empty"><i class="fas fa-folder-open"></i><p>No categories yet.</p></div>`;
+      return;
+    }
+    grid.innerHTML = snap.docs.map(d => {
+      const data  = d.data();
+      const info  = CAT_ICONS[data.name] || { icon: "fas fa-layer-group", color: "#f5a623" };
+      return `
+        <div class="cat-card fade-in-up">
+          <div class="cat-icon" style="--ci:${info.color}">
+            <i class="${info.icon}"></i>
+          </div>
+          <h3 class="cat-name">${data.name}</h3>
+          ${data.description ? `<p class="cat-desc">${data.description}</p>` : ""}
+        </div>`;
+    }).join("");
+  } catch (err) {
+    console.error("Categories load error:", err);
+    grid.innerHTML = `<div class="cat-empty"><i class="fas fa-exclamation-circle"></i><p>Could not load categories.</p></div>`;
+  }
+}
+
+function renderProjects(category) {
+  const grid = document.getElementById("portfolioGrid");
+  grid.innerHTML = "";
+
+  const filtered = category === "all"
+    ? allProjects
+    : allProjects.filter(p => p.category === category);
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-folder-open"></i>
+        <p>No projects found in this category.</p>
+      </div>`;
+    return;
+  }
+
+  filtered.forEach((project, i) => {
+    const card = document.createElement("div");
+    card.className = "project-card";
+    card.style.animationDelay = `${i * 0.08}s`;
+
+    let mediaHTML = "";
+    if (project.mediaUrl) {
+      const isVideo = /\.(mp4|webm|ogg)$/i.test(project.mediaUrl);
+      mediaHTML = isVideo
+        ? `<video src="${project.mediaUrl}" muted loop autoplay playsinline></video>`
+        : `<img src="${project.mediaUrl}" alt="${project.title}" loading="lazy" />`;
+    } else {
+      mediaHTML = `<div class="project-media-placeholder"><i class="fas fa-photo-film"></i></div>`;
+    }
+
+    card.innerHTML = `
+      <div class="project-media">
+        ${mediaHTML}
+        <div class="project-overlay"></div>
+        ${project.category ? `<span class="project-category-badge">${project.category}</span>` : ""}
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">${project.title || "Untitled Project"}</h3>
+        <p class="project-desc">${project.description || ""}</p>
+      </div>`;
+
+    grid.appendChild(card);
+  });
+}
+
+/* ── Filter tabs ── */
+document.getElementById("filterTabs").addEventListener("click", (e) => {
+  const tab = e.target.closest(".filter-tab");
+  if (!tab) return;
+  document.querySelectorAll(".filter-tab").forEach(t => t.classList.remove("active"));
+  tab.classList.add("active");
+  renderProjects(tab.dataset.cat);
+});
+
+/* ── Load Social Links ── */
+async function loadSocialLinks() {
+  const container = document.getElementById("socialIcons");
+
+  const iconMap = {
+    instagram:  { icon: "fab fa-instagram",  color: "#E1306C" },
+    facebook:   { icon: "fab fa-facebook-f", color: "#1877F2" },
+    twitter:    { icon: "fab fa-x-twitter",  color: "#ffffff" },
+    x:          { icon: "fab fa-x-twitter",  color: "#ffffff" },
+    tiktok:     { icon: "fab fa-tiktok",     color: "#ffffff" },
+    youtube:    { icon: "fab fa-youtube",    color: "#FF0000" },
+    linkedin:   { icon: "fab fa-linkedin-in",color: "#0A66C2" },
+    whatsapp:   { icon: "fab fa-whatsapp",   color: "#25D366" },
+    snapchat:   { icon: "fab fa-snapchat",   color: "#FFFC00" },
+    pinterest:  { icon: "fab fa-pinterest",  color: "#E60023" },
+    behance:    { icon: "fab fa-behance",    color: "#1769FF" },
+    dribbble:   { icon: "fab fa-dribbble",   color: "#EA4C89" },
+    fiverr:     { icon: "fas fa-dollar-sign",color: "#1DBF73" },
+  };
+
+  try {
+    const snap = await db.collection("settings").doc("socialLinks").get();
+
+    if (!snap.exists || !snap.data()) {
+      container.innerHTML = '<p style="color:var(--text-dim);font-size:0.85rem;">No social links configured yet.</p>';
+      return;
+    }
+
+    const links = snap.data();
+    container.innerHTML = "";
+
+    Object.entries(links).forEach(([type, value]) => {
+      if (!value) return;
+      const info = iconMap[type.toLowerCase()] || { icon: "fas fa-link", color: "#f5a623" };
+
+      // WhatsApp: format as wa.me link
+      const href = type.toLowerCase() === "whatsapp"
+        ? `https://wa.me/${value.replace(/\D/g, "")}`
+        : value;
+
+      const a = document.createElement("a");
+      a.href   = href;
+      a.target = "_blank";
+      a.rel    = "noopener noreferrer";
+      a.className = "social-icon-btn";
+      a.title  = type;
+      a.innerHTML = `<i class="${info.icon}"></i>`;
+      a.style.setProperty("--hover-color", info.color);
+      container.appendChild(a);
+    });
+
+    if (container.children.length === 0) {
+      container.innerHTML = '<p style="color:var(--text-dim);font-size:0.85rem;">No social links configured yet.</p>';
+    }
+  } catch (err) {
+    console.error("Social links error:", err);
+    container.innerHTML = "";
+  }
+}
+
+/* ── Contact form (basic — no backend needed) ── */
+document.getElementById("contactForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const btn  = document.getElementById("contactSendBtn");
+  btn.disabled  = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
+
+  try {
+    await db.collection("contactMessages").add({
+      name:      document.getElementById("cName").value.trim(),
+      email:     document.getElementById("cEmail").value.trim(),
+      message:   document.getElementById("cMessage").value.trim(),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+    showToast("Message sent! I'll be in touch soon. 🙌", "success");
+    e.target.reset();
+  } catch (err) {
+    showToast("Failed to send. Please try again.", "error");
+  } finally {
+    btn.disabled  = false;
+    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+  }
+});
+
+/* ── Scroll reveal ── */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add("fade-in-up");
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll(".about-grid, .contact-grid, .chat-cta-inner")
+  .forEach(el => observer.observe(el));
+
+/* ── Init ── */
+loadPortfolio();
+loadSocialLinks();
+loadCategories();
+</script>
+</body>
+</html>

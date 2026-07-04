@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account — HM Creative</title>
+  <meta name="description" content="Join HM Creative — create your account to connect with Hamza Mughal." />
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Firebase CDN -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+
+  <!-- Extra style for password-strength bar -->
+  <style>
+    .strength-bar {
+      height: 4px;
+      border-radius: 99px;
+      background: var(--border);
+      margin-top: 0.5rem;
+      overflow: hidden;
+    }
+    .strength-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.3s ease, background 0.3s ease;
+      width: 0;
+    }
+    .strength-label {
+      font-size: 0.72rem;
+      margin-top: 0.3rem;
+      color: var(--text-dim);
+    }
+  </style>
+</head>
+<body>
+
+<div class="auth-bg">
+  <div class="auth-orb auth-orb-1"></div>
+  <div class="auth-orb auth-orb-2"></div>
+</div>
+
+<div class="auth-page">
+  <div class="auth-card">
+
+    <!-- Logo -->
+    <a href="index.html" class="auth-logo">HM <span>Creative</span></a>
+    <p class="auth-subtitle">Create your account — it's free!</p>
+
+    <!-- Registration Form -->
+    <form class="auth-form" id="registerForm" novalidate>
+
+      <div class="form-group">
+        <label for="regName">Full Name</label>
+        <div class="input-wrap">
+          <i class="fas fa-user"></i>
+          <input
+            type="text"
+            id="regName"
+            name="name"
+            placeholder="Hamza Mughal"
+            autocomplete="name"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="regEmail">Email Address</label>
+        <div class="input-wrap">
+          <i class="fas fa-envelope"></i>
+          <input
+            type="email"
+            id="regEmail"
+            name="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="regPassword">Password</label>
+        <div class="input-wrap">
+          <i class="fas fa-lock"></i>
+          <input
+            type="password"
+            id="regPassword"
+            name="password"
+            placeholder="Min. 6 characters"
+            autocomplete="new-password"
+            required
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            id="pwToggle1"
+            aria-label="Toggle password"
+          >
+            <i class="fas fa-eye" id="pwIcon1"></i>
+          </button>
+        </div>
+        <!-- Strength bar -->
+        <div class="strength-bar">
+          <div class="strength-bar-fill" id="strengthFill"></div>
+        </div>
+        <p class="strength-label" id="strengthLabel"></p>
+      </div>
+
+      <div class="form-group">
+        <label for="regConfirm">Confirm Password</label>
+        <div class="input-wrap">
+          <i class="fas fa-shield-halved"></i>
+          <input
+            type="password"
+            id="regConfirm"
+            name="confirm"
+            placeholder="Re-enter password"
+            autocomplete="new-password"
+            required
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            id="pwToggle2"
+            aria-label="Toggle confirm password"
+          >
+            <i class="fas fa-eye" id="pwIcon2"></i>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-gold full-btn" id="registerBtn">
+        <i class="fas fa-user-plus"></i> Create Account
+      </button>
+    </form>
+
+    <!-- Divider -->
+    <div class="auth-divider"><span>or sign up with</span></div>
+
+    <!-- Google -->
+    <button class="google-btn" type="button">
+      <img
+        src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+        alt="Google"
+      />
+      Sign up with Google
+    </button>
+
+    <!-- Footer -->
+    <p class="auth-footer-text">
+      Already have an account?
+      <a href="login.html">Sign in</a>
+    </p>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="js/auth.js"></script>
+<script>
+/* ── Password toggles ── */
+function makeToggle(btnId, inputId, iconId) {
+  document.getElementById(btnId).addEventListener("click", () => {
+    const input = document.getElementById(inputId);
+    const icon  = document.getElementById(iconId);
+    const shown = input.type === "text";
+    input.type  = shown ? "password" : "text";
+    icon.className = shown ? "fas fa-eye" : "fas fa-eye-slash";
+  });
+}
+makeToggle("pwToggle1", "regPassword", "pwIcon1");
+makeToggle("pwToggle2", "regConfirm",  "pwIcon2");
+
+/* ── Password strength ── */
+document.getElementById("regPassword").addEventListener("input", (e) => {
+  const pw  = e.target.value;
+  const fill = document.getElementById("strengthFill");
+  const lbl  = document.getElementById("strengthLabel");
+
+  let score = 0;
+  if (pw.length >= 6)  score++;
+  if (pw.length >= 10) score++;
+  if (/[A-Z]/.test(pw))           score++;
+  if (/[0-9]/.test(pw))           score++;
+  if (/[^A-Za-z0-9]/.test(pw))   score++;
+
+  const levels = [
+    { pct: "0%",   color: "transparent",  label: "" },
+    { pct: "25%",  color: "#ff5252",      label: "Weak" },
+    { pct: "50%",  color: "#ffa726",      label: "Fair" },
+    { pct: "75%",  color: "#ffeb3b",      label: "Good" },
+    { pct: "90%",  color: "#66bb6a",      label: "Strong" },
+    { pct: "100%", color: "#f5a623",      label: "Excellent" },
+  ];
+
+  const level = levels[Math.min(score, 5)];
+  fill.style.width      = level.pct;
+  fill.style.background = level.color;
+  lbl.textContent       = level.label;
+  lbl.style.color       = level.color;
+});
+</script>
+</body>
+</html>

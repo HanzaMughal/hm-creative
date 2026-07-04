@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat with Hamza — HM Creative</title>
+  <meta name="description" content="Send a message directly to Hamza Mughal via HM Creative's live chat." />
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Firebase CDN -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+
+  <style>
+    /* chat page layout overrides */
+    body { overflow: hidden; }
+
+    /* Typing indicator */
+    .typing-indicator {
+      display: none;
+      padding: 0.4rem 0.75rem;
+      align-self: flex-start;
+    }
+
+    .typing-indicator.visible { display: flex; }
+
+    .typing-dots {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      padding: 0.6rem 1rem;
+      border-radius: 18px;
+      border-bottom-left-radius: 6px;
+    }
+
+    .typing-dots span {
+      width: 7px;
+      height: 7px;
+      background: var(--text-dim);
+      border-radius: 50%;
+      animation: typingDot 1.2s ease infinite;
+    }
+
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typingDot {
+      0%, 80%, 100% { transform: scale(0.7); opacity: 0.4; }
+      40%            { transform: scale(1);   opacity: 1;   }
+    }
+
+    /* day divider */
+    .day-divider {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--text-dim);
+      font-size: 0.72rem;
+      letter-spacing: 0.05em;
+      padding: 0.25rem 0;
+    }
+
+    .day-divider::before,
+    .day-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* scrolled-to-bottom FAB */
+    #scrollFab {
+      position: absolute;
+      bottom: 5rem;
+      right: 1.5rem;
+      width: 40px;
+      height: 40px;
+      background: var(--gold);
+      border: none;
+      border-radius: 50%;
+      color: #000;
+      font-size: 1rem;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 16px var(--gold-glow);
+      z-index: 10;
+      transition: var(--transition);
+    }
+
+    #scrollFab.visible { display: flex; }
+    #scrollFab:hover   { transform: scale(1.1); }
+
+    /* emoji picker hint */
+    .emoji-btn {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+    .emoji-btn:hover { color: var(--gold); transform: scale(1.15); }
+  </style>
+</head>
+<body>
+
+<div class="chat-page">
+
+  <!-- ── TOP BAR ── -->
+  <div class="chat-topbar">
+    <div class="chat-admin-info">
+      <div class="chat-admin-avatar">
+        <img
+          src="https://ui-avatars.com/api/?name=Hamza+Mughal&background=f5a623&color=000&bold=true&size=88"
+          alt="Hamza Mughal"
+          id="adminAvatar"
+        />
+        <span class="admin-online-dot"></span>
+      </div>
+      <div>
+        <div class="chat-admin-name">Hamza Mughal</div>
+        <div class="chat-admin-status">
+          <i class="fas fa-circle" style="font-size:0.5rem;"></i> Online
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-topbar-actions">
+      <a href="index.html" class="chat-back-btn">
+        <i class="fas fa-arrow-left"></i> Back
+      </a>
+      <button id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    </div>
+  </div>
+
+  <!-- ── MESSAGES ── -->
+  <div id="chatMessages" style="position:relative;">
+    <!-- messages injected by chat.js -->
+  </div>
+
+  <!-- Scroll to bottom FAB -->
+  <button id="scrollFab" aria-label="Scroll to bottom">
+    <i class="fas fa-chevron-down"></i>
+  </button>
+
+  <!-- ── TYPING INDICATOR ── -->
+  <div class="typing-indicator" id="typingIndicator">
+    <div class="typing-dots">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <!-- ── USER BAR ── -->
+  <div class="chat-user-bar">
+    <img
+      src="https://ui-avatars.com/api/?name=U&background=f5a623&color=000&bold=true"
+      alt="You"
+      id="chatUserAvatar"
+    />
+    <span>You are chatting as <strong id="chatUserName">…</strong></span>
+  </div>
+
+  <!-- ── INPUT BAR ── -->
+  <div class="chat-input-bar">
+    <!-- Reply Preview Widget -->
+    <div class="chat-reply-preview" id="replyPreview">
+      <div class="reply-preview-info">
+        <span class="reply-preview-sender" id="replySender">Replying to Hamza</span>
+        <span class="reply-preview-text" id="replyText">Message text preview...</span>
+      </div>
+      <button class="reply-preview-close" id="cancelReplyBtn" type="button" aria-label="Cancel reply">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="chat-input-wrap">
+      <button class="emoji-btn" type="button" title="Emoji (coming soon)" aria-label="Emoji">
+        <i class="far fa-face-smile"></i>
+      </button>
+      <textarea
+        id="chatInput"
+        placeholder="Type a message…"
+        rows="1"
+        maxlength="500"
+        aria-label="Chat message"
+      ></textarea>
+      <button id="sendBtn" aria-label="Send message">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+    <div class="chat-input-footer">
+      <span id="charCount">0/500</span>
+      <span style="font-size:0.72rem;color:var(--text-dim);">
+        <i class="fas fa-shield-halved" style="color:var(--gold);font-size:0.65rem;"></i>
+        End-to-end encrypted
+      </span>
+    </div>
+  </div>
+
+</div><!-- end .chat-page -->
+
+<script src="js/chat.js"></script>
+<script>
+/* ── Auto-resize textarea ── */
+const chatInput = document.getElementById("chatInput");
+chatInput.addEventListener("input", () => {
+  chatInput.style.height = "auto";
+  chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + "px";
+});
+
+/* ── Scroll FAB ── */
+const messagesEl = document.getElementById("chatMessages");
+const scrollFab  = document.getElementById("scrollFab");
+
+messagesEl.addEventListener("scroll", () => {
+  const atBottom = messagesEl.scrollHeight - messagesEl.scrollTop - messagesEl.clientHeight < 80;
+  scrollFab.classList.toggle("visible", !atBottom);
+});
+
+scrollFab.addEventListener("click", () => {
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+});
+
+/* ── Day dividers — injected after chat.js renders ── */
+// chat.js uses rtdb listener; we patch renderMessage for day headers
+// Simple approach: a MutationObserver on chatMessages
+const dayObserver = new MutationObserver(() => {
+  const bubbles = messagesEl.querySelectorAll(".msg-wrap");
+  let lastDay   = "";
+  bubbles.forEach(wrap => {
+    const timeEl = wrap.querySelector(".msg-time");
+    if (!timeEl) return;
+    // We can't easily get full date from time-only string,
+    // so we add today/yesterday marker once at top if no divider
+    if (!messagesEl.querySelector(".day-divider") && bubbles.length > 0) {
+      const divider = document.createElement("div");
+      divider.className = "day-divider";
+      divider.textContent = "Today";
+      messagesEl.prepend(divider);
+    }
+    dayObserver.disconnect(); // only once
+  });
+});
+dayObserver.observe(messagesEl, { childList: true });
+</script>
+</body>
+</html>

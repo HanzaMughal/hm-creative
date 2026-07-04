@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — HM Creative</title>
+  <meta name="description" content="Sign in to HM Creative to chat with Hamza Mughal directly." />
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Firebase CDN -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+</head>
+<body>
+
+<div class="auth-bg">
+  <div class="auth-orb auth-orb-1"></div>
+  <div class="auth-orb auth-orb-2"></div>
+</div>
+
+<div class="auth-page">
+  <div class="auth-card">
+
+    <!-- Logo -->
+    <a href="index.html" class="auth-logo">HM <span>Creative</span></a>
+    <p class="auth-subtitle">Welcome back! Sign in to continue.</p>
+
+    <!-- Email/Password Form -->
+    <form class="auth-form" id="loginForm" novalidate>
+
+      <div class="form-group">
+        <label for="loginEmail">Email Address</label>
+        <div class="input-wrap">
+          <i class="fas fa-envelope"></i>
+          <input
+            type="email"
+            id="loginEmail"
+            name="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <div class="input-wrap">
+          <i class="fas fa-lock"></i>
+          <input
+            type="password"
+            id="loginPassword"
+            name="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+            required
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            id="pwToggle"
+            aria-label="Show/hide password"
+          >
+            <i class="fas fa-eye" id="pwToggleIcon"></i>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-gold full-btn" id="loginBtn">
+        <i class="fas fa-sign-in-alt"></i> Sign In
+      </button>
+    </form>
+
+    <!-- Divider -->
+    <div class="auth-divider"><span>or continue with</span></div>
+
+    <!-- Google -->
+    <button class="google-btn" type="button">
+      <img
+        src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+        alt="Google"
+      />
+      Sign in with Google
+    </button>
+
+    <!-- Skip -->
+    <button
+      type="button"
+      class="skip-btn"
+      id="skipBtn"
+      title="Browse portfolio without logging in"
+    >
+      <i class="fas fa-eye-slash"></i> Skip for now — just browsing
+    </button>
+
+    <!-- Footer -->
+    <p class="auth-footer-text">
+      Don't have an account?
+      <a href="register.html">Create one</a>
+    </p>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="js/auth.js"></script>
+<script>
+/* ── Password visibility toggle ── */
+document.getElementById("pwToggle").addEventListener("click", () => {
+  const input = document.getElementById("loginPassword");
+  const icon  = document.getElementById("pwToggleIcon");
+  const shown = input.type === "text";
+  input.type  = shown ? "password" : "text";
+  icon.className = shown ? "fas fa-eye" : "fas fa-eye-slash";
+});
+
+/* ── Skip button ── */
+document.getElementById("skipBtn").addEventListener("click", () => {
+  window.location.href = "index.html";
+});
+
+/* ── Redirect to intended page after login (if set) ── */
+// auth.js handles the redirect — after signIn it goes to index.html
+// Override: if sessionStorage has a pending redirect, pick it up
+const redirect = sessionStorage.getItem("redirectAfterLogin");
+if (redirect) {
+  // Override auth.js redirect
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      sessionStorage.removeItem("redirectAfterLogin");
+      window.location.href = redirect;
+    }
+  });
+}
+</script>
+</body>
+</html>
