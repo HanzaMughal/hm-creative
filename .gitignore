@@ -2,3 +2,11 @@ database.rules.json
 firestore.rules
 image.png
 admin/
+.env
+.env.local
+.env*.local
+firebase-adminsdk-*.json
+serviceAccountKey.json
+node_modules/
+.vercel
+

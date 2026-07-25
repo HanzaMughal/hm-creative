@@ -59,22 +59,7 @@ if (loginForm) {
   });
 }
 
-/* ── Google Sign-In ── */
-const googleBtns = document.querySelectorAll(".google-btn");
-googleBtns.forEach((btn) => {
-  btn.addEventListener("click", async () => {
-    setLoading(btn, true);
-    try {
-      const result = await auth.signInWithPopup(googleProvider);
-      await saveUserProfile(result.user);
-      window.location.href = "index.html";
-    } catch (err) {
-      showToast(friendlyError(err.code));
-    } finally {
-      setLoading(btn, false);
-    }
-  });
-});
+
 
 /* ── Registration ── */
 const registerForm = document.getElementById("registerForm");

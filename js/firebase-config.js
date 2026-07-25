@@ -19,9 +19,7 @@ const auth = firebase.auth();
 const db   = firebase.firestore();
 const rtdb = firebase.database();
 
-// Google Auth Provider
-const googleProvider = new firebase.auth.GoogleAuthProvider();
-googleProvider.setCustomParameters({ prompt: "select_account" });
+
 
 // Premium Web Audio synthesized notification sound
 function playNotificationSound() {

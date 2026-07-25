@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HM Creative — Digital Ads by Hamza Mughal</title>
-  <meta name="description" content="HM Creative — Premium digital advertising and creative portfolio by Hamza Mughal. Elevating brands with stunning visual storytelling." />
+  <meta name="description"
+    content="HM Creative — Premium digital advertising and creative portfolio by Hamza Mughal. Elevating brands with stunning visual storytelling." />
 
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <!-- Styles -->
@@ -22,667 +25,1252 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <script src="js/firebase-config.js"></script>
 </head>
+
 <body>
 
-<!-- ── NAVBAR ── -->
-<nav class="navbar" id="navbar">
-  <div class="container nav-inner">
-    <a href="index.html" class="nav-logo">HM <span>Creative</span></a>
+  <!-- ── NAVBAR ── -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">HM <span>Creative</span></a>
 
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#about">About</a></li>
-      <li><a href="#portfolio">Portfolio</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about">About</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
 
-    <div class="nav-actions">
-      <!-- Auth state: shown dynamically -->
-      <div id="navAuthArea"></div>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </div>
-</nav>
-
-<!-- ── HERO ── -->
-<section class="hero" id="home">
-  <div class="hero-bg">
-    <div class="hero-grid"></div>
-    <div class="hero-orb hero-orb-1"></div>
-    <div class="hero-orb hero-orb-2"></div>
-  </div>
-
-  <div class="container">
-    <div class="hero-content">
-      <div class="hero-badge">
-        <i class="fas fa-circle"></i> Available for Projects
-      </div>
-
-      <h1 class="hero-name">
-        I'm <span class="gold">Hamza Mughal</span><br />
-        Digital Ads Creator
-      </h1>
-
-      <p class="hero-tagline">
-        Crafting <strong>high-impact digital advertising</strong> that stops
-        the scroll and drives real results — from social media campaigns to
-        full brand identities.
-      </p>
-
-      <div class="hero-cta">
-        <a href="#portfolio" class="btn btn-gold">
-          <i class="fas fa-eye"></i> View My Work
-        </a>
-        <button class="btn btn-outline" id="heroChat">
-          <i class="fas fa-comment-dots"></i> Let's Chat
+      <div class="nav-actions">
+        <!-- Auth state: shown dynamically -->
+        <div id="navAuthArea"></div>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
         </button>
       </div>
-
-      <div class="stats-bar">
-        <div class="stat-item">
-          <span class="stat-number" data-target="150">0</span>
-          <span class="stat-label">Projects Done</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number" data-target="60">0</span>
-          <span class="stat-label">Happy Clients</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number" data-target="5">0</span>
-          <span class="stat-label">Years Experience</span>
-        </div>
-      </div>
     </div>
-  </div>
+  </nav>
 
-  <div class="hero-scroll">
-    <span>Scroll</span>
-    <i class="fas fa-chevron-down"></i>
-  </div>
-</section>
+  <!-- ── HERO ── -->
+  <section class="hero" id="home">
+    <div class="hero-bg">
+      <div class="hero-grid"></div>
+      <div class="hero-orb hero-orb-1"></div>
+      <div class="hero-orb hero-orb-2"></div>
+    </div>
 
-<!-- ── ABOUT ── -->
-<section class="about" id="about">
-  <div class="container">
-    <div class="about-grid">
-      <!-- Image -->
-      <div class="about-img-wrap">
-        <div class="about-img-frame">
-          <img
-            src="images/hamza.png"
-            alt="Hamza Mughal — Digital Ads Creator"
-            class="about-photo"
-            loading="eager"
-          />
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <i class="fas fa-circle"></i> Available for Projects
         </div>
-        <div class="about-badge">
-          <strong>5+</strong> Years of Excellence
-        </div>
-      </div>
 
-      <!-- Text -->
-      <div class="about-text">
-        <p class="section-title">About <span>Me</span></p>
-        <div class="gold-line"></div>
-        <p>
-          Hey, I'm Hamza — a passionate digital ads creator based in Pakistan.
-          I specialize in creating visually stunning and strategically effective
-          advertising content that helps brands stand out in the digital landscape.
-        </p>
-        <p>
-          From eye-catching social media ads to compelling video content and
-          full brand campaigns, I bring ideas to life with creativity, precision,
-          and data-driven thinking.
+        <h1 class="hero-name">
+          I'm <span class="gold" id="heroProfileName">Hamza Mughal</span><br />
+          <span id="heroHeadline">Digital Ads Creator</span>
+        </h1>
+
+        <p class="hero-tagline" id="heroTagline">
+          Crafting <strong>high-impact digital advertising</strong> that stops
+          the scroll and drives real results — from social media campaigns to
+          full brand identities.
         </p>
 
-        <div class="skills-grid">
-          <span class="skill-tag">Social Media Ads</span>
-          <span class="skill-tag">Video Production</span>
-          <span class="skill-tag">Brand Identity</span>
-          <span class="skill-tag">Motion Graphics</span>
-          <span class="skill-tag">Facebook Ads</span>
-          <span class="skill-tag">Instagram Reels</span>
-          <span class="skill-tag">Content Strategy</span>
-          <span class="skill-tag">Graphic Design</span>
+        <div class="hero-cta">
+          <a href="#portfolio" class="btn btn-gold">
+            <i class="fas fa-eye"></i> View My Work
+          </a>
+          <button class="btn btn-outline" id="heroChat">
+            <i class="fas fa-comment-dots"></i> Let's Chat
+          </button>
         </div>
 
-        <a href="#contact" class="btn btn-gold">
-          <i class="fas fa-paper-plane"></i> Work With Me
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── PORTFOLIO ── -->
-<section class="portfolio" id="portfolio">
-  <div class="container">
-    <div class="portfolio-header">
-      <div>
-        <h2 class="section-title">My <span>Portfolio</span></h2>
-        <div class="gold-line"></div>
-        <p class="section-subtitle" style="margin-bottom:0">
-          A curated selection of my best work
-        </p>
-      </div>
-      <div class="filter-tabs" id="filterTabs">
-        <button class="filter-tab active" data-cat="all">All</button>
-      </div>
-    </div>
-
-    <div class="portfolio-grid" id="portfolioGrid">
-      <!-- skeleton loaders -->
-      <div class="skeleton-card">
-        <div class="skeleton skeleton-media"></div>
-        <div class="skeleton-body">
-          <div class="skeleton skeleton-title"></div>
-          <div class="skeleton skeleton-desc"></div>
-          <div class="skeleton skeleton-desc2"></div>
-        </div>
-      </div>
-      <div class="skeleton-card">
-        <div class="skeleton skeleton-media"></div>
-        <div class="skeleton-body">
-          <div class="skeleton skeleton-title"></div>
-          <div class="skeleton skeleton-desc"></div>
-          <div class="skeleton skeleton-desc2"></div>
-        </div>
-      </div>
-      <div class="skeleton-card">
-        <div class="skeleton skeleton-media"></div>
-        <div class="skeleton-body">
-          <div class="skeleton skeleton-title"></div>
-          <div class="skeleton skeleton-desc"></div>
-          <div class="skeleton skeleton-desc2"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── SOCIAL LINKS ── -->
-<section class="socials" id="socials">
-  <div class="container">
-    <div class="socials-inner">
-      <p class="socials-title">Find me on</p>
-      <div class="social-icons" id="socialIcons">
-        <!-- loaded from Firestore -->
-        <div class="skeleton" style="width:52px;height:52px;border-radius:14px;"></div>
-        <div class="skeleton" style="width:52px;height:52px;border-radius:14px;"></div>
-        <div class="skeleton" style="width:52px;height:52px;border-radius:14px;"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── CHAT CTA ── -->
-<section class="chat-cta" id="chat-cta">
-  <div class="container">
-    <div class="chat-cta-inner">
-      <h2><span>Chat</span> With Me</h2>
-      <p>
-        Have a project in mind? Send me a message directly — I usually reply
-        within a few hours.
-        <br /><span class="chat-pulse"></span><em>Online &amp; ready to help</em>
-      </p>
-      <button class="btn btn-gold" id="chatCTABtn">
-        <i class="fas fa-comment-dots"></i> Start Conversation
-      </button>
-    </div>
-  </div>
-</section>
-
-<!-- ── CONTACT ── -->
-<section class="contact" id="contact">
-  <div class="container">
-    <div class="contact-grid">
-      <div class="contact-info">
-        <h2>Get In <span>Touch</span></h2>
-        <div class="gold-line"></div>
-        <p>
-          Ready to elevate your brand? Let's create something extraordinary
-          together. Drop me a message and I'll get back to you soon!
-        </p>
-        <div class="contact-items">
-          <div class="contact-item">
-            <i class="fas fa-envelope"></i>
-            <span>hamza@hmcreative.com</span>
+        <div class="stats-bar">
+          <div class="stat-item">
+            <span class="stat-number" id="statProjects" data-target="150">0</span>
+            <span class="stat-label">Projects Done</span>
           </div>
-          <div class="contact-item">
-            <i class="fas fa-map-marker-alt"></i>
-            <span>Pakistan</span>
+          <div class="stat-item">
+            <span class="stat-number" id="statClients" data-target="60">0</span>
+            <span class="stat-label">Happy Clients</span>
           </div>
-          <div class="contact-item">
-            <i class="fas fa-clock"></i>
-            <span>Mon – Sat, 9 AM – 10 PM PKT</span>
+          <div class="stat-item">
+            <span class="stat-number" id="statYears" data-target="5">0</span>
+            <span class="stat-label">Years Experience</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <i class="fas fa-chevron-down"></i>
+    </div>
+  </section>
+
+  <!-- ── ABOUT ── -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <!-- Image -->
+        <div class="about-img-wrap">
+          <div class="about-img-frame">
+            <img src="images/hamza.png" alt="Hamza Mughal — Digital Ads Creator" class="about-photo" id="aboutPhoto"
+              loading="eager" />
+          </div>
+          <div class="about-badge" id="aboutBadge">
+            <strong id="badgeYears">5+</strong> Years of Excellence
+          </div>
+        </div>
+
+        <!-- Text -->
+        <div class="about-text">
+          <p class="section-title">About <span id="aboutTitleSpan">Me</span></p>
+          <div class="gold-line"></div>
+          <div id="aboutBioContainer">
+            <p id="aboutBioText">
+              Hey, I'm Hamza — a passionate digital ads creator based in Pakistan.
+              I specialize in creating visually stunning and strategically effective
+              advertising content that helps brands stand out in the digital landscape.
+            </p>
+          </div>
+
+          <div class="skills-grid">
+            <span class="skill-tag">Social Media Ads</span>
+            <span class="skill-tag">Video Production</span>
+            <span class="skill-tag">Brand Identity</span>
+            <span class="skill-tag">Motion Graphics</span>
+            <span class="skill-tag">Facebook Ads</span>
+            <span class="skill-tag">Instagram Reels</span>
+            <span class="skill-tag">Content Strategy</span>
+            <span class="skill-tag">Graphic Design</span>
+          </div>
+
+          <a href="#contact" class="btn btn-gold">
+            <i class="fas fa-paper-plane"></i> Work With Me
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PORTFOLIO ── -->
+  <section class="portfolio" id="portfolio">
+    <div class="container">
+      <div class="portfolio-header">
+        <div>
+          <h2 class="section-title">My <span>Portfolio</span></h2>
+          <div class="gold-line"></div>
+          <p class="section-subtitle" style="margin-bottom:0">
+            A curated selection of my best work
+          </p>
+        </div>
+        <div class="filter-tabs" id="filterTabs">
+          <button class="filter-tab active" data-cat="all">All</button>
+        </div>
+      </div>
+
+      <!-- Top-level Portfolio Tabs -->
+      <div class="portfolio-type-tabs">
+        <button class="portfolio-type-tab active" id="tabVideoAds"><i class="fas fa-video"></i> Video & Media
+          Ads</button>
+        <button class="portfolio-type-tab" id="tabWebsitePortfolio"><i class="fas fa-laptop-code"></i> Website
+          Portfolio</button>
+      </div>
+
+      <!-- Video Ads Portfolio Grid -->
+      <div class="portfolio-grid" id="portfolioGrid">
+        <!-- skeleton loaders -->
+        <div class="skeleton-card">
+          <div class="skeleton skeleton-media"></div>
+          <div class="skeleton-body">
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-desc"></div>
+            <div class="skeleton skeleton-desc2"></div>
+          </div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton skeleton-media"></div>
+          <div class="skeleton-body">
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-desc"></div>
+            <div class="skeleton skeleton-desc2"></div>
+          </div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton skeleton-media"></div>
+          <div class="skeleton-body">
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-desc"></div>
+            <div class="skeleton skeleton-desc2"></div>
           </div>
         </div>
       </div>
 
-      <div class="contact-form">
-        <div class="glass-card">
-          <form id="contactForm">
-            <div class="form-group">
-              <label for="cName">Your Name</label>
-              <input type="text" id="cName" placeholder="Hamza Mughal" required />
-            </div>
-            <div class="form-group">
-              <label for="cEmail">Email Address</label>
-              <input type="email" id="cEmail" placeholder="you@example.com" required />
-            </div>
-            <div class="form-group">
-              <label for="cMessage">Message</label>
-              <textarea id="cMessage" rows="4" placeholder="Tell me about your project…" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-gold full-btn" id="contactSendBtn">
-              <i class="fas fa-paper-plane"></i> Send Message
-            </button>
-          </form>
+      <!-- Website Portfolio Grid (hidden by default) -->
+      <div class="portfolio-grid" id="websiteGrid" style="display:none;">
+        <div class="skeleton-card">
+          <div class="skeleton skeleton-media"></div>
+          <div class="skeleton-body">
+            <div class="skeleton skeleton-title"></div>
+          </div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton skeleton-media"></div>
+          <div class="skeleton-body">
+            <div class="skeleton skeleton-title"></div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ── CATEGORIES ── -->
-<section class="categories-section" id="categories">
-  <div class="container">
-    <div class="text-center" style="margin-bottom:2.5rem;">
-      <h2 class="section-title">What I <span>Offer</span></h2>
-      <div class="gold-line" style="margin:0.75rem auto 0;"></div>
-      <p class="section-subtitle">Specialized services tailored for your brand</p>
+  <!-- ── SOCIAL LINKS ── -->
+  <section class="socials" id="socials">
+    <div class="container">
+      <div class="socials-inner">
+        <p class="socials-title">Find me on</p>
+        <div class="social-icons" id="socialIcons">
+          <!-- loaded from Firestore -->
+          <div class="skeleton" style="width:52px;height:52px;border-radius:14px;"></div>
+          <div class="skeleton" style="width:52px;height:52px;border-radius:14px;"></div>
+          <div class="skeleton" style="width:52px;height:52px;border-radius:14px;"></div>
+        </div>
+      </div>
     </div>
-    <div class="categories-grid" id="categoriesGrid">
-      <!-- Skeleton loaders -->
-      <div class="cat-skeleton"><div class="skeleton" style="height:120px;border-radius:16px;"></div></div>
-      <div class="cat-skeleton"><div class="skeleton" style="height:120px;border-radius:16px;"></div></div>
-      <div class="cat-skeleton"><div class="skeleton" style="height:120px;border-radius:16px;"></div></div>
-      <div class="cat-skeleton"><div class="skeleton" style="height:120px;border-radius:16px;"></div></div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- ── FOOTER ── -->
-<footer>
-  <div class="container">
-    <div class="footer-inner">
-      <div class="footer-logo">HM <span>Creative</span></div>
-      <p class="footer-copy">
-        © <span id="footerYear"></span> HM Creative. All rights reserved.
-        Crafted with ♥ by Hamza Mughal.
-      </p>
-      <div class="footer-links">
-        <a href="#about">About</a>
-        <a href="#portfolio">Work</a>
-        <a href="#contact">Contact</a>
+  <!-- ── CHAT CTA ── -->
+  <section class="chat-cta" id="chat-cta">
+    <div class="container">
+      <div class="chat-cta-inner">
+        <h2><span>Chat</span> With Me</h2>
+        <p>
+          Have a project in mind? Send me a message directly — I usually reply
+          within a few hours.
+          <br /><span class="chat-pulse"></span><em>Online &amp; ready to help</em>
+        </p>
+        <button class="btn btn-gold" id="chatCTABtn">
+          <i class="fas fa-comment-dots"></i> Start Conversation
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── REVIEWS / TESTIMONIALS ── -->
+  <section class="reviews-section" id="reviews">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:2rem;">
+        <h2 class="section-title">Client <span>Reviews</span></h2>
+        <div class="gold-line" style="margin:0.75rem auto 0;"></div>
+        <p class="section-subtitle">What clients say about working with me</p>
+      </div>
+      <div class="reviews-grid" id="reviewsGrid">
+        <div class="skeleton" style="height:160px;border-radius:18px;"></div>
+        <div class="skeleton" style="height:160px;border-radius:18px;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h2>Get In <span>Touch</span></h2>
+          <div class="gold-line"></div>
+          <p>
+            Ready to elevate your brand? Let's create something extraordinary
+            together. Drop me a message and I'll get back to you soon!
+          </p>
+          <div class="contact-items">
+            <div class="contact-item">
+              <i class="fas fa-envelope"></i>
+              <span id="infoContactEmail">hamza@hmcreative.com</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Pakistan</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-clock"></i>
+              <span id="infoWorkingHours">Mon – Sat, 9 AM – 10 PM PKT</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form">
+          <div class="glass-card">
+            <form id="contactForm">
+              <!-- Honeypot anti-spam field -->
+              <input type="text" id="cHoneypot" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;"
+                tabindex="-1" autocomplete="off" />
+
+              <div class="form-group">
+                <label for="cName">Your Name</label>
+                <input type="text" id="cName" placeholder="Hamza Mughal" required />
+              </div>
+              <div class="form-group">
+                <label for="cEmail">Email Address</label>
+                <input type="email" id="cEmail" placeholder="you@example.com" required />
+              </div>
+              <div class="form-group">
+                <label for="cMessage">Message</label>
+                <textarea id="cMessage" rows="4" placeholder="Tell me about your project…" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-gold full-btn" id="contactSendBtn">
+                <i class="fas fa-paper-plane"></i> Send Message
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CATEGORIES ── -->
+  <section class="categories-section" id="categories">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:2.5rem;">
+        <h2 class="section-title">What I <span>Offer</span></h2>
+        <div class="gold-line" style="margin:0.75rem auto 0;"></div>
+        <p class="section-subtitle">Specialized services tailored for your brand</p>
+      </div>
+      <div class="categories-grid" id="categoriesGrid">
+        <!-- Skeleton loaders -->
+        <div class="cat-skeleton">
+          <div class="skeleton" style="height:120px;border-radius:16px;"></div>
+        </div>
+        <div class="cat-skeleton">
+          <div class="skeleton" style="height:120px;border-radius:16px;"></div>
+        </div>
+        <div class="cat-skeleton">
+          <div class="skeleton" style="height:120px;border-radius:16px;"></div>
+        </div>
+        <div class="cat-skeleton">
+          <div class="skeleton" style="height:120px;border-radius:16px;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">HM <span>Creative</span></div>
+        <p class="footer-copy">
+          © <span id="footerYear"></span> HM Creative. All rights reserved.
+          Crafted with ♥ by Hamza Mughal.
+        </p>
+        <div class="footer-links">
+          <a href="#about">About</a>
+          <a href="#portfolio">Work</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ── IN-APP EMBEDDED BROWSER MODAL ── -->
+  <div class="browser-modal" id="browserModal">
+    <div class="browser-modal-content">
+      <div class="browser-modal-bar">
+        <div class="browser-modal-controls">
+          <span class="browser-dot browser-dot-red" id="closeBrowserDot" style="cursor:pointer;"></span>
+          <span class="browser-dot browser-dot-yellow"></span>
+          <span class="browser-dot browser-dot-green"></span>
+        </div>
+        <div class="browser-modal-title" id="browserTitle"><i class="fas fa-globe"></i> Website Viewer</div>
+        <button class="browser-modal-close" id="closeBrowserModal" aria-label="Close viewer"><i
+            class="fas fa-times"></i></button>
+      </div>
+      <div class="browser-modal-body">
+        <iframe id="browserFrame" src="about:blank"></iframe>
+        <div class="browser-fallback-card" id="browserFallback" style="display:none;">
+          <i class="fas fa-shield-halved" style="font-size:3rem;color:var(--gold);margin-bottom:1rem;"></i>
+          <h3 style="font-size:1.4rem;margin-bottom:0.5rem;color:var(--text);" id="fallbackTitle">Protected Site Preview
+          </h3>
+          <p style="max-width:500px;font-size:0.9rem;color:var(--text-muted);margin-bottom:1.5rem;">This website has
+            embedding security policies (X-Frame-Options/CSP). You can open it in an interactive full-screen viewer.</p>
+          <button class="btn btn-gold" id="fallbackLaunchBtn"><i class="fas fa-external-link-alt"></i> Open
+            Project</button>
+        </div>
+  </div>
+
+  <!-- ── PROJECT DETAIL & COMMENTS MODAL ── -->
+  <div class="project-modal" id="projectDetailModal">
+    <div class="project-modal-content">
+      <div class="project-modal-header">
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+          <button class="btn btn-ghost btn-sm" id="btnBackModal" style="padding:0.4rem 0.8rem;font-size:0.82rem;">
+            <i class="fas fa-arrow-left"></i> Back
+          </button>
+          <h3 class="project-modal-title" id="pModalTitle">Project Details</h3>
+        </div>
+        <button class="project-modal-close" id="closeProjectModal" aria-label="Close modal"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="project-modal-body">
+
+        <!-- Media Container -->
+        <div class="project-modal-media" id="pModalMedia"></div>
+
+        <!-- Description -->
+        <p id="pModalDesc" style="color:var(--text-muted);font-size:0.92rem;line-height:1.6;margin:0;"></p>
+
+        <hr style="border:0;border-top:1px solid var(--border);margin:0.5rem 0;" />
+
+        <!-- Comments Section -->
+        <div>
+          <h4 style="color:var(--text);font-size:1rem;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;">
+            <i class="fas fa-comments" style="color:var(--gold);"></i>
+            Comments <span id="pCommentCountBadge" style="font-size:0.75rem;color:var(--text-dim);font-weight:normal;">(0)</span>
+          </h4>
+
+          <!-- Comments Feed -->
+          <div id="pCommentsList">
+            <p style="color:var(--text-dim);font-size:0.85rem;">Loading comments...</p>
+          </div>
+
+          <!-- Comment Input Form -->
+          <div id="pCommentFormContainer" style="margin-top:1.25rem;">
+            <!-- Rendered dynamically depending on Auth state -->
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
-</footer>
 
-<!-- Toast -->
-<div class="toast" id="toast"></div>
+  <!-- ── SCRIPTS ── -->
+  <script>
+    /* ── Navbar scroll ── */
+    window.addEventListener("scroll", () => {
+      document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 50);
+    });
 
-<!-- ── SCRIPTS ── -->
-<script>
-/* ── Navbar scroll ── */
-window.addEventListener("scroll", () => {
-  document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 50);
-});
+    /* ── Mobile nav toggle ── */
+    const navToggle = document.getElementById("navToggle");
+    const navLinks = document.getElementById("navLinks");
+    navToggle.addEventListener("click", () => {
+      navToggle.classList.toggle("open");
+      navLinks.classList.toggle("open");
+    });
+    navLinks.querySelectorAll("a").forEach(a =>
+      a.addEventListener("click", () => {
+        navToggle.classList.remove("open");
+        navLinks.classList.remove("open");
+      })
+    );
 
-/* ── Mobile nav toggle ── */
-const navToggle = document.getElementById("navToggle");
-const navLinks  = document.getElementById("navLinks");
-navToggle.addEventListener("click", () => {
-  navToggle.classList.toggle("open");
-  navLinks.classList.toggle("open");
-});
-navLinks.querySelectorAll("a").forEach(a =>
-  a.addEventListener("click", () => {
-    navToggle.classList.remove("open");
-    navLinks.classList.remove("open");
-  })
-);
-
-/* ── Counter animation ── */
-function animateCounters() {
-  document.querySelectorAll(".stat-number[data-target]").forEach((el) => {
-    const target = +el.dataset.target;
-    let current  = 0;
-    const step   = Math.ceil(target / 60);
-    const timer  = setInterval(() => {
-      current = Math.min(current + step, target);
-      el.textContent = current + "+";
-      if (current >= target) clearInterval(timer);
-    }, 25);
-  });
-}
-
-const heroObserver = new IntersectionObserver(([e]) => {
-  if (e.isIntersecting) { animateCounters(); heroObserver.disconnect(); }
-}, { threshold: 0.3 });
-heroObserver.observe(document.querySelector(".stats-bar"));
-
-/* ── Footer year ── */
-document.getElementById("footerYear").textContent = new Date().getFullYear();
-
-/* ── Toast helper ── */
-function showToast(msg, type = "success") {
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.className   = `toast show ${type}`;
-  setTimeout(() => t.classList.remove("show"), 3500);
-}
-
-/* ── Auth state — Nav & Chat buttons ── */
-const navAuthArea = document.getElementById("navAuthArea");
-let currentUser   = null;
-
-auth.onAuthStateChanged(async (user) => {
-  currentUser = user;
-  if (user) {
-    let displayName = user.displayName;
-    try {
-      const userSnap = await db.collection("users").doc(user.uid).get();
-      if (userSnap.exists && userSnap.data().name) {
-        displayName = userSnap.data().name;
-      }
-    } catch (e) {
-      console.warn("Could not fetch user name from Firestore:", e);
+    /* ── Counter animation ── */
+    function animateCounters() {
+      document.querySelectorAll(".stat-number[data-target]").forEach((el) => {
+        const target = +el.dataset.target;
+        let current = 0;
+        const step = Math.ceil(target / 60);
+        const timer = setInterval(() => {
+          current = Math.min(current + step, target);
+          el.textContent = current + "+";
+          if (current >= target) clearInterval(timer);
+        }, 25);
+      });
     }
 
-    const photoSrc = user.photoURL ||
-      `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName || "U")}&background=f5a623&color=000&bold=true`;
-    navAuthArea.innerHTML = `
+    const heroObserver = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { animateCounters(); heroObserver.disconnect(); }
+    }, { threshold: 0.3 });
+    heroObserver.observe(document.querySelector(".stats-bar"));
+
+    /* ── Footer year ── */
+    document.getElementById("footerYear").textContent = new Date().getFullYear();
+
+    /* ── Toast helper ── */
+    function showToast(msg, type = "success") {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.className = `toast show ${type}`;
+      setTimeout(() => t.classList.remove("show"), 3500);
+    }
+
+    /* ── Auth state — Nav & Chat buttons ── */
+    const navAuthArea = document.getElementById("navAuthArea");
+    let currentUser = null;
+
+    auth.onAuthStateChanged(async (user) => {
+      currentUser = user;
+      if (user) {
+        let displayName = user.displayName;
+        try {
+          const userSnap = await db.collection("users").doc(user.uid).get();
+          if (userSnap.exists && userSnap.data().name) {
+            displayName = userSnap.data().name;
+          }
+        } catch (e) {
+          console.warn("Could not fetch user name from Firestore:", e);
+        }
+
+        const photoSrc = user.photoURL ||
+          `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName || "U")}&background=f5a623&color=000&bold=true`;
+        navAuthArea.innerHTML = `
       <div class="nav-user">
         <img src="${photoSrc}" alt="${displayName || 'User'}" />
         <span>${(displayName || user.email || "User").split(" ")[0]}</span>
       </div>`;
-    
-    // Start listening for admin replies
-    listenForAdminReplies(user.uid);
-  } else {
-    navAuthArea.innerHTML = `
+
+        // Start listening for admin replies
+        listenForAdminReplies(user.uid);
+      } else {
+        navAuthArea.innerHTML = `
       <a href="login.html" class="btn btn-ghost" style="padding:0.45rem 1.1rem;font-size:0.82rem;">
         <i class="fas fa-sign-in-alt"></i> Login
       </a>`;
-  }
-});
+      }
+    });
 
-let repliesListener = null;
-let lastMsgCount = -1;
-function listenForAdminReplies(uid) {
-  if (repliesListener) return;
-  repliesListener = rtdb.ref(`chats/${uid}/messages`);
-  repliesListener.on("value", (snap) => {
-    const msgs = [];
-    snap.forEach(child => msgs.push(child.val()));
-    
-    if (lastMsgCount !== -1 && msgs.length > lastMsgCount) {
-      const lastMsg = msgs[msgs.length - 1];
-      // Only play sound and notify if the message is from the admin
-      if (lastMsg.senderId !== uid) {
-        playNotificationSound();
-        showToast(`Hamza: "${lastMsg.text.substring(0, 32)}${lastMsg.text.length > 32 ? '...' : ''}"`, "success");
-        // Click to go directly to chat page
-        const t = document.getElementById("toast");
-        if (t) {
-          t.style.pointerEvents = "auto";
-          t.style.cursor = "pointer";
-          t.onclick = () => { window.location.href = "chat.html"; };
+    let repliesListener = null;
+    let lastMsgCount = -1;
+    function listenForAdminReplies(uid) {
+      if (repliesListener) return;
+      repliesListener = rtdb.ref(`chats/${uid}/messages`);
+      repliesListener.on("value", (snap) => {
+        const msgs = [];
+        snap.forEach(child => msgs.push(child.val()));
+
+        if (lastMsgCount !== -1 && msgs.length > lastMsgCount) {
+          const lastMsg = msgs[msgs.length - 1];
+          // Only play sound and notify if the message is from the admin
+          if (lastMsg.senderId !== uid) {
+            playNotificationSound();
+            showToast(`Hamza: "${lastMsg.text.substring(0, 32)}${lastMsg.text.length > 32 ? '...' : ''}"`, "success");
+            // Click to go directly to chat page
+            const t = document.getElementById("toast");
+            if (t) {
+              t.style.pointerEvents = "auto";
+              t.style.cursor = "pointer";
+              t.onclick = () => { window.location.href = "chat.html"; };
+            }
+          }
         }
+        lastMsgCount = msgs.length;
+      });
+    }
+
+    /* ── Chat button routing ── */
+    function gotoChat() {
+      if (currentUser) {
+        window.location.href = "chat.html";
+      } else {
+        // store intended destination
+        sessionStorage.setItem("redirectAfterLogin", "chat.html");
+        window.location.href = "login.html";
       }
     }
-    lastMsgCount = msgs.length;
-  });
-}
 
-/* ── Chat button routing ── */
-function gotoChat() {
-  if (currentUser) {
-    window.location.href = "chat.html";
-  } else {
-    // store intended destination
-    sessionStorage.setItem("redirectAfterLogin", "chat.html");
-    window.location.href = "login.html";
-  }
-}
+    document.getElementById("heroChat")?.addEventListener("click", gotoChat);
+    document.getElementById("chatCTABtn")?.addEventListener("click", gotoChat);
 
-document.getElementById("heroChat")?.addEventListener("click", gotoChat);
-document.getElementById("chatCTABtn")?.addEventListener("click", gotoChat);
+    /* ── Load Portfolio from Firestore ── */
+    let allProjects = [];
 
-/* ── Load Portfolio from Firestore ── */
-let allProjects = [];
-let activeCategory = "all";
+    async function loadPortfolio() {
+      const grid = document.getElementById("portfolioGrid");
+      const tabs = document.getElementById("filterTabs");
+      if (!grid) return;
 
-async function loadPortfolio() {
-  const grid = document.getElementById("portfolioGrid");
-  const tabs  = document.getElementById("filterTabs");
+      try {
+        let snap;
+        try {
+          snap = await db.collection("projects").orderBy("createdAt", "desc").get();
+        } catch (e1) {
+          console.warn("Firestore orderBy failed, falling back to simple get():", e1);
+          snap = await db.collection("projects").get();
+        }
 
-  try {
-    const snap = await db.collection("projects").orderBy("createdAt", "desc").get();
-    allProjects = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        allProjects = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-    // Build category tabs from projects (deduped)
-    const categories = [...new Set(allProjects.map(p => p.category).filter(Boolean))];
-    // Remove any existing dynamic tabs first
-    tabs.querySelectorAll(".filter-tab:not([data-cat='all'])").forEach(t => t.remove());
-    categories.forEach(cat => {
-      const btn = document.createElement("button");
-      btn.className   = "filter-tab";
-      btn.dataset.cat = cat;
-      btn.textContent = cat;
-      tabs.appendChild(btn);
-    });
+        if (tabs) {
+          const categories = [...new Set(allProjects.map(p => p.category).filter(Boolean))];
+          tabs.querySelectorAll(".filter-tab:not([data-cat='all'])").forEach(t => t.remove());
+          categories.forEach(cat => {
+            const btn = document.createElement("button");
+            btn.className   = "filter-tab";
+            btn.dataset.cat = cat;
+            btn.textContent = cat;
+            tabs.appendChild(btn);
+          });
+        }
 
-    renderProjects("all");
-  } catch (err) {
-    console.error("Portfolio load error:", err);
-    document.getElementById("portfolioGrid").innerHTML = `
-      <div class="empty-state">
-        <i class="fas fa-exclamation-circle"></i>
-        <p>Could not load projects. Please try again later.</p>
-      </div>`;
-  }
-}
-
-/* ── Category icon map ── */
-const CAT_ICONS = {
-  "Video Ads":    { icon: "fas fa-video",         color: "#f5a623" },
-  "Graphic Ads":  { icon: "fas fa-palette",        color: "#e879f9" },
-  "Social Media": { icon: "fas fa-hashtag",         color: "#38bdf8" },
-  "Web/App":      { icon: "fas fa-globe",           color: "#4ade80" },
-  "Motion":       { icon: "fas fa-film",            color: "#fb923c" },
-  "Branding":     { icon: "fas fa-star",            color: "#facc15" },
-  "Photography":  { icon: "fas fa-camera",          color: "#f87171" },
-  "Content":      { icon: "fas fa-pen-nib",         color: "#a78bfa" },
-};
-
-/* ── Load Categories from Firestore ── */
-async function loadCategories() {
-  const grid = document.getElementById("categoriesGrid");
-  try {
-    const snap = await db.collection("categories").orderBy("order", "asc").get();
-    if (snap.empty) {
-      grid.innerHTML = `<div class="cat-empty"><i class="fas fa-folder-open"></i><p>No categories yet.</p></div>`;
-      return;
+        renderProjects("all");
+      } catch (err) {
+        console.error("Portfolio load error:", err);
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column:1/-1;">
+            <i class="fas fa-folder-open"></i>
+            <p>No projects found in portfolio yet.</p>
+          </div>`;
+      }
     }
-    grid.innerHTML = snap.docs.map(d => {
-      const data  = d.data();
-      const info  = CAT_ICONS[data.name] || { icon: "fas fa-layer-group", color: "#f5a623" };
-      return `
-        <div class="cat-card fade-in-up">
-          <div class="cat-icon" style="--ci:${info.color}">
-            <i class="${info.icon}"></i>
+
+    const CAT_ICONS = {
+      "Video Ads":    { icon: "fas fa-video",         color: "#f5a623" },
+      "Graphic Ads":  { icon: "fas fa-palette",        color: "#e879f9" },
+      "Social Media": { icon: "fas fa-hashtag",         color: "#38bdf8" },
+      "Web/App":      { icon: "fas fa-globe",           color: "#4ade80" },
+      "Motion":       { icon: "fas fa-film",            color: "#fb923c" },
+      "Branding":     { icon: "fas fa-star",            color: "#facc15" },
+      "Photography":  { icon: "fas fa-camera",          color: "#f87171" },
+      "Content":      { icon: "fas fa-pen-nib",         color: "#a78bfa" },
+    };
+
+    async function loadCategories() {
+      const grid = document.getElementById("categoriesGrid");
+      if (!grid) return;
+      try {
+        let snap;
+        try {
+          snap = await db.collection("categories").orderBy("order", "asc").get();
+        } catch (e) {
+          snap = await db.collection("categories").get();
+        }
+        if (snap.empty) {
+          grid.innerHTML = `<div class="cat-empty"><i class="fas fa-folder-open"></i><p>No categories yet.</p></div>`;
+          return;
+        }
+        grid.innerHTML = snap.docs.map(d => {
+          const data  = d.data();
+          const info  = CAT_ICONS[data.name] || { icon: "fas fa-layer-group", color: "#f5a623" };
+          return `
+            <div class="cat-card fade-in-up">
+              <div class="cat-icon" style="--ci:${info.color}">
+                <i class="${info.icon}"></i>
+              </div>
+              <h3 class="cat-name">${data.name}</h3>
+              ${data.description ? `<p class="cat-desc">${data.description}</p>` : ""}
+            </div>`;
+        }).join("");
+      } catch (err) {
+        console.error("Categories load error:", err);
+        grid.innerHTML = `<div class="cat-empty"><i class="fas fa-exclamation-circle"></i><p>Could not load categories.</p></div>`;
+      }
+    }
+
+    function renderProjects(category) {
+      const grid = document.getElementById("portfolioGrid");
+      if (!grid) return;
+      grid.innerHTML = "";
+
+      const filtered = category === "all"
+        ? allProjects
+        : allProjects.filter(p => p.category === category);
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column:1/-1;">
+            <i class="fas fa-folder-open"></i>
+            <p>No projects found in this category.</p>
+          </div>`;
+        return;
+      }
+
+      filtered.forEach((project, i) => {
+        const card = document.createElement("div");
+        card.className = "project-card";
+        card.style.animationDelay = `${i * 0.08}s`;
+
+        let mediaHTML = "";
+        if (project.mediaUrl) {
+          const isVideo = /\.(mp4|webm|ogg)$/i.test(project.mediaUrl);
+          mediaHTML = isVideo
+            ? `<video src="${project.mediaUrl}" muted loop autoplay playsinline></video>`
+            : `<img src="${project.mediaUrl}" alt="${project.title}" loading="lazy" />`;
+        } else {
+          mediaHTML = `<div class="project-media-placeholder"><i class="fas fa-photo-film"></i></div>`;
+        }
+
+        const safeId = project.id || 'proj_' + i;
+        const isVideo = project.mediaUrl ? /\.(mp4|webm|ogg)$/i.test(project.mediaUrl) : false;
+
+        card.style.cursor = "pointer";
+        card.onclick = () => {
+          window.location.href = `project-detail.html?id=${encodeURIComponent(safeId)}&type=video`;
+        };
+
+        card.innerHTML = `
+          <div class="project-media">
+            ${mediaHTML}
+            <div class="project-overlay">
+              <span class="web-card-overlay-btn"><i class="fas fa-play"></i> Watch Video & Comments</span>
+            </div>
+            ${project.category ? `<span class="project-category-badge">${escapeHtml(project.category)}</span>` : ""}
           </div>
-          <h3 class="cat-name">${data.name}</h3>
-          ${data.description ? `<p class="cat-desc">${data.description}</p>` : ""}
-        </div>`;
-    }).join("");
-  } catch (err) {
-    console.error("Categories load error:", err);
-    grid.innerHTML = `<div class="cat-empty"><i class="fas fa-exclamation-circle"></i><p>Could not load categories.</p></div>`;
-  }
-}
+          <div class="project-body">
+            <h3 class="project-title">${escapeHtml(project.title || "Untitled Project")}</h3>
+            <p class="project-desc">${escapeHtml(project.description || "")}</p>
+            <button class="comment-btn-badge" onclick="event.stopPropagation(); window.location.href='project-detail.html?id=${encodeURIComponent(safeId)}&type=video';">
+              <i class="fas fa-comments"></i> View Details & Comments
+            </button>
+          </div>`;
 
-function renderProjects(category) {
-  const grid = document.getElementById("portfolioGrid");
-  grid.innerHTML = "";
-
-  const filtered = category === "all"
-    ? allProjects
-    : allProjects.filter(p => p.category === category);
-
-  if (filtered.length === 0) {
-    grid.innerHTML = `
-      <div class="empty-state">
-        <i class="fas fa-folder-open"></i>
-        <p>No projects found in this category.</p>
-      </div>`;
-    return;
-  }
-
-  filtered.forEach((project, i) => {
-    const card = document.createElement("div");
-    card.className = "project-card";
-    card.style.animationDelay = `${i * 0.08}s`;
-
-    let mediaHTML = "";
-    if (project.mediaUrl) {
-      const isVideo = /\.(mp4|webm|ogg)$/i.test(project.mediaUrl);
-      mediaHTML = isVideo
-        ? `<video src="${project.mediaUrl}" muted loop autoplay playsinline></video>`
-        : `<img src="${project.mediaUrl}" alt="${project.title}" loading="lazy" />`;
-    } else {
-      mediaHTML = `<div class="project-media-placeholder"><i class="fas fa-photo-film"></i></div>`;
+        grid.appendChild(card);
+      });
     }
 
-    card.innerHTML = `
-      <div class="project-media">
-        ${mediaHTML}
-        <div class="project-overlay"></div>
-        ${project.category ? `<span class="project-category-badge">${project.category}</span>` : ""}
-      </div>
-      <div class="project-body">
-        <h3 class="project-title">${project.title || "Untitled Project"}</h3>
-        <p class="project-desc">${project.description || ""}</p>
-      </div>`;
-
-    grid.appendChild(card);
-  });
-}
-
-/* ── Filter tabs ── */
-document.getElementById("filterTabs").addEventListener("click", (e) => {
-  const tab = e.target.closest(".filter-tab");
-  if (!tab) return;
-  document.querySelectorAll(".filter-tab").forEach(t => t.classList.remove("active"));
-  tab.classList.add("active");
-  renderProjects(tab.dataset.cat);
-});
-
-/* ── Load Social Links ── */
-async function loadSocialLinks() {
-  const container = document.getElementById("socialIcons");
-
-  const iconMap = {
-    instagram:  { icon: "fab fa-instagram",  color: "#E1306C" },
-    facebook:   { icon: "fab fa-facebook-f", color: "#1877F2" },
-    twitter:    { icon: "fab fa-x-twitter",  color: "#ffffff" },
-    x:          { icon: "fab fa-x-twitter",  color: "#ffffff" },
-    tiktok:     { icon: "fab fa-tiktok",     color: "#ffffff" },
-    youtube:    { icon: "fab fa-youtube",    color: "#FF0000" },
-    linkedin:   { icon: "fab fa-linkedin-in",color: "#0A66C2" },
-    whatsapp:   { icon: "fab fa-whatsapp",   color: "#25D366" },
-    snapchat:   { icon: "fab fa-snapchat",   color: "#FFFC00" },
-    pinterest:  { icon: "fab fa-pinterest",  color: "#E60023" },
-    behance:    { icon: "fab fa-behance",    color: "#1769FF" },
-    dribbble:   { icon: "fab fa-dribbble",   color: "#EA4C89" },
-    fiverr:     { icon: "fas fa-dollar-sign",color: "#1DBF73" },
-  };
-
-  try {
-    const snap = await db.collection("settings").doc("socialLinks").get();
-
-    if (!snap.exists || !snap.data()) {
-      container.innerHTML = '<p style="color:var(--text-dim);font-size:0.85rem;">No social links configured yet.</p>';
-      return;
-    }
-
-    const links = snap.data();
-    container.innerHTML = "";
-
-    Object.entries(links).forEach(([type, value]) => {
-      if (!value) return;
-      const info = iconMap[type.toLowerCase()] || { icon: "fas fa-link", color: "#f5a623" };
-
-      // WhatsApp: format as wa.me link
-      const href = type.toLowerCase() === "whatsapp"
-        ? `https://wa.me/${value.replace(/\D/g, "")}`
-        : value;
-
-      const a = document.createElement("a");
-      a.href   = href;
-      a.target = "_blank";
-      a.rel    = "noopener noreferrer";
-      a.className = "social-icon-btn";
-      a.title  = type;
-      a.innerHTML = `<i class="${info.icon}"></i>`;
-      a.style.setProperty("--hover-color", info.color);
-      container.appendChild(a);
+    document.getElementById("filterTabs")?.addEventListener("click", (e) => {
+      const tab = e.target.closest(".filter-tab");
+      if (!tab) return;
+      document.querySelectorAll(".filter-tab").forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+      renderProjects(tab.dataset.cat);
     });
 
-    if (container.children.length === 0) {
-      container.innerHTML = '<p style="color:var(--text-dim);font-size:0.85rem;">No social links configured yet.</p>';
+    async function loadSocialLinks() {
+      const container = document.getElementById("socialIcons");
+      if (!container) return;
+
+      const iconMap = {
+        instagram:  { icon: "fab fa-instagram",  color: "#E1306C" },
+        facebook:   { icon: "fab fa-facebook-f", color: "#1877F2" },
+        twitter:    { icon: "fab fa-x-twitter",  color: "#ffffff" },
+        x:          { icon: "fab fa-x-twitter",  color: "#ffffff" },
+        tiktok:     { icon: "fab fa-tiktok",     color: "#ffffff" },
+        youtube:    { icon: "fab fa-youtube",    color: "#FF0000" },
+        linkedin:   { icon: "fab fa-linkedin-in",color: "#0A66C2" },
+        whatsapp:   { icon: "fab fa-whatsapp",   color: "#25D366" },
+        snapchat:   { icon: "fab fa-snapchat",   color: "#FFFC00" },
+        pinterest:  { icon: "fab fa-pinterest",  color: "#E60023" },
+        behance:    { icon: "fab fa-behance",    color: "#1769FF" },
+        dribbble:   { icon: "fab fa-dribbble",   color: "#EA4C89" },
+        fiverr:     { icon: "fas fa-dollar-sign",color: "#1DBF73" },
+      };
+
+      try {
+        const snap = await db.collection("settings").doc("socialLinks").get();
+
+        if (!snap.exists || !snap.data()) {
+          container.innerHTML = '<p style="color:var(--text-dim);font-size:0.85rem;">No social links configured yet.</p>';
+          return;
+        }
+
+        const links = snap.data();
+        container.innerHTML = "";
+
+        Object.entries(links).forEach(([type, value]) => {
+          if (!value) return;
+          const info = iconMap[type.toLowerCase()] || { icon: "fas fa-link", color: "#f5a623" };
+
+          const href = type.toLowerCase() === "whatsapp"
+            ? `https://wa.me/${value.replace(/\D/g, "")}`
+            : value;
+
+          const a = document.createElement("a");
+          a.href   = href;
+          a.target = "_blank";
+          a.rel    = "noopener noreferrer";
+          a.className = "social-icon-btn";
+          a.title  = type;
+          a.innerHTML = `<i class="${info.icon}"></i>`;
+          a.style.setProperty("--hover-color", info.color);
+          container.appendChild(a);
+        });
+
+        if (container.children.length === 0) {
+          container.innerHTML = '<p style="color:var(--text-dim);font-size:0.85rem;">No social links configured yet.</p>';
+        }
+      } catch (err) {
+        console.error("Social links error:", err);
+        container.innerHTML = '<p style="color:var(--text-dim);font-size:0.85rem;">No social links configured yet.</p>';
+      }
     }
-  } catch (err) {
-    console.error("Social links error:", err);
-    container.innerHTML = "";
-  }
-}
 
-/* ── Contact form (basic — no backend needed) ── */
-document.getElementById("contactForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const btn  = document.getElementById("contactSendBtn");
-  btn.disabled  = true;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
+    /* ── Load Site Settings (RTDB) ── */
+    function loadSiteSettings() {
+      rtdb.ref("siteSettings").on("value", (snap) => {
+        const data = snap.val() || {};
 
-  try {
-    await db.collection("contactMessages").add({
-      name:      document.getElementById("cName").value.trim(),
-      email:     document.getElementById("cEmail").value.trim(),
-      message:   document.getElementById("cMessage").value.trim(),
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        if (data.profileName) {
+          const pNameEl = document.getElementById("heroProfileName");
+          if (pNameEl) pNameEl.textContent = data.profileName;
+        }
+
+        if (data.heroTagline) {
+          const tagEl = document.getElementById("heroTagline");
+          if (tagEl) tagEl.innerHTML = escapeHtml(data.heroTagline);
+        }
+
+        if (data.aboutText) {
+          const bioEl = document.getElementById("aboutBioText");
+          if (bioEl) bioEl.textContent = data.aboutText;
+        }
+
+        if (data.profilePictureUrl) {
+          const photoEl = document.getElementById("aboutPhoto");
+          if (photoEl) photoEl.src = data.profilePictureUrl;
+        }
+
+        if (data.contactEmail) {
+          const emailEl = document.getElementById("infoContactEmail");
+          if (emailEl) emailEl.textContent = data.contactEmail;
+        }
+
+        if (data.workingHours) {
+          const hoursEl = document.getElementById("infoWorkingHours");
+          if (hoursEl) hoursEl.textContent = data.workingHours;
+        }
+
+        // Stats
+        const sp = document.getElementById("statProjects");
+        const sc = document.getElementById("statClients");
+        const sy = document.getElementById("statYears");
+        const by = document.getElementById("badgeYears");
+        if (sp && data.statProjects !== undefined) sp.dataset.target = data.statProjects;
+        if (sc && data.statClients !== undefined) sc.dataset.target = data.statClients;
+        if (sy && data.statYears !== undefined) sy.dataset.target = data.statYears;
+        if (by && data.statYears !== undefined) by.textContent = data.statYears + "+";
+
+        animateCounters();
+
+        // Render Reviews
+        renderReviews(data.reviews || {});
+      });
+    }
+
+    function renderReviews(reviewsObj) {
+      const container = document.getElementById("reviewsGrid");
+      const keys = Object.keys(reviewsObj);
+      if (!container) return;
+
+      if (keys.length === 0) {
+        container.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:var(--text-dim);font-size:0.9rem;padding:2rem;">No client reviews posted yet.</div>`;
+        return;
+      }
+
+      container.innerHTML = keys.map(key => {
+        const rev = reviewsObj[key];
+        const stars = "★".repeat(rev.rating || 5) + "☆".repeat(5 - (rev.rating || 5));
+        const initial = (rev.name || "C").charAt(0).toUpperCase();
+        return `
+      <div class="review-card fade-in-up">
+        <div>
+          <div class="review-stars">${stars}</div>
+          <div class="review-text">"${escapeHtml(rev.text)}"</div>
+        </div>
+        <div class="review-author">
+          <div class="review-author-avatar">${initial}</div>
+          <div>
+            <div class="review-author-name">${escapeHtml(rev.name)}</div>
+            ${rev.role ? `<div class="review-author-role">${escapeHtml(rev.role)}</div>` : ''}
+          </div>
+        </div>
+      </div>`;
+      }).join("");
+    }
+
+    /* ── Top-Level Portfolio Browsing Tabs ── */
+    let websitePortfolioItems = {};
+    let webPortfolioLoaded = false;
+
+    const tabVideoAds = document.getElementById("tabVideoAds");
+    const tabWebsitePortfolio = document.getElementById("tabWebsitePortfolio");
+    const portfolioGrid = document.getElementById("portfolioGrid");
+    const websiteGrid = document.getElementById("websiteGrid");
+    const filterTabs = document.getElementById("filterTabs");
+
+    tabVideoAds?.addEventListener("click", () => {
+      tabVideoAds.classList.add("active");
+      tabWebsitePortfolio.classList.remove("active");
+      portfolioGrid.style.display = "grid";
+      filterTabs.style.display = "flex";
+      websiteGrid.style.display = "none";
     });
-    showToast("Message sent! I'll be in touch soon. 🙌", "success");
-    e.target.reset();
-  } catch (err) {
-    showToast("Failed to send. Please try again.", "error");
-  } finally {
-    btn.disabled  = false;
-    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
-  }
-});
 
-/* ── Scroll reveal ── */
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add("fade-in-up");
-      observer.unobserve(e.target);
+    tabWebsitePortfolio?.addEventListener("click", () => {
+      tabWebsitePortfolio.classList.add("active");
+      tabVideoAds.classList.remove("active");
+      portfolioGrid.style.display = "none";
+      filterTabs.style.display = "none";
+      websiteGrid.style.display = "grid";
+
+      if (!webPortfolioLoaded) {
+        loadWebsitePortfolio();
+      }
+    });
+
+    function loadWebsitePortfolio() {
+      rtdb.ref("websitePortfolio").on("value", (snap) => {
+        webPortfolioLoaded = true;
+        websitePortfolioItems = snap.val() || {};
+        renderWebsitePortfolio();
+      });
     }
-  });
-}, { threshold: 0.1 });
 
-document.querySelectorAll(".about-grid, .contact-grid, .chat-cta-inner")
-  .forEach(el => observer.observe(el));
+    function renderWebsitePortfolio() {
+      const container = document.getElementById("websiteGrid");
+      const keys = Object.keys(websitePortfolioItems);
 
-/* ── Init ── */
-loadPortfolio();
-loadSocialLinks();
-loadCategories();
-</script>
+      if (keys.length === 0) {
+        container.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1;">
+        <i class="fas fa-globe"></i>
+        <p>No website portfolio items available yet.</p>
+      </div>`;
+        return;
+      }
+
+      container.innerHTML = keys.map((key, i) => {
+        const item = websitePortfolioItems[key];
+        const thumbMedia = item.thumbnailUrl
+          ? `<img src="${escapeHtml(item.thumbnailUrl)}" alt="${escapeHtml(item.title)}" loading="lazy" />`
+          : `<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg, rgba(245,166,35,0.1), rgba(20,20,20,0.9));color:var(--gold);"><i class="fas fa-globe" style="font-size:2.5rem;margin-bottom:0.4rem;"></i><span style="font-size:0.75rem;color:var(--text-muted);font-weight:500;">Interactive Web Demo</span></div>`;
+
+        return `
+          <div class="web-card fade-in-up" style="animation-delay:${i * 0.08}s">
+            <div class="web-card-thumb" onclick="openBrowserModal('${escapeHtml(item.title)}', '${escapeHtml(item.url)}')">
+              ${thumbMedia}
+              <div class="web-card-overlay">
+                <span class="web-card-overlay-btn"><i class="fas fa-laptop"></i> Launch Website</span>
+              </div>
+            </div>
+            <div class="web-card-body">
+              <h3 class="web-card-title">${escapeHtml(item.title)}</h3>
+              ${item.description ? `<p class="web-card-desc">${escapeHtml(item.description)}</p>` : ''}
+              <div style="margin-top:auto;padding-top:0.75rem;display:flex;gap:0.5rem;">
+                <button class="btn btn-ghost btn-sm" style="flex:1;font-size:0.78rem;" onclick="openBrowserModal('${escapeHtml(item.title)}', '${escapeHtml(item.url)}')">
+                  <i class="fas fa-external-link-alt"></i> Preview
+                </button>
+                <button class="comment-btn-badge" style="margin:0;" onclick="window.location.href='project-detail.html?id=${encodeURIComponent(key)}&type=website';">
+                  <i class="fas fa-comments"></i> Comments
+                </button>
+              </div>
+            </div>
+          </div>`;
+      }).join("");
+    }
+
+    /* ── In-App Embedded Browser View Modal ── */
+    const browserModal = document.getElementById("browserModal");
+    const browserFrame = document.getElementById("browserFrame");
+    const browserTitle = document.getElementById("browserTitle");
+    const browserFallback = document.getElementById("browserFallback");
+    const fallbackTitle = document.getElementById("fallbackTitle");
+    const fallbackBtn = document.getElementById("fallbackLaunchBtn");
+    let currentWebUrl = "";
+
+    function openBrowserModal(title, url) {
+      currentWebUrl = url;
+      browserTitle.innerHTML = `<i class="fas fa-globe"></i> ${escapeHtml(title)}`;
+      fallbackTitle.textContent = title;
+
+      browserFallback.style.display = "none";
+      browserFrame.style.display = "block";
+      browserFrame.src = url;
+
+      browserModal.classList.add("show");
+      document.body.style.overflow = "hidden";
+
+      // Check iframe loading issues
+      let loaded = false;
+      browserFrame.onload = () => { loaded = true; };
+
+      setTimeout(() => {
+        // If iframe fails to load or triggers security error fallback
+        try {
+          if (!loaded && browserFrame.contentWindow.location.href === "about:blank") {
+            showFallbackView();
+          }
+        } catch (e) {
+          // Cross-origin restriction is normal, but if blank show fallback
+        }
+      }, 2500);
+    }
+
+    function showFallbackView() {
+      browserFrame.style.display = "none";
+      browserFallback.style.display = "flex";
+    }
+
+    fallbackBtn?.addEventListener("click", () => {
+      if (currentWebUrl) {
+        const win = window.open(currentWebUrl, "_blank", "noopener,noreferrer");
+        if (win) win.focus();
+      }
+    });
+
+    function closeBrowserModal() {
+      browserModal.classList.remove("show");
+      browserFrame.src = "about:blank";
+      document.body.style.overflow = "";
+    }
+
+    document.getElementById("closeBrowserModal")?.addEventListener("click", closeBrowserModal);
+    document.getElementById("closeBrowserDot")?.addEventListener("click", closeBrowserModal);
+    browserModal?.addEventListener("click", (e) => {
+      if (e.target === browserModal) closeBrowserModal();
+    });
+
+    /* ── Project Detail & Realtime Comments Modal ── */
+    const projectDetailModal = document.getElementById("projectDetailModal");
+    const pModalTitle        = document.getElementById("pModalTitle");
+    const pModalMedia        = document.getElementById("pModalMedia");
+    const pModalDesc         = document.getElementById("pModalDesc");
+    const pCommentsList      = document.getElementById("pCommentsList");
+    const pCommentCountBadge = document.getElementById("pCommentCountBadge");
+    const pCommentFormWrap   = document.getElementById("pCommentFormContainer");
+
+    let currentCommentsListener = null;
+
+    function openProjectDetailModal(itemId, title, mediaUrl, isVideo, description, itemType) {
+      pModalTitle.textContent = title || "Project Details";
+      pModalDesc.textContent  = description || "";
+
+      // Clean video rendering (no auto-play audio bugs)
+      if (mediaUrl) {
+        pModalMedia.style.display = "flex";
+        if (isVideo) {
+          pModalMedia.innerHTML = `<video src="${escapeHtml(mediaUrl)}" controls playsinline preload="metadata" style="width:100%;max-height:400px;border-radius:12px;outline:none;"></video>`;
+        } else {
+          pModalMedia.innerHTML = `<img src="${escapeHtml(mediaUrl)}" alt="${escapeHtml(title)}" style="width:100%;max-height:400px;object-fit:contain;border-radius:12px;" />`;
+        }
+      } else {
+        pModalMedia.style.display = "none";
+        pModalMedia.innerHTML = "";
+      }
+
+      // Render comment form & load comments
+      renderProjectCommentForm(itemId, title, itemType);
+      listenToProjectComments(itemId);
+
+      // Browser history navigation state
+      if (!window.location.hash.includes("project-details")) {
+        history.pushState({ modalOpen: true }, "", "#project-details");
+      }
+
+      projectDetailModal.classList.add("show");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeProjectModal(popHistory = false) {
+      // Pause & stop any playing video inside modal immediately
+      const activeVideo = pModalMedia.querySelector("video");
+      if (activeVideo) {
+        try {
+          activeVideo.pause();
+          activeVideo.removeAttribute("src");
+          activeVideo.load();
+        } catch (e) {}
+      }
+      pModalMedia.innerHTML = "";
+
+      projectDetailModal.classList.remove("show");
+      document.body.style.overflow = "";
+
+      if (currentCommentsListener) {
+        currentCommentsListener.off();
+        currentCommentsListener = null;
+      }
+
+      if (popHistory && window.location.hash.includes("project-details")) {
+        history.back();
+      }
+    }
+
+    // Modal Navigation listeners (Back button, X button, Overlay click, Escape key, Browser popstate)
+    document.getElementById("btnBackModal")?.addEventListener("click", () => closeProjectModal(true));
+    document.getElementById("closeProjectModal")?.addEventListener("click", () => closeProjectModal(true));
+    
+    projectDetailModal?.addEventListener("click", (e) => {
+      if (e.target === projectDetailModal) closeProjectModal(true);
+    });
+
+    window.addEventListener("popstate", () => {
+      if (projectDetailModal.classList.contains("show")) {
+        closeProjectModal(false);
+      }
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && projectDetailModal.classList.contains("show")) {
+        closeProjectModal(true);
+      }
+    });
+
+    function listenToProjectComments(itemId) {
+      if (currentCommentsListener) {
+        currentCommentsListener.off();
+      }
+
+      currentCommentsListener = rtdb.ref(`portfolioComments/${itemId}`);
+      currentCommentsListener.on("value", (snap) => {
+        const data = snap.val() || {};
+        const keys = Object.keys(data);
+
+        pCommentCountBadge.textContent = `(${keys.length})`;
+
+        if (keys.length === 0) {
+          pCommentsList.innerHTML = `<p style="color:var(--text-dim);font-size:0.88rem;text-align:center;padding:1.5rem;background:var(--surface2);border-radius:12px;">No comments yet. Be the first to leave a comment!</p>`;
+          return;
+        }
+
+        const commentList = keys.map(key => ({ commentId: key, ...data[key] }));
+        commentList.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+        pCommentsList.innerHTML = commentList.map(c => {
+          const isLiked = !!c.likedByAdmin;
+          const hasReply = !!c.adminReply;
+          const dateStr = c.timestamp ? new Date(c.timestamp).toLocaleDateString() : "Just now";
+          const avatar = c.userPhoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(c.userName || "U")}&background=f5a623&color=000&bold=true`;
+
+          return `
+            <div class="user-comment-card">
+              <div class="user-comment-header">
+                <div class="user-comment-user">
+                  <img src="${avatar}" alt="${escapeHtml(c.userName)}" class="user-comment-avatar" />
+                  <div>
+                    <div class="user-comment-name">${escapeHtml(c.userName || "User")}</div>
+                    <div class="user-comment-time">${dateStr}</div>
+                  </div>
+                </div>
+                ${isLiked ? `<span class="admin-liked-badge"><i class="fas fa-heart"></i> Liked by Hamza</span>` : ''}
+              </div>
+
+              <div class="user-comment-text">${escapeHtml(c.text)}</div>
+
+              ${hasReply ? `
+                <div class="user-admin-reply">
+                  <div class="user-admin-reply-header">
+                    <i class="fas fa-check-circle"></i> Hamza Mughal (Admin)
+                  </div>
+                  <div style="font-size:0.85rem;color:var(--text);">${escapeHtml(c.adminReply.text)}</div>
+                </div>
+              ` : ''}
+            </div>`;
+        }).join("");
+      });
+    }
+
+    function renderProjectCommentForm(itemId, title, itemType) {
+      if (currentUser) {
+        const userDisplayName = currentUser.displayName || currentUser.email.split("@")[0];
+        pCommentFormWrap.innerHTML = `
+          <form id="postCommentForm" style="display:flex;gap:0.75rem;">
+            <input type="text" id="commentInputText" placeholder="Write a public comment as ${escapeHtml(userDisplayName)}..." required style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:0.75rem 1rem;color:var(--text);outline:none;font-size:0.9rem;" />
+            <button type="submit" class="btn btn-gold btn-sm" id="postCommentBtn">
+              <i class="fas fa-paper-plane"></i> Post
+            </button>
+          </form>`;
+
+        document.getElementById("postCommentForm")?.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const input = document.getElementById("commentInputText");
+          const btn   = document.getElementById("postCommentBtn");
+          const text  = input.value.trim();
+
+          if (!text) return;
+          setLoading(btn, true);
+
+          try {
+            const commentData = {
+              userId: currentUser.uid,
+              userName: userDisplayName,
+              userPhoto: currentUser.photoURL || "",
+              text,
+              itemTitle: title,
+              itemType: itemType || "video",
+              timestamp: firebase.database.ServerValue.TIMESTAMP
+            };
+
+            await rtdb.ref(`portfolioComments/${itemId}`).push(commentData);
+            input.value = "";
+            showToast("Comment posted!", "success");
+          } catch (err) {
+            showToast("Failed to post comment: " + err.message, "error");
+          } finally {
+            setLoading(btn, false);
+          }
+        });
+      } else {
+        pCommentFormWrap.innerHTML = `
+          <div style="background:var(--surface2);padding:1.25rem;border-radius:var(--radius);text-align:center;font-size:0.88rem;color:var(--text-muted);border:1px solid var(--border);">
+            <i class="fas fa-user-lock" style="color:var(--gold);font-size:1.4rem;margin-bottom:0.5rem;display:block;"></i>
+            <span>Want to leave a comment on this project?</span>
+            <div style="margin-top:0.6rem;">
+              <a href="login.html" onclick="sessionStorage.setItem('redirectAfterLogin', 'index.html#portfolio')" class="btn btn-gold btn-sm" style="display:inline-flex;align-items:center;gap:0.4rem;text-decoration:none;">
+                <i class="fas fa-sign-in-alt"></i> Sign In to Comment
+              </a>
+            </div>
+          </div>`;
+      }
+    }
+
+    /* ── Contact form with Security & Rate Limiting ── */
+    document.getElementById("contactForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      // 1. Honeypot check
+      const honeypot = document.getElementById("cHoneypot")?.value;
+      if (honeypot) {
+        showToast("Message sent! I'll be in touch soon. 🙌", "success");
+        e.target.reset();
+        return;
+      }
+
+      // 2. Client-side rate limiting (60s)
+      const lastSub = localStorage.getItem("lastContactSubmit");
+      const now = Date.now();
+      if (lastSub && (now - parseInt(lastSub, 10)) < 60000) {
+        const remaining = Math.ceil((60000 - (now - parseInt(lastSub, 10))) / 1000);
+        showToast(`Please wait ${remaining} seconds before sending another message.`, "error");
+        return;
+      }
+
+      const btn = document.getElementById("contactSendBtn");
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
+
+      try {
+        await db.collection("contactMessages").add({
+          name: document.getElementById("cName").value.trim(),
+          email: document.getElementById("cEmail").value.trim(),
+          message: document.getElementById("cMessage").value.trim(),
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+
+        localStorage.setItem("lastContactSubmit", now.toString());
+        showToast("Message sent! I'll be in touch soon. 🙌", "success");
+        e.target.reset();
+      } catch (err) {
+        showToast("Failed to send. Please try again.", "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+      }
+    });
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    /* ── Scroll reveal ── */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add("fade-in-up");
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll(".about-grid, .contact-grid, .chat-cta-inner")
+      .forEach(el => observer.observe(el));
+
+    /* ── Init ── */
+    loadSiteSettings();
+    loadPortfolio();
+    loadSocialLinks();
+    loadCategories();
+  </script>
 </body>
+
 </html>

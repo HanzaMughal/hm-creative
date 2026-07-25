@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Details — HM Creative</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Firebase CDN (compat mode) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <script src="js/firebase-config.js"></script>
+
+  <style>
+    .project-detail-section {
+      padding: 100px 0 60px;
+      min-height: 85vh;
+    }
+    .media-player-container {
+      width: 100%;
+      background: #0d0d0d;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 350px;
+      max-height: 600px;
+    }
+    .media-player-container video {
+      width: 100%;
+      max-height: 600px;
+      outline: none;
+      object-fit: contain;
+    }
+    .media-player-container img {
+      width: 100%;
+      max-height: 600px;
+      object-fit: contain;
+    }
+    .project-meta-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 2.5rem;
+    }
+    .comments-section-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.75rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-mark">HM</span>
+        <span class="logo-text">Creative<span class="logo-dot">.</span></span>
+      </a>
+
+      <div class="nav-links" id="navLinks">
+        <a href="index.html#home" class="nav-link">Home</a>
+        <a href="index.html#about" class="nav-link">About</a>
+        <a href="index.html#portfolio" class="nav-link active">Portfolio</a>
+        <a href="index.html#contact" class="nav-link">Contact</a>
+        <div id="navAuthSection"></div>
+      </div>
+
+      <div class="nav-actions">
+        <a href="chat.html" class="nav-chat-btn" id="heroChat" title="Chat with me">
+          <i class="fas fa-comment-dots"></i>
+          <span class="chat-badge-pulse" id="navUnreadBadge" style="display:none"></span>
+        </a>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── PROJECT DETAIL CONTENT ── -->
+  <section class="project-detail-section">
+    <div class="container" style="max-width:960px;">
+
+      <!-- Top Back Navigation -->
+      <div style="margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;">
+        <a href="index.html#portfolio" class="btn btn-ghost btn-sm" style="display:inline-flex;align-items:center;gap:0.5rem;text-decoration:none;">
+          <i class="fas fa-arrow-left"></i> Back to Portfolio
+        </a>
+      </div>
+
+      <!-- Hero Media Player -->
+      <div class="media-player-container" id="mediaContainer">
+        <div style="color:var(--text-dim);text-align:center;padding:2rem;">
+          <i class="fas fa-spinner fa-spin" style="font-size:2rem;margin-bottom:0.75rem;"></i>
+          <p>Loading project media...</p>
+        </div>
+      </div>
+
+      <!-- Project Metadata Box -->
+      <div class="project-meta-box fade-in-up">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;flex-wrap:wrap;">
+          <span class="project-category-badge" id="pCategory">Portfolio</span>
+          <span style="font-size:0.8rem;color:var(--text-dim);" id="pTypeBadge"></span>
+        </div>
+        <h1 style="font-size:1.8rem;font-weight:800;color:var(--text);margin-bottom:0.75rem;" id="pTitle">Loading Project...</h1>
+        <p style="font-size:0.98rem;color:var(--text-muted);line-height:1.7;margin:0;" id="pDesc"></p>
+        <div id="pWebLaunchWrap" style="margin-top:1.25rem;display:none;">
+          <a href="#" target="_blank" rel="noopener" id="pWebLaunchBtn" class="btn btn-gold btn-sm">
+            <i class="fas fa-external-link-alt"></i> Open Live Website
+          </a>
+        </div>
+      </div>
+
+      <!-- Comments & Discussion Box -->
+      <div class="comments-section-box fade-in-up">
+        <h3 style="font-size:1.25rem;font-weight:700;color:var(--text);margin-bottom:1.25rem;display:flex;align-items:center;gap:0.6rem;">
+          <i class="fas fa-comments" style="color:var(--gold);"></i>
+          Project Discussion <span style="font-size:0.85rem;color:var(--text-dim);font-weight:normal;" id="pCommentCount">(0)</span>
+        </h3>
+
+        <!-- Comments Feed -->
+        <div id="pCommentsFeed">
+          <p style="color:var(--text-dim);font-size:0.9rem;">Loading comments...</p>
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--border);margin:1.75rem 0 1.25rem;" />
+
+        <!-- Comment Input Form -->
+        <div id="pCommentFormWrap"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo">
+            <span class="logo-mark">HM</span>
+            <span class="logo-text">Creative<span class="logo-dot">.</span></span>
+          </a>
+        </div>
+        <p class="footer-copy">
+          © <span id="footerYear"></span> HM Creative. All rights reserved.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/project-detail.js"></script>
+  <script>
+    document.getElementById("footerYear").textContent = new Date().getFullYear();
+    /* Mobile nav toggle */
+    const navToggle = document.getElementById("navToggle");
+    const navLinks = document.getElementById("navLinks");
+    navToggle?.addEventListener("click", () => {
+      navToggle.classList.toggle("open");
+      navLinks.classList.toggle("open");
+    });
+  </script>
+</body>
+</html>
