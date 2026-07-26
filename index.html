@@ -1181,6 +1181,24 @@
             };
 
             await rtdb.ref(`portfolioComments/${itemId}`).push(commentData);
+
+            // Also sync comment into Admin Chat thread
+            try {
+              await rtdb.ref(`chats/${currentUser.uid}/messages`).push({
+                text: `💬 Commented on "${title}": "${text}"`,
+                senderId: currentUser.uid,
+                senderName: userDisplayName,
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                isRead: false
+              });
+              await rtdb.ref(`chats/${currentUser.uid}`).update({
+                name: userDisplayName,
+                email: currentUser.email || ""
+              });
+            } catch (chatErr) {
+              console.warn("Chat notification sync skipped:", chatErr);
+            }
+
             input.value = "";
             showToast("Comment posted!", "success");
           } catch (err) {
