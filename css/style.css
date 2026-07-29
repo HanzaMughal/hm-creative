@@ -2298,3 +2298,145 @@ footer {
 }
 
 
+/* ============================================================
+   LIKE BUTTON
+   ============================================================ */
+.like-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: var(--transition);
+  min-height: 44px;
+  font-family: inherit;
+  line-height: 1;
+}
+
+.like-btn i { font-size: 0.8rem; transition: transform 0.25s ease, color 0.25s ease; }
+
+.like-btn:hover {
+  background: rgba(255, 82, 82, 0.1);
+  border-color: rgba(255, 82, 82, 0.4);
+  color: #ff6b6b;
+}
+
+.like-btn.liked {
+  background: rgba(255, 82, 82, 0.15);
+  border-color: #ff5252;
+  color: #ff5252;
+}
+
+@keyframes heartPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.5); }
+  70%  { transform: scale(0.9); }
+  100% { transform: scale(1.2); }
+}
+
+.like-btn.liked i { animation: heartPop 0.35s ease forwards; }
+
+.like-count { min-width: 1ch; }
+
+/* ── Card actions row ── */
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+/* ============================================================
+   MOBILE-FIRST OVERHAUL
+   ============================================================ */
+
+/* ── 768px: modals full-screen, portfolio 2-col ── */
+@media (max-width: 768px) {
+  .browser-modal { padding: 0; align-items: flex-end; }
+  .browser-modal-content {
+    width: 100%;
+    max-width: 100%;
+    height: 95dvh;
+    border-radius: 20px 20px 0 0;
+  }
+  .project-modal { padding: 0; align-items: flex-end; }
+  .project-modal-content {
+    width: 100%;
+    max-width: 100%;
+    max-height: 95dvh;
+    border-radius: 20px 20px 0 0;
+  }
+  .project-modal-close,
+  .browser-modal-close {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .portfolio-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  #websiteGrid    { grid-template-columns: repeat(2, 1fr) !important; }
+  .portfolio-type-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    justify-content: flex-start;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .portfolio-type-tabs::-webkit-scrollbar { display: none; }
+  .portfolio-type-tab { flex-shrink: 0; white-space: nowrap; min-height: 44px; }
+  .filter-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap !important;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .filter-tabs::-webkit-scrollbar { display: none; }
+  .filter-tab { white-space: nowrap; flex-shrink: 0; min-height: 44px; display: inline-flex; align-items: center; }
+}
+
+/* ── 480px: single column, stacked forms ── */
+@media (max-width: 480px) {
+  .portfolio-grid,
+  #websiteGrid { grid-template-columns: 1fr !important; }
+
+  .media-player-container {
+    min-height: 200px;
+    max-height: min(56vw, 340px);
+    border-radius: 14px;
+  }
+  .media-player-container video,
+  .media-player-container img { max-height: min(56vw, 340px); }
+
+  .project-modal-media { max-height: min(55vw, 240px); }
+  .project-modal-media video,
+  .project-modal-media img { max-height: min(55vw, 240px); }
+
+  .hero-cta .btn { min-height: 48px; }
+
+  #detailCommentForm,
+  #postCommentForm { flex-direction: column !important; gap: 0.5rem !important; }
+  #detailCommentForm input,
+  #postCommentForm input { width: 100% !important; }
+
+  .browser-modal-controls { display: none; }
+  .browser-modal-bar { padding: 0.6rem 1rem; }
+}
+
+/* ── Landscape phones ── */
+@media (max-width: 768px) and (orientation: landscape) {
+  .hero { padding-top: 4rem; min-height: auto; }
+  .hero-name { font-size: clamp(1.6rem, 5vw, 2.4rem); }
+  .stats-bar { margin-top: 1.5rem; }
+  .project-modal-content { max-height: 90dvh; }
+  .browser-modal-content { height: 90dvh; }
+  .media-player-container { max-height: 60vh; }
+}

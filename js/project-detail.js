@@ -80,7 +80,7 @@ async function loadProjectDetails() {
       if (item.mediaUrl) {
         const isVideo = /\.(mp4|webm|ogg)$/i.test(item.mediaUrl);
         if (isVideo) {
-          container.innerHTML = `<video src="${escapeHtml(item.mediaUrl)}" controls playsinline preload="metadata" style="width:100%;max-height:580px;"></video>`;
+          container.innerHTML = `<video src="${escapeHtml(item.mediaUrl)}" controls controlsList="nodownload" oncontextmenu="return false" playsinline preload="metadata" style="width:100%;max-height:580px;"></video>`;
         } else {
           container.innerHTML = `<img src="${escapeHtml(item.mediaUrl)}" alt="${escapeHtml(item.title)}" />`;
         }

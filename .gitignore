@@ -3,10 +3,12 @@ firestore.rules
 image.png
 admin/
 .env
-.env.local
-.env*.local
+.env.*
+!.env.example
 firebase-adminsdk-*.json
 serviceAccountKey.json
 node_modules/
 .vercel
+js/config.js
+!js/config.example.js
 

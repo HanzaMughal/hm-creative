@@ -23,6 +23,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="js/config.js"></script>
   <script src="js/firebase-config.js"></script>
 </head>
 
@@ -284,7 +285,7 @@
           <div class="contact-items">
             <div class="contact-item">
               <i class="fas fa-envelope"></i>
-              <span id="infoContactEmail">hamza@hmcreative.com</span>
+              <span id="infoContactEmail">hmdesigne102@gmail.com</span>
             </div>
             <div class="contact-item">
               <i class="fas fa-map-marker-alt"></i>
@@ -571,6 +572,9 @@
     document.getElementById("heroChat")?.addEventListener("click", gotoChat);
     document.getElementById("chatCTABtn")?.addEventListener("click", gotoChat);
 
+    /* ── In-session data cache (prevents re-fetching on tab switches) ── */
+    const _cache = {};
+
     /* ── Load Portfolio from Firestore ── */
     let allProjects = [];
 
@@ -579,16 +583,42 @@
       const tabs = document.getElementById("filterTabs");
       if (!grid) return;
 
+      // Restore saved filter tab
+      const savedCat = sessionStorage.getItem('hmc_filter') || 'all';
+
+      if (_cache.projects) {
+        // Cache hit — skip skeleton, render immediately
+        allProjects = _cache.projects;
+        if (tabs) {
+          tabs.querySelectorAll(".filter-tab:not([data-cat='all'])").forEach(t => t.remove());
+          const categories = [...new Set(allProjects.map(p => p.category).filter(Boolean))];
+          categories.forEach(cat => {
+            const btn = document.createElement("button");
+            btn.className   = "filter-tab";
+            btn.dataset.cat = cat;
+            btn.textContent = cat;
+            tabs.appendChild(btn);
+          });
+        }
+        // Restore active tab UI
+        document.querySelectorAll(".filter-tab").forEach(t => {
+          t.classList.toggle('active', t.dataset.cat === savedCat);
+        });
+        renderProjects(savedCat);
+        return;
+      }
+
       try {
         let snap;
         try {
           snap = await db.collection("projects").orderBy("createdAt", "desc").get();
         } catch (e1) {
-          console.warn("Firestore orderBy failed, falling back to simple get():", e1);
+          console.warn("Firestore orderBy failed, falling back:", e1);
           snap = await db.collection("projects").get();
         }
 
         allProjects = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        _cache.projects = allProjects;
 
         if (tabs) {
           const categories = [...new Set(allProjects.map(p => p.category).filter(Boolean))];
@@ -602,7 +632,7 @@
           });
         }
 
-        renderProjects("all");
+        renderProjects(savedCat);
       } catch (err) {
         console.error("Portfolio load error:", err);
         grid.innerHTML = `
@@ -627,6 +657,12 @@
     async function loadCategories() {
       const grid = document.getElementById("categoriesGrid");
       if (!grid) return;
+
+      if (_cache.categories) {
+        grid.innerHTML = _cache.categories;
+        return;
+      }
+
       try {
         let snap;
         try {
@@ -650,6 +686,7 @@
               ${data.description ? `<p class="cat-desc">${data.description}</p>` : ""}
             </div>`;
         }).join("");
+        _cache.categories = grid.innerHTML; // cache rendered HTML
       } catch (err) {
         console.error("Categories load error:", err);
         grid.innerHTML = `<div class="cat-empty"><i class="fas fa-exclamation-circle"></i><p>Could not load categories.</p></div>`;
@@ -690,7 +727,7 @@
         }
 
         const safeId = project.id || 'proj_' + i;
-        const isVideo = project.mediaUrl ? /\.(mp4|webm|ogg)$/i.test(project.mediaUrl) : false;
+        const liked = !!localStorage.getItem(`liked_video_${safeId}`);
 
         card.style.cursor = "pointer";
         card.onclick = () => {
@@ -708,12 +745,23 @@
           <div class="project-body">
             <h3 class="project-title">${escapeHtml(project.title || "Untitled Project")}</h3>
             <p class="project-desc">${escapeHtml(project.description || "")}</p>
-            <button class="comment-btn-badge" onclick="event.stopPropagation(); window.location.href='project-detail.html?id=${encodeURIComponent(safeId)}&type=video';">
-              <i class="fas fa-comments"></i> View Details & Comments
-            </button>
+            <div class="card-actions">
+              <button class="comment-btn-badge" onclick="event.stopPropagation(); window.location.href='project-detail.html?id=${encodeURIComponent(safeId)}&type=video';">
+                <i class="fas fa-comments"></i> View Details & Comments
+              </button>
+              <button class="like-btn ${liked ? 'liked' : ''}" id="like-video-${safeId}" onclick="event.stopPropagation(); likeItem('video', '${safeId}')" aria-label="Like this project">
+                <i class="fas fa-heart"></i> <span class="like-count" id="lc-video-${safeId}">0</span>
+              </button>
+            </div>
           </div>`;
 
         grid.appendChild(card);
+
+        // Load live count
+        rtdb.ref(`likes/video/${safeId}/count`).on("value", snap => {
+          const el = document.getElementById(`lc-video-${safeId}`);
+          if (el) el.textContent = snap.val() || 0;
+        });
       });
     }
 
@@ -722,12 +770,19 @@
       if (!tab) return;
       document.querySelectorAll(".filter-tab").forEach(t => t.classList.remove("active"));
       tab.classList.add("active");
+      sessionStorage.setItem('hmc_filter', tab.dataset.cat); // persist for back-navigation
       renderProjects(tab.dataset.cat);
     });
 
     async function loadSocialLinks() {
       const container = document.getElementById("socialIcons");
       if (!container) return;
+
+      // Return cached result
+      if (_cache.socialLinks) {
+        container.innerHTML = _cache.socialLinks;
+        return;
+      }
 
       const iconMap = {
         instagram:  { icon: "fab fa-instagram",  color: "#E1306C" },
@@ -750,6 +805,7 @@
 
         if (!snap.exists || !snap.data()) {
           container.innerHTML = '<p style="color:var(--text-dim);font-size:0.85rem;">No social links configured yet.</p>';
+          _cache.socialLinks = container.innerHTML;
           return;
         }
 
@@ -778,6 +834,7 @@
         if (container.children.length === 0) {
           container.innerHTML = '<p style="color:var(--text-dim);font-size:0.85rem;">No social links configured yet.</p>';
         }
+        _cache.socialLinks = container.innerHTML; // cache the rendered HTML
       } catch (err) {
         console.error("Social links error:", err);
         container.innerHTML = '<p style="color:var(--text-dim);font-size:0.85rem;">No social links configured yet.</p>';
@@ -809,9 +866,9 @@
           if (photoEl) photoEl.src = data.profilePictureUrl;
         }
 
-        if (data.contactEmail) {
-          const emailEl = document.getElementById("infoContactEmail");
-          if (emailEl) emailEl.textContent = data.contactEmail;
+        const emailEl = document.getElementById("infoContactEmail");
+        if (emailEl) {
+          emailEl.textContent = data.contactEmail || (window.APP_CONFIG && window.APP_CONFIG.CONTACT_EMAIL) || "hmdesigne102@gmail.com";
         }
 
         if (data.workingHours) {
@@ -898,9 +955,15 @@
     });
 
     function loadWebsitePortfolio() {
+      if (webPortfolioLoaded && _cache.websitePortfolio) {
+        websitePortfolioItems = _cache.websitePortfolio;
+        renderWebsitePortfolio();
+        return;
+      }
       rtdb.ref("websitePortfolio").on("value", (snap) => {
         webPortfolioLoaded = true;
         websitePortfolioItems = snap.val() || {};
+        _cache.websitePortfolio = websitePortfolioItems;
         renderWebsitePortfolio();
       });
     }
@@ -923,6 +986,7 @@
         const thumbMedia = item.thumbnailUrl
           ? `<img src="${escapeHtml(item.thumbnailUrl)}" alt="${escapeHtml(item.title)}" loading="lazy" />`
           : `<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg, rgba(245,166,35,0.1), rgba(20,20,20,0.9));color:var(--gold);"><i class="fas fa-globe" style="font-size:2.5rem;margin-bottom:0.4rem;"></i><span style="font-size:0.75rem;color:var(--text-muted);font-weight:500;">Interactive Web Demo</span></div>`;
+        const liked = !!localStorage.getItem(`liked_website_${key}`);
 
         return `
           <div class="web-card fade-in-up" style="animation-delay:${i * 0.08}s">
@@ -935,20 +999,58 @@
             <div class="web-card-body">
               <h3 class="web-card-title">${escapeHtml(item.title)}</h3>
               ${item.description ? `<p class="web-card-desc">${escapeHtml(item.description)}</p>` : ''}
-              <div style="margin-top:auto;padding-top:0.75rem;display:flex;gap:0.5rem;">
+              <div class="card-actions" style="margin-top:auto;padding-top:0.75rem;">
                 <button class="btn btn-ghost btn-sm" style="flex:1;font-size:0.78rem;" onclick="openBrowserModal('${escapeHtml(item.title)}', '${escapeHtml(item.url)}')">
                   <i class="fas fa-external-link-alt"></i> Preview
                 </button>
                 <button class="comment-btn-badge" style="margin:0;" onclick="window.location.href='project-detail.html?id=${encodeURIComponent(key)}&type=website';">
                   <i class="fas fa-comments"></i> Comments
                 </button>
+                <button class="like-btn ${liked ? 'liked' : ''}" id="like-website-${key}" onclick="likeItem('website', '${key}')" aria-label="Like this project">
+                  <i class="fas fa-heart"></i> <span class="like-count" id="lc-website-${key}">0</span>
+                </button>
               </div>
             </div>
           </div>`;
       }).join("");
+
+      // Load live like counts for website items
+      keys.forEach(key => {
+        rtdb.ref(`likes/website/${key}/count`).on("value", snap => {
+          const el = document.getElementById(`lc-website-${key}`);
+          if (el) el.textContent = snap.val() || 0;
+        });
+      });
     }
 
-    /* ── In-App Embedded Browser View Modal ── */
+    /* ── Like system ── */
+    function likeItem(type, id) {
+      const storageKey = `liked_${type}_${id}`;
+      const already = !!localStorage.getItem(storageKey);
+      const ref = rtdb.ref(`likes/${type}/${id}`);
+      const btn = document.getElementById(`like-${type}-${id}`);
+
+      if (already) {
+        // Unlike
+        ref.transaction(data => {
+          data = data || { count: 0 };
+          data.count = Math.max(0, (data.count || 0) - 1);
+          return data;
+        });
+        localStorage.removeItem(storageKey);
+        if (btn) btn.classList.remove('liked');
+      } else {
+        // Like
+        ref.transaction(data => {
+          data = data || { count: 0 };
+          data.count = (data.count || 0) + 1;
+          return data;
+        });
+        localStorage.setItem(storageKey, '1');
+        if (btn) btn.classList.add('liked');
+      }
+    }
+
     const browserModal = document.getElementById("browserModal");
     const browserFrame = document.getElementById("browserFrame");
     const browserTitle = document.getElementById("browserTitle");
@@ -1028,7 +1130,7 @@
       if (mediaUrl) {
         pModalMedia.style.display = "flex";
         if (isVideo) {
-          pModalMedia.innerHTML = `<video src="${escapeHtml(mediaUrl)}" controls playsinline preload="metadata" style="width:100%;max-height:400px;border-radius:12px;outline:none;"></video>`;
+          pModalMedia.innerHTML = `<video src="${escapeHtml(mediaUrl)}" controls controlsList="nodownload" oncontextmenu="return false" playsinline preload="metadata" style="width:100%;max-height:400px;border-radius:12px;outline:none;"></video>`;
         } else {
           pModalMedia.innerHTML = `<img src="${escapeHtml(mediaUrl)}" alt="${escapeHtml(title)}" style="width:100%;max-height:400px;object-fit:contain;border-radius:12px;" />`;
         }
@@ -1221,11 +1323,11 @@
       }
     }
 
-    /* ── Contact form with Security & Rate Limiting ── */
+    /* ── Contact form → WhatsApp + Firestore backup ── */
     document.getElementById("contactForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      // 1. Honeypot check
+      // 1. Honeypot check (silent no-op for bots)
       const honeypot = document.getElementById("cHoneypot")?.value;
       if (honeypot) {
         showToast("Message sent! I'll be in touch soon. 🙌", "success");
@@ -1238,32 +1340,63 @@
       const now = Date.now();
       if (lastSub && (now - parseInt(lastSub, 10)) < 60000) {
         const remaining = Math.ceil((60000 - (now - parseInt(lastSub, 10))) / 1000);
-        showToast(`Please wait ${remaining} seconds before sending another message.`, "error");
+        showToast(`Please wait ${remaining}s before sending again.`, "error");
+        return;
+      }
+
+      // 3. Collect & validate fields
+      const name    = document.getElementById("cName").value.trim();
+      const email   = document.getElementById("cEmail").value.trim();
+      const message = document.getElementById("cMessage").value.trim();
+
+      if (!name || !email || !message) {
+        showToast("Please fill in all fields.", "error");
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showToast("Please enter a valid email address.", "error");
         return;
       }
 
       const btn = document.getElementById("contactSendBtn");
       btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Opening WhatsApp…';
 
       try {
+        // 4. Log to Firestore (record-keeping)
         await db.collection("contactMessages").add({
-          name: document.getElementById("cName").value.trim(),
-          email: document.getElementById("cEmail").value.trim(),
-          message: document.getElementById("cMessage").value.trim(),
+          name,
+          email,
+          message,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
+        }).catch(err => console.warn("Firestore log skipped:", err));
 
         localStorage.setItem("lastContactSubmit", now.toString());
-        showToast("Message sent! I'll be in touch soon. 🙌", "success");
+
+        // 5. Build WhatsApp link
+        const waNumber = (window.APP_CONFIG && window.APP_CONFIG.WHATSAPP_NUMBER) || "923068787931";
+        const waText = encodeURIComponent(
+          `*New message from HM Creative website* 🎨\n\n` +
+          `👤 *Name:* ${name}\n` +
+          `📧 *Email:* ${email}\n\n` +
+          `💬 *Message:*\n${message}`
+        );
+        const waUrl = `https://wa.me/${waNumber}?text=${waText}`;
+
+        // 6. Open WhatsApp (app on mobile, web on desktop)
+        window.open(waUrl, "_blank", "noopener,noreferrer");
+
+        showToast("Opening WhatsApp… 🚀", "success");
         e.target.reset();
       } catch (err) {
-        showToast("Failed to send. Please try again.", "error");
+        showToast("Something went wrong. Please try again.", "error");
+        console.error("Contact form error:", err);
       } finally {
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
       }
     });
+
 
     function escapeHtml(str) {
       if (!str) return "";
