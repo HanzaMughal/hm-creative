@@ -13,7 +13,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase (compat mode)
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 const auth = firebase.auth();
 const db   = firebase.firestore();

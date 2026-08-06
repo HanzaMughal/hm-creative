@@ -2440,3 +2440,26 @@ footer {
   .browser-modal-content { height: 90dvh; }
   .media-player-container { max-height: 60vh; }
 }
+
+/* ── Detail Page Category Badge (Inline non-absolute) ── */
+.detail-cat-badge {
+  display: inline-flex;
+  align-items: center;
+  position: static;
+  background: rgba(245, 166, 35, 0.15);
+  border: 1px solid rgba(245, 166, 35, 0.4);
+  color: var(--gold);
+  padding: 0.28rem 0.8rem;
+  border-radius: 99px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 768px) {
+  .project-detail-section {
+    padding-top: 85px;
+  }
+}
+

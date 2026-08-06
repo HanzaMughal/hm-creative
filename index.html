@@ -23,7 +23,12 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-  <script src="js/config.js"></script>
+  <script>
+    window.APP_CONFIG = {
+      WHATSAPP_NUMBER: "923068787931",
+      CONTACT_EMAIL: "hmdesigne102@gmail.com"
+    };
+  </script>
   <script src="js/firebase-config.js"></script>
 </head>
 
@@ -749,7 +754,7 @@
               <button class="comment-btn-badge" onclick="event.stopPropagation(); window.location.href='project-detail.html?id=${encodeURIComponent(safeId)}&type=video';">
                 <i class="fas fa-comments"></i> View Details & Comments
               </button>
-              <button class="like-btn ${liked ? 'liked' : ''}" id="like-video-${safeId}" onclick="event.stopPropagation(); likeItem('video', '${safeId}')" aria-label="Like this project">
+              <button class="like-btn" id="like-video-${safeId}" onclick="event.stopPropagation(); likeItem('video', '${safeId}')" aria-label="Like this project">
                 <i class="fas fa-heart"></i> <span class="like-count" id="lc-video-${safeId}">0</span>
               </button>
             </div>
@@ -757,10 +762,18 @@
 
         grid.appendChild(card);
 
-        // Load live count
-        rtdb.ref(`likes/video/${safeId}/count`).on("value", snap => {
-          const el = document.getElementById(`lc-video-${safeId}`);
-          if (el) el.textContent = snap.val() || 0;
+        // Load live count & user like state
+        rtdb.ref(`likes/video/${safeId}`).on("value", snap => {
+          const val = snap.val() || {};
+          const countEl = document.getElementById(`lc-video-${safeId}`);
+          const btn = document.getElementById(`like-video-${safeId}`);
+          if (countEl) countEl.textContent = val.count || 0;
+          const user = firebase.auth().currentUser;
+          if (user && val.users && val.users[user.uid]) {
+            if (btn) btn.classList.add("liked");
+          } else {
+            if (btn) btn.classList.remove("liked");
+          }
         });
       });
     }
@@ -986,8 +999,6 @@
         const thumbMedia = item.thumbnailUrl
           ? `<img src="${escapeHtml(item.thumbnailUrl)}" alt="${escapeHtml(item.title)}" loading="lazy" />`
           : `<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg, rgba(245,166,35,0.1), rgba(20,20,20,0.9));color:var(--gold);"><i class="fas fa-globe" style="font-size:2.5rem;margin-bottom:0.4rem;"></i><span style="font-size:0.75rem;color:var(--text-muted);font-weight:500;">Interactive Web Demo</span></div>`;
-        const liked = !!localStorage.getItem(`liked_website_${key}`);
-
         return `
           <div class="web-card fade-in-up" style="animation-delay:${i * 0.08}s">
             <div class="web-card-thumb" onclick="openBrowserModal('${escapeHtml(item.title)}', '${escapeHtml(item.url)}')">
@@ -1006,7 +1017,7 @@
                 <button class="comment-btn-badge" style="margin:0;" onclick="window.location.href='project-detail.html?id=${encodeURIComponent(key)}&type=website';">
                   <i class="fas fa-comments"></i> Comments
                 </button>
-                <button class="like-btn ${liked ? 'liked' : ''}" id="like-website-${key}" onclick="likeItem('website', '${key}')" aria-label="Like this project">
+                <button class="like-btn" id="like-website-${key}" onclick="likeItem('website', '${key}')" aria-label="Like this project">
                   <i class="fas fa-heart"></i> <span class="like-count" id="lc-website-${key}">0</span>
                 </button>
               </div>
@@ -1014,41 +1025,57 @@
           </div>`;
       }).join("");
 
-      // Load live like counts for website items
+      // Load live count & user like state for website items
       keys.forEach(key => {
-        rtdb.ref(`likes/website/${key}/count`).on("value", snap => {
-          const el = document.getElementById(`lc-website-${key}`);
-          if (el) el.textContent = snap.val() || 0;
+        rtdb.ref(`likes/website/${key}`).on("value", snap => {
+          const val = snap.val() || {};
+          const countEl = document.getElementById(`lc-website-${key}`);
+          const btn = document.getElementById(`like-website-${key}`);
+          if (countEl) countEl.textContent = val.count || 0;
+          const user = firebase.auth().currentUser;
+          if (user && val.users && val.users[user.uid]) {
+            if (btn) btn.classList.add("liked");
+          } else {
+            if (btn) btn.classList.remove("liked");
+          }
         });
       });
     }
 
-    /* ── Like system ── */
+    /* ── Like system (Auth-Gated + RTDB Realtime Sync) ── */
     function likeItem(type, id) {
-      const storageKey = `liked_${type}_${id}`;
-      const already = !!localStorage.getItem(storageKey);
-      const ref = rtdb.ref(`likes/${type}/${id}`);
-      const btn = document.getElementById(`like-${type}-${id}`);
-
-      if (already) {
-        // Unlike
-        ref.transaction(data => {
-          data = data || { count: 0 };
-          data.count = Math.max(0, (data.count || 0) - 1);
-          return data;
-        });
-        localStorage.removeItem(storageKey);
-        if (btn) btn.classList.remove('liked');
-      } else {
-        // Like
-        ref.transaction(data => {
-          data = data || { count: 0 };
-          data.count = (data.count || 0) + 1;
-          return data;
-        });
-        localStorage.setItem(storageKey, '1');
-        if (btn) btn.classList.add('liked');
+      const user = firebase.auth().currentUser;
+      if (!user) {
+        showToast("Please sign in to like projects!", "error");
+        sessionStorage.setItem("redirectAfterLogin", window.location.href);
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1200);
+        return;
       }
+
+      const userUid = user.uid;
+      const itemLikesRef = rtdb.ref(`likes/${type}/${id}`);
+
+      itemLikesRef.transaction((currentData) => {
+        if (!currentData) {
+          currentData = { count: 1, users: {} };
+          currentData.users[userUid] = true;
+          return currentData;
+        }
+        if (!currentData.users) currentData.users = {};
+
+        if (currentData.users[userUid]) {
+          // User already liked -> Unlike
+          delete currentData.users[userUid];
+          currentData.count = Math.max(0, (currentData.count || 1) - 1);
+        } else {
+          // Like
+          currentData.users[userUid] = true;
+          currentData.count = (currentData.count || 0) + 1;
+        }
+        return currentData;
+      });
     }
 
     const browserModal = document.getElementById("browserModal");

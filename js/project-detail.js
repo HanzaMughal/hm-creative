@@ -96,6 +96,9 @@ async function loadProjectDetails() {
     // Load Comments for this item
     listenToComments(currentProjectId);
 
+    // Init Like Button for this item
+    initDetailLikeButton(currentProjectType, currentProjectId);
+
   } catch (err) {
     console.error("Error loading project details:", err);
     showErrorState("Failed to load project details: " + err.message);
@@ -168,10 +171,29 @@ function listenToComments(itemId) {
   });
 }
 
-// Auth Observer for Comment Form
+// Auth Observer for Comment Form & Navbar
 function initAuthObserver() {
   auth.onAuthStateChanged((user) => {
     const wrap = document.getElementById("pCommentFormWrap");
+    const navAuthArea = document.getElementById("navAuthArea");
+
+    if (navAuthArea) {
+      if (user) {
+        const displayName = user.displayName || user.email.split("@")[0];
+        const photoSrc = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=f5a623&color=000&bold=true`;
+        navAuthArea.innerHTML = `
+          <div class="nav-user">
+            <img src="${photoSrc}" alt="${escapeHtml(displayName)}" />
+            <span>${escapeHtml(displayName.split(" ")[0])}</span>
+          </div>`;
+      } else {
+        navAuthArea.innerHTML = `
+          <a href="login.html" class="btn btn-ghost" style="padding:0.45rem 1.1rem;font-size:0.82rem;">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </a>`;
+      }
+    }
+
     if (!wrap) return;
 
     if (user) {
@@ -227,6 +249,57 @@ function initAuthObserver() {
         </div>`;
     }
   });
+}
+
+// Like Button initialization for detail page
+function initDetailLikeButton(type, id) {
+  const btn = document.getElementById("pDetailLikeBtn");
+  const countEl = document.getElementById("pDetailLikeCount");
+  if (!btn || !id) return;
+
+  rtdb.ref(`likes/${type}/${id}`).on("value", (snap) => {
+    const val = snap.val() || {};
+    if (countEl) countEl.textContent = val.count || 0;
+    const user = auth.currentUser;
+    if (user && val.users && val.users[user.uid]) {
+      btn.classList.add("liked");
+    } else {
+      btn.classList.remove("liked");
+    }
+  });
+
+  btn.onclick = () => {
+    const user = auth.currentUser;
+    if (!user) {
+      showToast("Please sign in to like this project!", "error");
+      sessionStorage.setItem("redirectAfterLogin", window.location.href);
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 1200);
+      return;
+    }
+
+    const userUid = user.uid;
+    const itemLikesRef = rtdb.ref(`likes/${type}/${id}`);
+
+    itemLikesRef.transaction((currentData) => {
+      if (!currentData) {
+        currentData = { count: 1, users: {} };
+        currentData.users[userUid] = true;
+        return currentData;
+      }
+      if (!currentData.users) currentData.users = {};
+
+      if (currentData.users[userUid]) {
+        delete currentData.users[userUid];
+        currentData.count = Math.max(0, (currentData.count || 1) - 1);
+      } else {
+        currentData.users[userUid] = true;
+        currentData.count = (currentData.count || 0) + 1;
+      }
+      return currentData;
+    });
+  };
 }
 
 function escapeHtml(str) {

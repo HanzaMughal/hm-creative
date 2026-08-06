@@ -73,25 +73,18 @@
 
   <!-- ── NAVBAR ── -->
   <nav class="navbar" id="navbar">
-    <div class="nav-container">
-      <a href="index.html" class="nav-logo">
-        <span class="logo-mark">HM</span>
-        <span class="logo-text">Creative<span class="logo-dot">.</span></span>
-      </a>
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">HM <span>Creative</span></a>
 
-      <div class="nav-links" id="navLinks">
-        <a href="index.html#home" class="nav-link">Home</a>
-        <a href="index.html#about" class="nav-link">About</a>
-        <a href="index.html#portfolio" class="nav-link active">Portfolio</a>
-        <a href="index.html#contact" class="nav-link">Contact</a>
-        <div id="navAuthSection"></div>
-      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html#home">Home</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#portfolio" class="active">Portfolio</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
 
       <div class="nav-actions">
-        <a href="chat.html" class="nav-chat-btn" id="heroChat" title="Chat with me">
-          <i class="fas fa-comment-dots"></i>
-          <span class="chat-badge-pulse" id="navUnreadBadge" style="display:none"></span>
-        </a>
+        <div id="navAuthArea"></div>
         <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
           <span></span><span></span><span></span>
         </button>
@@ -120,9 +113,14 @@
 
       <!-- Project Metadata Box -->
       <div class="project-meta-box fade-in-up">
-        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;flex-wrap:wrap;">
-          <span class="project-category-badge" id="pCategory">Portfolio</span>
-          <span style="font-size:0.8rem;color:var(--text-dim);" id="pTypeBadge"></span>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.75rem;">
+          <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+            <span class="detail-cat-badge" id="pCategory">Portfolio</span>
+            <span style="font-size:0.82rem;color:var(--text-muted);font-weight:500;" id="pTypeBadge"></span>
+          </div>
+          <button class="like-btn" id="pDetailLikeBtn" aria-label="Like this project">
+            <i class="fas fa-heart"></i> <span class="like-count" id="pDetailLikeCount">0</span> Likes
+          </button>
         </div>
         <h1 style="font-size:1.8rem;font-weight:800;color:var(--text);margin-bottom:0.75rem;" id="pTitle">Loading Project...</h1>
         <p style="font-size:0.98rem;color:var(--text-muted);line-height:1.7;margin:0;" id="pDesc"></p>
