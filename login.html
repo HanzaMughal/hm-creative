@@ -34,7 +34,7 @@
 
     <!-- Logo -->
     <a href="index.html" class="auth-logo">HM <span>Creative</span></a>
-    <p class="auth-subtitle">Welcome back! Sign in to continue.</p>
+    <p class="auth-subtitle" id="loginSubtitle">Welcome back! Sign in to continue.</p>
 
     <!-- Email/Password Form -->
     <form class="auth-form" id="loginForm" novalidate>
@@ -126,6 +126,13 @@ document.getElementById("skipBtn").addEventListener("click", () => {
 // auth.js handles the redirect — after signIn it goes to index.html
 // Override: if sessionStorage has a pending redirect, pick it up
 const redirect = sessionStorage.getItem("redirectAfterLogin");
+const pendingLike = sessionStorage.getItem("pendingLike");
+
+if (pendingLike) {
+  const subtitle = document.getElementById("loginSubtitle");
+  if (subtitle) subtitle.innerHTML = 'Sign in to <strong style="color:#ff5252;">❤ like this project</strong> and save your favorites!';
+}
+
 if (redirect) {
   // Override auth.js redirect
   auth.onAuthStateChanged(user => {

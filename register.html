@@ -176,6 +176,24 @@ function makeToggle(btnId, inputId, iconId) {
 makeToggle("pwToggle1", "regPassword", "pwIcon1");
 makeToggle("pwToggle2", "regConfirm",  "pwIcon2");
 
+/* ── Update subtitle if coming from a pending like ── */
+const pendingLike = sessionStorage.getItem("pendingLike");
+if (pendingLike) {
+  const subtitle = document.querySelector(".auth-subtitle");
+  if (subtitle) subtitle.innerHTML = 'Create a free account to <strong style="color:#ff5252;">❤ like this project</strong>!';
+}
+
+/* ── Redirect to intended page after register (if set) ── */
+const redirect = sessionStorage.getItem("redirectAfterLogin");
+if (redirect) {
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      sessionStorage.removeItem("redirectAfterLogin");
+      window.location.href = redirect;
+    }
+  });
+}
+
 /* ── Password strength ── */
 document.getElementById("regPassword").addEventListener("input", (e) => {
   const pw  = e.target.value;

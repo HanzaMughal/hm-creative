@@ -50,7 +50,14 @@ if (loginForm) {
     setLoading(btn, true);
     try {
       await auth.signInWithEmailAndPassword(email, password);
-      window.location.href = "index.html";
+      // Respect pending redirect (e.g. came from liking a project)
+      const redirect = sessionStorage.getItem("redirectAfterLogin");
+      if (redirect) {
+        sessionStorage.removeItem("redirectAfterLogin");
+        window.location.href = redirect;
+      } else {
+        window.location.href = "index.html";
+      }
     } catch (err) {
       showToast(friendlyError(err.code));
     } finally {
@@ -86,7 +93,14 @@ if (registerForm) {
       const cred = await auth.createUserWithEmailAndPassword(email, password);
       await cred.user.updateProfile({ displayName: name });
       await saveUserProfile(cred.user, { name });
-      window.location.href = "index.html";
+      // Respect pending redirect (e.g. came from liking a project)
+      const redirect = sessionStorage.getItem("redirectAfterLogin");
+      if (redirect) {
+        sessionStorage.removeItem("redirectAfterLogin");
+        window.location.href = redirect;
+      } else {
+        window.location.href = "index.html";
+      }
     } catch (err) {
       showToast(friendlyError(err.code));
     } finally {

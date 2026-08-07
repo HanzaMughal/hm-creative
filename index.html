@@ -445,6 +445,29 @@
           </div>
         </div>
 
+  </div>
+
+  <!-- ── AUTH GATE MODAL (Like without login prompt) ── -->
+  <div class="auth-gate-overlay" id="authGateModal">
+    <div class="auth-gate-card">
+      <button class="auth-gate-dismiss" id="closeAuthGateModal" aria-label="Close modal"><i class="fas fa-times"></i></button>
+      <div class="auth-gate-icon">
+        <i class="fas fa-heart" style="color:#ff5252;"></i>
+      </div>
+      <h3 class="auth-gate-title">Like This <span>Project?</span></h3>
+      <p class="auth-gate-desc">
+        Create a free account or sign in to show your appreciation and save your liked projects!
+      </p>
+      <div class="auth-gate-actions">
+        <a href="register.html" id="authGateRegisterBtn" class="auth-gate-btn-primary">
+          <i class="fas fa-user-plus"></i> Create Free Account
+        </a>
+        <a href="login.html" id="authGateLoginBtn" class="auth-gate-btn-secondary">
+          <i class="fas fa-sign-in-alt"></i> Sign In to Account
+        </a>
+        <button type="button" class="auth-gate-skip" id="skipAuthGateBtn">
+          Continue Browsing
+        </button>
       </div>
     </div>
   </div>
@@ -527,6 +550,8 @@
 
         // Start listening for admin replies
         listenForAdminReplies(user.uid);
+        // Check if user came back from login with a pending like
+        checkPendingLike();
       } else {
         navAuthArea.innerHTML = `
       <a href="login.html" class="btn btn-ghost" style="padding:0.45rem 1.1rem;font-size:0.82rem;">
@@ -735,7 +760,8 @@
         const liked = !!localStorage.getItem(`liked_video_${safeId}`);
 
         card.style.cursor = "pointer";
-        card.onclick = () => {
+        card.onclick = (e) => {
+          if (e.target.closest("button") || e.target.closest(".like-btn")) return;
           window.location.href = `project-detail.html?id=${encodeURIComponent(safeId)}&type=video`;
         };
 
@@ -754,13 +780,23 @@
               <button class="comment-btn-badge" onclick="event.stopPropagation(); window.location.href='project-detail.html?id=${encodeURIComponent(safeId)}&type=video';">
                 <i class="fas fa-comments"></i> View Details & Comments
               </button>
-              <button class="like-btn" id="like-video-${safeId}" onclick="event.stopPropagation(); likeItem('video', '${safeId}')" aria-label="Like this project">
+              <button class="like-btn" id="like-video-${safeId}" aria-label="Like this project">
                 <i class="fas fa-heart"></i> <span class="like-count" id="lc-video-${safeId}">0</span>
               </button>
             </div>
           </div>`;
 
         grid.appendChild(card);
+
+        // Bind click handler dynamically
+        const likeBtn = document.getElementById(`like-video-${safeId}`);
+        if (likeBtn) {
+          likeBtn.onclick = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            likeItem('video', safeId, e);
+          };
+        }
 
         // Load live count & user like state
         rtdb.ref(`likes/video/${safeId}`).on("value", snap => {
@@ -1017,7 +1053,7 @@
                 <button class="comment-btn-badge" style="margin:0;" onclick="window.location.href='project-detail.html?id=${encodeURIComponent(key)}&type=website';">
                   <i class="fas fa-comments"></i> Comments
                 </button>
-                <button class="like-btn" id="like-website-${key}" onclick="likeItem('website', '${key}')" aria-label="Like this project">
+                <button class="like-btn" id="like-website-${key}" aria-label="Like this project">
                   <i class="fas fa-heart"></i> <span class="like-count" id="lc-website-${key}">0</span>
                 </button>
               </div>
@@ -1027,6 +1063,16 @@
 
       // Load live count & user like state for website items
       keys.forEach(key => {
+        // Bind click handler dynamically
+        const likeBtn = document.getElementById(`like-website-${key}`);
+        if (likeBtn) {
+          likeBtn.onclick = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            likeItem('website', key, e);
+          };
+        }
+
         rtdb.ref(`likes/website/${key}`).on("value", snap => {
           const val = snap.val() || {};
           const countEl = document.getElementById(`lc-website-${key}`);
@@ -1042,40 +1088,121 @@
       });
     }
 
-    /* ── Like system (Auth-Gated + RTDB Realtime Sync) ── */
-    function likeItem(type, id) {
+    /* \u2500\u2500 Auth Gate Modal Controls \u2500\u2500 */
+    const authGateModal = document.getElementById("authGateModal");
+    const closeAuthGateModalBtn = document.getElementById("closeAuthGateModal");
+    const skipAuthGateBtn = document.getElementById("skipAuthGateBtn");
+
+    function openAuthGateModal(type, id) {
+      if (!authGateModal) return;
+      sessionStorage.setItem("pendingLike", JSON.stringify({ type, id }));
+      sessionStorage.setItem("redirectAfterLogin", window.location.href);
+
+      authGateModal.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeAuthGateModal() {
+      if (!authGateModal) return;
+      authGateModal.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    closeAuthGateModalBtn?.addEventListener("click", closeAuthGateModal);
+    skipAuthGateBtn?.addEventListener("click", closeAuthGateModal);
+    authGateModal?.addEventListener("click", (e) => {
+      if (e.target === authGateModal) closeAuthGateModal();
+    });
+
+    /* \u2500\u2500 Heart Burst Particle Animation \u2500\u2500 */
+    function triggerHeartBurst(x, y) {
+      const symbols = ["\u2764\ufe0f", "\ud83d\udc96", "\u2728", "\ud83d\udd25"];
+      for (let i = 0; i < 7; i++) {
+        const particle = document.createElement("span");
+        particle.className = "heart-particle";
+        particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        const rot = (Math.random() * 60 - 30) + "deg";
+        const offsetX = (Math.random() * 60 - 30);
+        const offsetY = (Math.random() * 20 - 10);
+        particle.style.left = `${x + offsetX}px`;
+        particle.style.top = `${y + offsetY}px`;
+        particle.style.setProperty("--rot", rot);
+        document.body.appendChild(particle);
+        setTimeout(() => particle.remove(), 850);
+      }
+    }
+
+    /* ============================================================
+       LIKE SYSTEM — Robust atomic read/write (no transaction bugs)
+       ============================================================ */
+    function likeItem(type, id, event) {
       const user = firebase.auth().currentUser;
+
+      // Guest user: show auth gate modal
       if (!user) {
-        showToast("Please sign in to like projects!", "error");
-        sessionStorage.setItem("redirectAfterLogin", window.location.href);
-        setTimeout(() => {
-          window.location.href = "login.html";
-        }, 1200);
+        openAuthGateModal(type, id);
         return;
       }
 
+      const clickX = event ? event.clientX : window.innerWidth / 2;
+      const clickY = event ? event.clientY : window.innerHeight / 2;
       const userUid = user.uid;
-      const itemLikesRef = rtdb.ref(`likes/${type}/${id}`);
+      const itemRef = rtdb.ref(`likes/${type}/${id}`);
+      const userLikeRef = rtdb.ref(`likes/${type}/${id}/users/${userUid}`);
 
-      itemLikesRef.transaction((currentData) => {
-        if (!currentData) {
-          currentData = { count: 1, users: {} };
-          currentData.users[userUid] = true;
-          return currentData;
-        }
-        if (!currentData.users) currentData.users = {};
+      // Disable button temporarily to prevent double-click
+      const btn = event && event.currentTarget
+        ? event.currentTarget
+        : document.getElementById(`like-${type}-${id}`);
+      if (btn) btn.disabled = true;
 
-        if (currentData.users[userUid]) {
-          // User already liked -> Unlike
-          delete currentData.users[userUid];
-          currentData.count = Math.max(0, (currentData.count || 1) - 1);
+      // Read current like status for this user
+      userLikeRef.once("value").then((snap) => {
+        const alreadyLiked = snap.val() === true;
+
+        if (alreadyLiked) {
+          // UNLIKE: remove user entry and decrement count
+          const updates = {};
+          updates[`likes/${type}/${id}/users/${userUid}`] = null;
+          updates[`likes/${type}/${id}/count`] = firebase.database.ServerValue.increment(-1);
+          return rtdb.ref().update(updates).then(() => {
+            showToast("Like removed.", "info");
+          });
         } else {
-          // Like
-          currentData.users[userUid] = true;
-          currentData.count = (currentData.count || 0) + 1;
+          // LIKE: add user entry and increment count
+          const updates = {};
+          updates[`likes/${type}/${id}/users/${userUid}`] = true;
+          updates[`likes/${type}/${id}/count`] = firebase.database.ServerValue.increment(1);
+          return rtdb.ref().update(updates).then(() => {
+            triggerHeartBurst(clickX, clickY);
+            showToast("\u2764\ufe0f Like saved!", "success");
+          });
         }
-        return currentData;
+      }).catch((err) => {
+        console.error("Like error:", err);
+        showToast("Could not save like. Please try again.", "error");
+      }).finally(() => {
+        if (btn) btn.disabled = false;
       });
+    }
+
+    // Auto-apply pending like after user signs in or registers
+    function checkPendingLike() {
+      const pendingStr = sessionStorage.getItem("pendingLike");
+      if (!pendingStr) return;
+      const user = firebase.auth().currentUser;
+      if (!user) return;
+
+      try {
+        const { type, id } = JSON.parse(pendingStr);
+        sessionStorage.removeItem("pendingLike");
+        // Small delay to ensure UI has rendered
+        setTimeout(() => {
+          likeItem(type, id);
+        }, 600);
+      } catch (e) {
+        sessionStorage.removeItem("pendingLike");
+      }
     }
 
     const browserModal = document.getElementById("browserModal");

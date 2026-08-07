@@ -6,6 +6,16 @@ let currentProjectId = "";
 let currentProjectType = "video";
 let currentProjectTitle = "";
 
+/* ── Toast helper ── */
+function showToast(msg, type = "success") {
+  const t = document.getElementById("toast");
+  if (!t) return;
+  t.textContent = msg;
+  t.className = `toast show ${type}`;
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove("show"), 3500);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   currentProjectId   = params.get("id") || "";
@@ -251,12 +261,77 @@ function initAuthObserver() {
   });
 }
 
+// Particle animation helper for project detail page
+function triggerDetailHeartBurst(x, y) {
+  const symbols = ["❤️", "💖", "✨", "🔥"];
+  for (let i = 0; i < 7; i++) {
+    const particle = document.createElement("span");
+    particle.className = "heart-particle";
+    particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    const rot = (Math.random() * 60 - 30) + "deg";
+    const offsetX = (Math.random() * 60 - 30);
+    const offsetY = (Math.random() * 20 - 10);
+    particle.style.left = `${x + offsetX}px`;
+    particle.style.top = `${y + offsetY}px`;
+    particle.style.setProperty("--rot", rot);
+    document.body.appendChild(particle);
+
+    setTimeout(() => particle.remove(), 850);
+  }
+}
+
+// In-page Auth Gate Modal for detail page
+function showDetailAuthGateModal(type, id) {
+  sessionStorage.setItem("pendingLike", JSON.stringify({ type, id }));
+  sessionStorage.setItem("redirectAfterLogin", window.location.href);
+
+  let modal = document.getElementById("authGateModal");
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "authGateModal";
+    modal.className = "auth-gate-overlay";
+    modal.innerHTML = `
+      <div class="auth-gate-card">
+        <button class="auth-gate-dismiss" onclick="this.closest('.auth-gate-overlay').classList.remove('open');document.body.style.overflow='';" aria-label="Close modal"><i class="fas fa-times"></i></button>
+        <div class="auth-gate-icon">
+          <i class="fas fa-heart" style="color:#ff5252;"></i>
+        </div>
+        <h3 class="auth-gate-title">Like This <span>Project?</span></h3>
+        <p class="auth-gate-desc">
+          Create a free account or sign in to show your appreciation and save your liked projects!
+        </p>
+        <div class="auth-gate-actions">
+          <a href="register.html" class="auth-gate-btn-primary">
+            <i class="fas fa-user-plus"></i> Create Free Account
+          </a>
+          <a href="login.html" class="auth-gate-btn-secondary">
+            <i class="fas fa-sign-in-alt"></i> Sign In to Account
+          </a>
+          <button type="button" class="auth-gate-skip" onclick="this.closest('.auth-gate-overlay').classList.remove('open');document.body.style.overflow='';">
+            Continue Browsing
+          </button>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.classList.remove("open");
+        document.body.style.overflow = "";
+      }
+    });
+  }
+
+  modal.classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
 // Like Button initialization for detail page
 function initDetailLikeButton(type, id) {
   const btn = document.getElementById("pDetailLikeBtn");
   const countEl = document.getElementById("pDetailLikeCount");
   if (!btn || !id) return;
 
+  // Real-time listener for count and liked state
   rtdb.ref(`likes/${type}/${id}`).on("value", (snap) => {
     const val = snap.val() || {};
     if (countEl) countEl.textContent = val.count || 0;
@@ -268,36 +343,47 @@ function initDetailLikeButton(type, id) {
     }
   });
 
-  btn.onclick = () => {
+  btn.onclick = (e) => {
     const user = auth.currentUser;
     if (!user) {
-      showToast("Please sign in to like this project!", "error");
-      sessionStorage.setItem("redirectAfterLogin", window.location.href);
-      setTimeout(() => {
-        window.location.href = "login.html";
-      }, 1200);
+      showDetailAuthGateModal(type, id);
       return;
     }
 
+    const clickX = e ? e.clientX : window.innerWidth / 2;
+    const clickY = e ? e.clientY : window.innerHeight / 2;
     const userUid = user.uid;
-    const itemLikesRef = rtdb.ref(`likes/${type}/${id}`);
+    const userLikeRef = rtdb.ref(`likes/${type}/${id}/users/${userUid}`);
 
-    itemLikesRef.transaction((currentData) => {
-      if (!currentData) {
-        currentData = { count: 1, users: {} };
-        currentData.users[userUid] = true;
-        return currentData;
-      }
-      if (!currentData.users) currentData.users = {};
+    // Disable to prevent double-click
+    btn.disabled = true;
 
-      if (currentData.users[userUid]) {
-        delete currentData.users[userUid];
-        currentData.count = Math.max(0, (currentData.count || 1) - 1);
+    // Read current like status, then write atomically
+    userLikeRef.once("value").then((snap) => {
+      const alreadyLiked = snap.val() === true;
+      const updates = {};
+
+      if (alreadyLiked) {
+        // UNLIKE
+        updates[`likes/${type}/${id}/users/${userUid}`] = null;
+        updates[`likes/${type}/${id}/count`] = firebase.database.ServerValue.increment(-1);
+        return rtdb.ref().update(updates).then(() => {
+          if (typeof showToast === "function") showToast("Like removed.", "info");
+        });
       } else {
-        currentData.users[userUid] = true;
-        currentData.count = (currentData.count || 0) + 1;
+        // LIKE
+        updates[`likes/${type}/${id}/users/${userUid}`] = true;
+        updates[`likes/${type}/${id}/count`] = firebase.database.ServerValue.increment(1);
+        return rtdb.ref().update(updates).then(() => {
+          triggerDetailHeartBurst(clickX, clickY);
+          if (typeof showToast === "function") showToast("\u2764\ufe0f Like saved!", "success");
+        });
       }
-      return currentData;
+    }).catch((err) => {
+      console.error("Like error:", err);
+      if (typeof showToast === "function") showToast("Could not save like. Please try again.", "error");
+    }).finally(() => {
+      btn.disabled = false;
     });
   };
 }
