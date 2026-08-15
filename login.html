@@ -127,10 +127,14 @@ document.getElementById("skipBtn").addEventListener("click", () => {
 // Override: if sessionStorage has a pending redirect, pick it up
 const redirect = sessionStorage.getItem("redirectAfterLogin");
 const pendingLike = sessionStorage.getItem("pendingLike");
+const pendingOrder = sessionStorage.getItem("pendingOrder");
 
 if (pendingLike) {
   const subtitle = document.getElementById("loginSubtitle");
   if (subtitle) subtitle.innerHTML = 'Sign in to <strong style="color:#ff5252;">❤ like this project</strong> and save your favorites!';
+} else if (pendingOrder) {
+  const subtitle = document.getElementById("loginSubtitle");
+  if (subtitle) subtitle.innerHTML = 'Sign in to <strong style="color:var(--gold);">📦 complete your package order</strong>!';
 }
 
 if (redirect) {

@@ -178,9 +178,14 @@ makeToggle("pwToggle2", "regConfirm",  "pwIcon2");
 
 /* ── Update subtitle if coming from a pending like ── */
 const pendingLike = sessionStorage.getItem("pendingLike");
+const pendingOrder = sessionStorage.getItem("pendingOrder");
+
 if (pendingLike) {
   const subtitle = document.querySelector(".auth-subtitle");
   if (subtitle) subtitle.innerHTML = 'Create a free account to <strong style="color:#ff5252;">❤ like this project</strong>!';
+} else if (pendingOrder) {
+  const subtitle = document.querySelector(".auth-subtitle");
+  if (subtitle) subtitle.innerHTML = 'Create a free account to <strong style="color:var(--gold);">📦 complete your package order</strong>!';
 }
 
 /* ── Redirect to intended page after register (if set) ── */

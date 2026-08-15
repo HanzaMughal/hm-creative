@@ -230,10 +230,17 @@ chatInput.addEventListener("input", () => {
 const messagesEl = document.getElementById("chatMessages");
 const scrollFab  = document.getElementById("scrollFab");
 
+let fabTicking = false;
 messagesEl.addEventListener("scroll", () => {
-  const atBottom = messagesEl.scrollHeight - messagesEl.scrollTop - messagesEl.clientHeight < 80;
-  scrollFab.classList.toggle("visible", !atBottom);
-});
+  if (!fabTicking) {
+    window.requestAnimationFrame(() => {
+      const atBottom = messagesEl.scrollHeight - messagesEl.scrollTop - messagesEl.clientHeight < 80;
+      scrollFab.classList.toggle("visible", !atBottom);
+      fabTicking = false;
+    });
+    fabTicking = true;
+  }
+}, { passive: true });
 
 scrollFab.addEventListener("click", () => {
   messagesEl.scrollTop = messagesEl.scrollHeight;

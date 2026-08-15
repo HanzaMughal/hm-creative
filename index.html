@@ -41,6 +41,7 @@
 
       <ul class="nav-links" id="navLinks">
         <li><a href="#about">About</a></li>
+        <li><a href="#offers">Offers</a></li>
         <li><a href="#portfolio">Portfolio</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
@@ -123,13 +124,13 @@
               loading="eager" />
           </div>
           <div class="about-badge" id="aboutBadge">
-            <strong id="badgeYears">5+</strong> Years of Excellence
+            <strong id="badgeYears">5+</strong> <span id="badgeLabel">Years of Excellence</span>
           </div>
         </div>
 
         <!-- Text -->
         <div class="about-text">
-          <p class="section-title">About <span id="aboutTitleSpan">Me</span></p>
+          <p class="section-title"><span id="aboutTitleMain">About</span> <span id="aboutTitleSpan">Me</span></p>
           <div class="gold-line"></div>
           <div id="aboutBioContainer">
             <p id="aboutBioText">
@@ -139,7 +140,7 @@
             </p>
           </div>
 
-          <div class="skills-grid">
+          <div class="skills-grid" id="aboutOffersGrid">
             <span class="skill-tag">Social Media Ads</span>
             <span class="skill-tag">Video Production</span>
             <span class="skill-tag">Brand Identity</span>
@@ -150,8 +151,8 @@
             <span class="skill-tag">Graphic Design</span>
           </div>
 
-          <a href="#contact" class="btn btn-gold">
-            <i class="fas fa-paper-plane"></i> Work With Me
+          <a href="#contact" class="btn btn-gold" id="aboutCtaBtn">
+            <i class="fas fa-paper-plane"></i> <span id="aboutCtaText">Work With Me</span>
           </a>
         </div>
       </div>
@@ -276,6 +277,24 @@
     </div>
   </section>
 
+  <!-- ── OFFERS & PACKAGES ── -->
+  <section class="offers" id="offers">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:2.5rem;">
+        <h2 class="section-title">My <span>Offers</span></h2>
+        <div class="gold-line" style="margin:0.75rem auto 0;"></div>
+        <p class="section-subtitle">Choose a service package designed for your brand's growth. Click any package to see full details and order.</p>
+      </div>
+
+      <div class="offers-grid" id="offersGrid">
+        <!-- Loaded dynamically from Firebase RTDB /packages node -->
+        <div class="skeleton" style="height:340px;border-radius:20px;"></div>
+        <div class="skeleton" style="height:340px;border-radius:20px;"></div>
+        <div class="skeleton" style="height:340px;border-radius:20px;"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- ── CONTACT ── -->
   <section class="contact" id="contact">
     <div class="container">
@@ -332,31 +351,6 @@
     </div>
   </section>
 
-  <!-- ── CATEGORIES ── -->
-  <section class="categories-section" id="categories">
-    <div class="container">
-      <div class="text-center" style="margin-bottom:2.5rem;">
-        <h2 class="section-title">What I <span>Offer</span></h2>
-        <div class="gold-line" style="margin:0.75rem auto 0;"></div>
-        <p class="section-subtitle">Specialized services tailored for your brand</p>
-      </div>
-      <div class="categories-grid" id="categoriesGrid">
-        <!-- Skeleton loaders -->
-        <div class="cat-skeleton">
-          <div class="skeleton" style="height:120px;border-radius:16px;"></div>
-        </div>
-        <div class="cat-skeleton">
-          <div class="skeleton" style="height:120px;border-radius:16px;"></div>
-        </div>
-        <div class="cat-skeleton">
-          <div class="skeleton" style="height:120px;border-radius:16px;"></div>
-        </div>
-        <div class="cat-skeleton">
-          <div class="skeleton" style="height:120px;border-radius:16px;"></div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- ── FOOTER ── -->
   <footer>
@@ -472,12 +466,98 @@
     </div>
   </div>
 
+  <!-- ── PACKAGE DETAILS MODAL ── -->
+  <div class="auth-gate-overlay" id="pkgDetailsModal" style="z-index:9990;">
+    <div class="auth-gate-card" style="max-width:640px;text-align:left;padding:0;overflow:hidden;">
+      <!-- Header banner -->
+      <div id="pkgDetailsBanner" style="background:linear-gradient(135deg,rgba(245,166,35,0.18),rgba(245,166,35,0.04));padding:1.5rem 1.75rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1rem;position:relative;">
+        <button class="auth-gate-dismiss" id="closePkgDetailsModal" style="position:absolute;top:1rem;right:1rem;" aria-label="Close"><i class="fas fa-times"></i></button>
+        <div id="pkgDetailsBannerIcon" style="width:56px;height:56px;background:rgba(245,166,35,0.15);border-radius:16px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:1.6rem;flex-shrink:0;"></div>
+        <div>
+          <div id="pkgDetailsBadge" style="display:none;background:var(--gold);color:#000;font-weight:700;font-size:0.7rem;padding:0.15rem 0.6rem;border-radius:99px;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.35rem;width:fit-content;"></div>
+          <h2 id="pkgDetailsName" style="margin:0;font-size:1.4rem;font-weight:800;color:var(--text);"></h2>
+          <div id="pkgDetailsPrice" style="font-size:1.8rem;font-weight:800;color:var(--gold);margin-top:0.1rem;"></div>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div style="padding:1.5rem 1.75rem;max-height:65vh;overflow-y:auto;">
+        <p id="pkgDetailsDesc" style="color:var(--text-dim);font-size:0.93rem;line-height:1.6;margin-bottom:1.5rem;"></p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem;">
+
+          <!-- Features -->
+          <div>
+            <div style="font-weight:700;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-dim);margin-bottom:0.75rem;"><i class="fas fa-list-check" style="color:var(--gold);margin-right:0.35rem;"></i>What's Included</div>
+            <ul id="pkgDetailsFeatures" style="list-style:none;padding:0;margin:0;"></ul>
+          </div>
+
+          <!-- Package Info -->
+          <div>
+            <div style="font-weight:700;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-dim);margin-bottom:0.75rem;"><i class="fas fa-info-circle" style="color:var(--gold);margin-right:0.35rem;"></i>Package Info</div>
+            <div id="pkgDetailsInfo" style="display:flex;flex-direction:column;gap:0.65rem;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div style="padding:1rem 1.75rem;border-top:1px solid var(--border);display:flex;gap:0.75rem;justify-content:flex-end;">
+        <button type="button" class="btn btn-ghost" id="cancelPkgDetailsBtn">Close</button>
+        <button type="button" class="btn btn-gold" id="orderFromDetailsBtn">
+          <i class="fas fa-cart-shopping"></i> Order This Package
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ORDER CONFIRMATION MODAL ── -->
+  <div class="auth-gate-overlay" id="packageOrderModal" style="z-index:9995;">
+    <div class="auth-gate-card" style="max-width:500px;text-align:left;">
+      <button class="auth-gate-dismiss" id="closeOrderModal" aria-label="Close modal"><i class="fas fa-times"></i></button>
+
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.25rem;">
+        <div class="auth-gate-icon" style="margin:0;width:46px;height:46px;font-size:1.25rem;">
+          <i class="fas fa-shopping-cart" style="color:var(--gold);"></i>
+        </div>
+        <div>
+          <h3 class="auth-gate-title" style="margin:0;font-size:1.2rem;" id="orderModalPkgName">Confirm Order</h3>
+          <p style="color:var(--gold);font-weight:800;font-size:1.15rem;margin:0;" id="orderModalPkgPrice">$0</p>
+        </div>
+      </div>
+
+      <div id="orderModalPkgDetails" style="background:var(--surface2);padding:0.85rem;border-radius:10px;border:1px solid var(--border);margin-bottom:1rem;font-size:0.84rem;line-height:1.6;color:var(--text-dim);">
+      </div>
+
+      <div class="form-group" style="margin-bottom:1rem;">
+        <label style="color:var(--text);font-size:0.85rem;font-weight:600;margin-bottom:0.4rem;display:block;">
+          Project Brief / Special Instructions <span style="color:var(--text-dim);font-weight:400;">(Optional)</span>
+        </label>
+        <textarea id="orderNotesInput" rows="3" style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:0.65rem;border-radius:8px;font-size:0.85rem;outline:none;resize:vertical;" placeholder="e.g. Target audience, brand colors, reference examples, any special requirements..."></textarea>
+      </div>
+
+      <div style="display:flex;gap:0.5rem;justify-content:flex-end;">
+        <button type="button" class="btn btn-ghost" id="cancelOrderBtn">Cancel</button>
+        <button type="button" class="btn btn-gold" id="confirmOrderBtn">
+          <i class="fas fa-check"></i> Place Order Now
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ── SCRIPTS ── -->
   <script>
-    /* ── Navbar scroll ── */
+    /* ── Navbar scroll (throttled for 60/120fps smooth performance) ── */
+    const navbarEl = document.getElementById("navbar");
+    let isTicking = false;
     window.addEventListener("scroll", () => {
-      document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 50);
-    });
+      if (!isTicking) {
+        window.requestAnimationFrame(() => {
+          if (navbarEl) navbarEl.classList.toggle("scrolled", window.scrollY > 50);
+          isTicking = false;
+        });
+        isTicking = true;
+      }
+    }, { passive: true });
 
     /* ── Mobile nav toggle ── */
     const navToggle = document.getElementById("navToggle");
@@ -550,8 +630,9 @@
 
         // Start listening for admin replies
         listenForAdminReplies(user.uid);
-        // Check if user came back from login with a pending like
+        // Check if user came back from login with a pending like or order
         checkPendingLike();
+        checkPendingOrder();
       } else {
         navAuthArea.innerHTML = `
       <a href="login.html" class="btn btn-ghost" style="padding:0.45rem 1.1rem;font-size:0.82rem;">
@@ -905,6 +986,17 @@
           if (tagEl) tagEl.innerHTML = escapeHtml(data.heroTagline);
         }
 
+        // About Me Section Dynamic Updates
+        if (data.aboutTitleMain) {
+          const mainTitleEl = document.getElementById("aboutTitleMain");
+          if (mainTitleEl) mainTitleEl.textContent = data.aboutTitleMain;
+        }
+
+        if (data.aboutTitleHighlight) {
+          const spanTitleEl = document.getElementById("aboutTitleSpan");
+          if (spanTitleEl) spanTitleEl.textContent = data.aboutTitleHighlight;
+        }
+
         if (data.aboutText) {
           const bioEl = document.getElementById("aboutBioText");
           if (bioEl) bioEl.textContent = data.aboutText;
@@ -913,6 +1005,26 @@
         if (data.profilePictureUrl) {
           const photoEl = document.getElementById("aboutPhoto");
           if (photoEl) photoEl.src = data.profilePictureUrl;
+        }
+
+        if (data.badgeYearsText) {
+          const by = document.getElementById("badgeYears");
+          if (by) by.textContent = data.badgeYearsText;
+        }
+
+        if (data.badgeLabelText) {
+          const bl = document.getElementById("badgeLabel");
+          if (bl) bl.textContent = data.badgeLabelText;
+        }
+
+        if (data.aboutCtaText) {
+          const ctaTextEl = document.getElementById("aboutCtaText");
+          if (ctaTextEl) ctaTextEl.textContent = data.aboutCtaText;
+        }
+
+        if (data.aboutCtaLink) {
+          const ctaBtn = document.getElementById("aboutCtaBtn");
+          if (ctaBtn) ctaBtn.href = data.aboutCtaLink;
         }
 
         const emailEl = document.getElementById("infoContactEmail");
@@ -933,14 +1045,343 @@
         if (sp && data.statProjects !== undefined) sp.dataset.target = data.statProjects;
         if (sc && data.statClients !== undefined) sc.dataset.target = data.statClients;
         if (sy && data.statYears !== undefined) sy.dataset.target = data.statYears;
-        if (by && data.statYears !== undefined) by.textContent = data.statYears + "+";
+        if (by && !data.badgeYearsText && data.statYears !== undefined) by.textContent = data.statYears + "+";
 
         animateCounters();
 
         // Render Reviews
         renderReviews(data.reviews || {});
       });
+
+      // Load Services & Packages nodes
+      loadServices();
+      loadPackages();
     }
+
+    /* ── Load Dynamic Services for About Me ── */
+    const DEFAULT_SERVICES_LIST = [
+      { title: "Social Media Ads", icon: "fas fa-bullhorn", description: "High-converting video and image ads for social platforms", order: 1, enabled: true },
+      { title: "Video Production", icon: "fas fa-video", description: "Professional end-to-end video shooting and editing", order: 2, enabled: true },
+      { title: "Brand Identity", icon: "fas fa-palette", description: "Complete brand visual identity and design guidelines", order: 3, enabled: true },
+      { title: "Motion Graphics", icon: "fas fa-film", description: "Dynamic motion design and 2D/3D visual animations", order: 4, enabled: true },
+      { title: "Facebook Ads", icon: "fab fa-facebook", description: "Targeted Facebook advertising creative and strategy", order: 5, enabled: true },
+      { title: "Instagram Reels", icon: "fab fa-instagram", description: "Viral short-form Reels and Stories creation", order: 6, enabled: true },
+      { title: "Content Strategy", icon: "fas fa-chess", description: "Strategic ad content planning and conversion funnels", order: 7, enabled: true },
+      { title: "Graphic Design", icon: "fas fa-vector-square", description: "Custom digital graphics and promotional banners", order: 8, enabled: true }
+    ];
+
+    function loadServices() {
+      rtdb.ref("services").on("value", (snap) => {
+        let servicesObj = snap.val();
+
+        if (!servicesObj || Object.keys(servicesObj).length === 0) {
+          // Check if old siteSettings/offers exists
+          rtdb.ref("siteSettings/offers").once("value", (oldSnap) => {
+            const oldOffers = oldSnap.val();
+            if (oldOffers && Object.keys(oldOffers).length > 0) {
+              renderServicesObj(oldOffers);
+            } else {
+              // Render default 8 services fallback
+              const defaultObj = {};
+              DEFAULT_SERVICES_LIST.forEach((s, idx) => { defaultObj[`def_${idx}`] = s; });
+              renderServicesObj(defaultObj);
+            }
+          });
+          return;
+        }
+
+        renderServicesObj(servicesObj);
+      });
+    }
+
+    function renderServicesObj(servicesObj) {
+      const container = document.getElementById("aboutOffersGrid");
+      if (!container) return;
+      const keys = Object.keys(servicesObj);
+
+      const activeServices = keys
+        .map(k => ({ key: k, ...servicesObj[k] }))
+        .filter(srv => srv.enabled !== false)
+        .sort((a, b) => (a.order || 99) - (b.order || 99));
+
+      if (activeServices.length === 0) {
+        container.innerHTML = '<span class="skill-tag" style="opacity:0.6;">No active services</span>';
+        return;
+      }
+
+      container.innerHTML = activeServices.map(srv => {
+        const iconHtml = srv.icon ? `<i class="${escapeHtml(srv.icon)}"></i> ` : '';
+        const descTitle = srv.description ? ` title="${escapeHtml(srv.description)}"` : '';
+        return `<span class="skill-tag"${descTitle} style="display:inline-flex;align-items:center;gap:0.4rem;">${iconHtml}${escapeHtml(srv.title)}</span>`;
+      }).join("");
+    }
+
+    /* ── Load Dynamic Packages into existing #offers section ── */
+    let cachedPackagesData = {};
+
+    function loadPackages() {
+      rtdb.ref("packages").on("value", (snap) => {
+        const pkgs = snap.val() || {};
+        cachedPackagesData = pkgs;
+        renderOffersGrid(pkgs);
+      });
+    }
+
+    function renderOffersGrid(pkgs) {
+      const container = document.getElementById("offersGrid");
+      if (!container) return;
+      const keys = Object.keys(pkgs);
+
+      const activePkgs = keys
+        .map(k => ({ key: k, ...pkgs[k] }))
+        .filter(pkg => pkg.enabled !== false)
+        .sort((a, b) => (a.order || 99) - (b.order || 99));
+
+      if (activePkgs.length === 0) {
+        container.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:var(--text-dim);padding:3rem;">
+          <i class="fas fa-box-open" style="font-size:2.5rem;opacity:0.2;display:block;margin-bottom:0.75rem;"></i>
+          No packages available at the moment. Check back soon!
+        </div>`;
+        return;
+      }
+
+      container.innerHTML = activePkgs.map(pkg => {
+        const isFeatured = pkg.featured ? ' featured' : '';
+        const badgeHtml = pkg.badge ? `<div class="offer-badge-ribbon">${escapeHtml(pkg.badge)}</div>` : '';
+        const iconClass = pkg.icon || 'fas fa-box';
+
+        // Show first 3 features as a preview
+        const previewFeatures = (pkg.features || '').split('\n').filter(f => f.trim() !== '').slice(0, 4);
+        const featuresList = previewFeatures.map(f =>
+          `<li><i class="fas fa-check-circle"></i> <span>${escapeHtml(f.trim())}</span></li>`
+        ).join('');
+
+        return `
+          <div class="offer-card${isFeatured}" onclick="viewPackageDetails('${pkg.key}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')viewPackageDetails('${pkg.key}')">
+            ${badgeHtml}
+
+            <div>
+              <div class="offer-card-header">
+                <div class="offer-card-icon"><i class="${escapeHtml(iconClass)}"></i></div>
+                <div>
+                  <div class="offer-card-title">${escapeHtml(pkg.name)}</div>
+                  <div class="offer-card-price">${escapeHtml(pkg.price)}</div>
+                </div>
+              </div>
+
+              <p class="offer-card-desc">${escapeHtml(pkg.description || '')}</p>
+
+              <ul class="offer-card-features">
+                ${featuresList}
+              </ul>
+            </div>
+
+            <div class="offer-card-footer">
+              <div class="offer-card-meta">
+                ${pkg.delivery ? `<span><i class="fas fa-truck-fast"></i> ${escapeHtml(pkg.delivery)}</span>` : ''}
+                ${pkg.revisions ? `<span><i class="fas fa-rotate"></i> ${escapeHtml(pkg.revisions)}</span>` : ''}
+              </div>
+              <button class="btn ${pkg.featured ? 'btn-gold' : 'btn-outline'} btn-sm" onclick="event.stopPropagation();viewPackageDetails('${pkg.key}')">
+                <i class="fas fa-eye"></i> View Details
+              </button>
+            </div>
+          </div>`;
+      }).join("");
+    }
+
+    /* ── Package Details Modal ── */
+    let currentViewedPackageKey = null;
+    const pkgDetailsModal = document.getElementById("pkgDetailsModal");
+
+    function viewPackageDetails(pkgKey) {
+      const pkg = cachedPackagesData[pkgKey];
+      if (!pkg) return;
+      currentViewedPackageKey = pkgKey;
+
+      // Populate banner
+      const iconEl = document.getElementById("pkgDetailsBannerIcon");
+      if (iconEl) iconEl.innerHTML = `<i class="${escapeHtml(pkg.icon || 'fas fa-box')}"></i>`;
+
+      const badgeEl = document.getElementById("pkgDetailsBadge");
+      if (badgeEl) {
+        if (pkg.badge) {
+          badgeEl.textContent = pkg.badge;
+          badgeEl.style.display = "block";
+        } else {
+          badgeEl.style.display = "none";
+        }
+      }
+
+      document.getElementById("pkgDetailsName").textContent = pkg.name || "";
+      document.getElementById("pkgDetailsPrice").textContent = pkg.price || "";
+      document.getElementById("pkgDetailsDesc").textContent = pkg.description || "";
+
+      // Features list
+      const featuresList = document.getElementById("pkgDetailsFeatures");
+      if (featuresList) {
+        const feats = (pkg.features || '').split('\n').filter(f => f.trim());
+        featuresList.innerHTML = feats.map(f =>
+          `<li style="font-size:0.86rem;color:var(--text-muted);margin-bottom:0.6rem;display:flex;align-items:flex-start;gap:0.5rem;line-height:1.4;">
+            <i class="fas fa-check-circle" style="color:var(--gold);font-size:0.82rem;margin-top:0.2rem;"></i>
+            <span>${escapeHtml(f.trim())}</span>
+          </li>`
+        ).join('');
+      }
+
+      // Package info panel
+      const infoEl = document.getElementById("pkgDetailsInfo");
+      if (infoEl) {
+        const infoItems = [];
+        if (pkg.delivery) infoItems.push({ icon: 'fa-truck-fast', label: 'Delivery', value: pkg.delivery });
+        if (pkg.revisions) infoItems.push({ icon: 'fa-rotate', label: 'Revisions', value: pkg.revisions });
+        if (pkg.price) infoItems.push({ icon: 'fa-tag', label: 'Price', value: pkg.price });
+        if (pkg.featured) infoItems.push({ icon: 'fa-star', label: 'Status', value: 'Featured Package' });
+
+        infoEl.innerHTML = infoItems.map(item =>
+          `<div style="display:flex;align-items:flex-start;gap:0.6rem;">
+            <div style="width:30px;height:30px;background:rgba(245,166,35,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <i class="fas ${item.icon}" style="color:var(--gold);font-size:0.8rem;"></i>
+            </div>
+            <div>
+              <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-dim);font-weight:600;">${item.label}</div>
+              <div style="font-size:0.88rem;color:var(--text);font-weight:600;">${escapeHtml(item.value)}</div>
+            </div>
+          </div>`
+        ).join('');
+      }
+
+      if (pkgDetailsModal) {
+        pkgDetailsModal.classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+    }
+
+    function closePkgDetailsModal() {
+      if (pkgDetailsModal) {
+        pkgDetailsModal.classList.remove("open");
+        document.body.style.overflow = "";
+      }
+    }
+
+    document.getElementById("closePkgDetailsModal")?.addEventListener("click", closePkgDetailsModal);
+    document.getElementById("cancelPkgDetailsBtn")?.addEventListener("click", closePkgDetailsModal);
+
+    document.getElementById("orderFromDetailsBtn")?.addEventListener("click", () => {
+      closePkgDetailsModal();
+      if (currentViewedPackageKey) {
+        setTimeout(() => selectPackageForOrder(currentViewedPackageKey), 100);
+      }
+    });
+
+    /* ── Package Order Confirmation System ── */
+    let selectedPackageForOrder = null;
+    const orderModal = document.getElementById("packageOrderModal");
+
+    function selectPackageForOrder(pkgKey) {
+      const user = firebase.auth().currentUser;
+      const pkg = cachedPackagesData[pkgKey];
+      if (!pkg) return;
+
+      if (!user) {
+        // Guest → prompt auth, save pending order
+        sessionStorage.setItem("pendingOrder", JSON.stringify({ packageId: pkgKey }));
+        sessionStorage.setItem("redirectAfterLogin", window.location.href + "#offers");
+        openAuthGateModal("package", pkgKey);
+        return;
+      }
+
+      // Snapshot price and details at time of order (important for historical accuracy)
+      selectedPackageForOrder = { key: pkgKey, ...pkg };
+
+      document.getElementById("orderModalPkgName").textContent = pkg.name;
+      document.getElementById("orderModalPkgPrice").textContent = pkg.price;
+
+      const featuresSummary = (pkg.features || '').split('\n').filter(f => f.trim()).map(f => `• ${f.trim()}`).join('\n');
+      document.getElementById("orderModalPkgDetails").innerHTML = `
+        <div style="margin-bottom:0.5rem;"><strong>Package:</strong> ${escapeHtml(pkg.name)} — <strong style="color:var(--gold)">${escapeHtml(pkg.price)}</strong></div>
+        ${pkg.delivery ? `<div><i class="fas fa-truck-fast"></i> ${escapeHtml(pkg.delivery)}${pkg.revisions ? ` &nbsp;|&nbsp; <i class="fas fa-rotate"></i> ${escapeHtml(pkg.revisions)}` : ''}</div>` : ''}
+        ${featuresSummary ? `<div style="margin-top:0.4rem;white-space:pre-line;font-size:0.82rem;">${escapeHtml(featuresSummary)}</div>` : ''}
+      `;
+
+      document.getElementById("orderNotesInput").value = "";
+      if (orderModal) {
+        orderModal.classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+    }
+
+    function closePackageOrderModal() {
+      if (orderModal) {
+        orderModal.classList.remove("open");
+        document.body.style.overflow = "";
+      }
+    }
+
+    document.getElementById("closeOrderModal")?.addEventListener("click", closePackageOrderModal);
+    document.getElementById("cancelOrderBtn")?.addEventListener("click", closePackageOrderModal);
+
+    document.getElementById("confirmOrderBtn")?.addEventListener("click", async () => {
+      const user = firebase.auth().currentUser;
+      if (!user || !selectedPackageForOrder) return;
+
+      const notes = document.getElementById("orderNotesInput").value.trim();
+      const btn = document.getElementById("confirmOrderBtn");
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Placing Order...`;
+
+      try {
+        let userName = user.displayName;
+        try {
+          const snap = await db.collection("users").doc(user.uid).get();
+          if (snap.exists && snap.data().name) userName = snap.data().name;
+        } catch (e) {}
+
+        // Snapshot package info at order time — price/name won't change even if admin edits later
+        const orderObj = {
+          userId: user.uid,
+          userName: userName || user.email || "Customer",
+          userEmail: user.email || "",
+          packageId: selectedPackageForOrder.key,
+          packageName: selectedPackageForOrder.name,
+          packagePrice: selectedPackageForOrder.price,
+          packageDescription: selectedPackageForOrder.description || "",
+          delivery: selectedPackageForOrder.delivery || "",
+          revisions: selectedPackageForOrder.revisions || "",
+          features: selectedPackageForOrder.features || "",
+          notes: notes,
+          status: "Pending",
+          createdAt: firebase.database.ServerValue.TIMESTAMP
+        };
+
+        await rtdb.ref("orders").push(orderObj);
+        closePackageOrderModal();
+        showToast("🎉 Order placed successfully! We will contact you soon.", "success");
+      } catch (err) {
+        showToast("Failed to place order: " + err.message, "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fas fa-check"></i> Place Order Now`;
+      }
+    });
+
+    function checkPendingOrder() {
+      const pendingOrderStr = sessionStorage.getItem("pendingOrder");
+      if (!pendingOrderStr) return;
+      const user = firebase.auth().currentUser;
+      if (!user) return;
+
+      try {
+        const { packageId } = JSON.parse(pendingOrderStr);
+        sessionStorage.removeItem("pendingOrder");
+        setTimeout(() => {
+          // Show details first then order
+          viewPackageDetails(packageId);
+        }, 800);
+      } catch (e) {
+        sessionStorage.removeItem("pendingOrder");
+      }
+    }
+
 
     function renderReviews(reviewsObj) {
       const container = document.getElementById("reviewsGrid");
@@ -1574,7 +2015,6 @@
     loadSiteSettings();
     loadPortfolio();
     loadSocialLinks();
-    loadCategories();
   </script>
 </body>
 
