@@ -1325,7 +1325,7 @@
         ).join('');
 
         return `
-          <div class="offer-card${isFeatured}" data-key="${escapeHtml(pkg.key)}" onclick="viewPackageDetails(this.dataset.key)" role="button" tabindex="0" onkeydown="if(event.key==='Enter')viewPackageDetails(this.dataset.key)">
+          <div class="offer-card${isFeatured}" data-pkg-key="${escapeHtml(pkg.key)}" role="button" tabindex="0">
             ${badgeHtml}
 
             <div>
@@ -1349,13 +1349,24 @@
                 ${pkg.delivery ? `<span><i class="fas fa-truck-fast"></i> ${escapeHtml(pkg.delivery)}</span>` : ''}
                 ${pkg.revisions ? `<span><i class="fas fa-rotate"></i> ${escapeHtml(pkg.revisions)}</span>` : ''}
               </div>
-              <button type="button" class="btn ${pkg.featured ? 'btn-gold' : 'btn-outline'} btn-sm" onclick="event.stopPropagation(); viewPackageDetails(this.closest('.offer-card').dataset.key)">
+              <button type="button" class="btn ${pkg.featured ? 'btn-gold' : 'btn-outline'} btn-sm view-pkg-details-btn" data-pkg-key="${escapeHtml(pkg.key)}">
                 <i class="fas fa-eye"></i> View Details
               </button>
             </div>
           </div>`;
       }).join("");
     }
+
+    // Global Event Delegation for Offer Package Cards & View Details Buttons
+    document.addEventListener("click", (e) => {
+      const trigger = e.target.closest("[data-pkg-key]");
+      if (trigger) {
+        const key = trigger.getAttribute("data-pkg-key");
+        if (key && typeof window.viewPackageDetails === "function") {
+          window.viewPackageDetails(key);
+        }
+      }
+    });
 
     /* ── Package Details Modal ── */
     let currentViewedPackageKey = null;
