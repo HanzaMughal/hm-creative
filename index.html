@@ -1430,22 +1430,36 @@
       const hostSection = document.getElementById("pkgHostingSection");
       const hostBody    = document.getElementById("pkgHostingBody");
       const hostNotes   = document.getElementById("pkgHostingNotes");
-      const h = pkg.hostingDetails || {};
-      const isSsl = h.ssl === true || h.ssl === "true";
-      const isCdn = h.cdn === true || h.cdn === "true";
+
+      const h = (pkg.hostingDetails && (pkg.hostingDetails.provider || pkg.hostingDetails.planName))
+        ? pkg.hostingDetails
+        : {
+            provider: "Hostinger / High-Speed Cloud",
+            planName: "Standard Web Package",
+            storage: "50 GB NVMe SSD",
+            bandwidth: "Unlimited",
+            websites: "1 Website Included",
+            email: "Free Professional Email",
+            ssl: true,
+            cdn: true,
+            notes: "Includes 99.9% Uptime Guarantee, Free SSL Certificate, and Automated Backups."
+          };
+
+      const isSsl = h.ssl === true || h.ssl === "true" || typeof h.ssl === 'undefined';
+      const isCdn = h.cdn === true || h.cdn === "true" || typeof h.cdn === 'undefined';
 
       const hostItems = [
-        h.provider  && { icon: 'fa-building', label: 'Provider',   value: h.provider },
-        h.planName  && { icon: 'fa-layer-group', label: 'Plan',    value: h.planName },
-        h.storage   && { icon: 'fa-hard-drive', label: 'Storage',  value: h.storage },
-        h.bandwidth && { icon: 'fa-arrows-alt-h', label: 'Bandwidth', value: h.bandwidth },
-        h.websites  && { icon: 'fa-globe',       label: 'Websites', value: h.websites },
-        h.email     && { icon: 'fa-envelope',    label: 'Email Accounts', value: h.email },
-        typeof h.ssl !== 'undefined' && { icon: 'fa-lock', label: 'Free SSL', value: isSsl ? 'Included ✅' : 'Not included' },
-        typeof h.cdn !== 'undefined' && isCdn && { icon: 'fa-bolt', label: 'Free CDN', value: 'Included ✅' },
-      ].filter(Boolean);
+        { icon: 'fa-building', label: 'Provider',   value: h.provider || "Hostinger" },
+        { icon: 'fa-layer-group', label: 'Plan',    value: h.planName || "Standard Package" },
+        { icon: 'fa-hard-drive', label: 'Storage',  value: h.storage || "50 GB SSD" },
+        { icon: 'fa-arrows-alt-h', label: 'Bandwidth', value: h.bandwidth || "Unlimited" },
+        { icon: 'fa-globe',       label: 'Websites', value: h.websites || "1 Website" },
+        { icon: 'fa-envelope',    label: 'Email Accounts', value: h.email || "Included" },
+        { icon: 'fa-lock', label: 'Free SSL', value: isSsl ? 'Included ✅' : 'Not included' },
+        { icon: 'fa-bolt', label: 'Free CDN', value: isCdn ? 'Included ✅' : 'Not included' },
+      ];
 
-      if (hostItems.length > 0 && hostSection && hostBody) {
+      if (hostSection && hostBody) {
         hostSection.style.display = "block";
         hostBody.innerHTML = hostItems.map(item =>
           `<div style="display:flex;align-items:flex-start;gap:0.5rem;background:var(--surface2);border-radius:8px;padding:0.55rem 0.7rem;">
@@ -1465,8 +1479,6 @@
         } else if (hostNotes) {
           hostNotes.style.display = "none";
         }
-      } else if (hostSection) {
-        hostSection.style.display = "none";
       }
 
       /* ══════════════════════════════════════════════
@@ -1477,23 +1489,31 @@
       const domNotes    = document.getElementById("pkgDomainNotes");
       const pricingWrap = document.getElementById("pkgPricingTableWrap");
       const pricingBody = document.getElementById("pkgPricingTableBody");
-      const d = pkg.domainDetails || {};
-      const isDomInc = d.included === true || d.included === "true";
 
-      const hasDomainData = d.extension || d.notes || (Array.isArray(d.pricing) && d.pricing.length > 0);
-      if (hasDomainData && domSection) {
+      const d = (pkg.domainDetails && (pkg.domainDetails.extension || (pkg.domainDetails.pricing && pkg.domainDetails.pricing.length)))
+        ? pkg.domainDetails
+        : {
+            included: true,
+            extension: ".com / .pk",
+            notes: "Domain pricing breakdown based on selected Hostinger / Registrar duration plan.",
+            pricing: [
+              { duration: "1 Year",  hosting: "PKR 4,500",  domain: "PKR 2,500" },
+              { duration: "2 Years", hosting: "PKR 8,000",  domain: "PKR 4,500" },
+              { duration: "3 Years", hosting: "PKR 11,500", domain: "PKR 6,500" },
+              { duration: "4 Years", hosting: "PKR 14,500", domain: "PKR 8,000" }
+            ]
+          };
+
+      const isDomInc = d.included === true || d.included === "true" || typeof d.included === 'undefined';
+
+      if (domSection) {
         domSection.style.display = "block";
 
-        // Meta chips
         if (domMeta) {
-          const chips = [];
-          if (typeof d.included !== 'undefined') {
-            chips.push(`<span style="background:${isDomInc ? 'rgba(76,175,80,0.15)' : 'rgba(255,82,82,0.1)'};color:${isDomInc ? '#4caf50' : '#ff5252'};border:1px solid ${isDomInc ? 'rgba(76,175,80,0.3)' : 'rgba(255,82,82,0.3)'};padding:0.2rem 0.7rem;border-radius:99px;font-size:0.75rem;font-weight:600;"><i class="fas ${isDomInc ? 'fa-circle-check' : 'fa-circle-xmark'}" style="margin-right:0.3rem;"></i>Domain ${isDomInc ? 'Included' : 'Not Included'}</span>`);
-          }
-          if (d.extension) {
-            chips.push(`<span style="background:rgba(245,166,35,0.1);color:var(--gold);border:1px solid rgba(245,166,35,0.2);padding:0.2rem 0.7rem;border-radius:99px;font-size:0.75rem;font-weight:600;">${escapeHtml(d.extension)}</span>`);
-          }
-          domMeta.innerHTML = chips.join('');
+          domMeta.innerHTML = `
+            <span style="background:${isDomInc ? 'rgba(76,175,80,0.15)' : 'rgba(255,82,82,0.1)'};color:${isDomInc ? '#4caf50' : '#ff5252'};border:1px solid ${isDomInc ? 'rgba(76,175,80,0.3)' : 'rgba(255,82,82,0.3)'};padding:0.2rem 0.7rem;border-radius:99px;font-size:0.75rem;font-weight:600;"><i class="fas ${isDomInc ? 'fa-circle-check' : 'fa-circle-xmark'}" style="margin-right:0.3rem;"></i>Domain ${isDomInc ? 'Included' : 'Not Included'}</span>
+            ${d.extension ? `<span style="background:rgba(245,166,35,0.1);color:var(--gold);border:1px solid rgba(245,166,35,0.2);padding:0.2rem 0.7rem;border-radius:99px;font-size:0.75rem;font-weight:600;">${escapeHtml(d.extension)}</span>` : ''}
+          `;
         }
 
         if (d.notes && domNotes) {
@@ -1503,10 +1523,16 @@
           domNotes.style.display = "none";
         }
 
-        // Pricing table
-        if (Array.isArray(d.pricing) && d.pricing.length > 0 && pricingWrap && pricingBody) {
+        const pricingList = (Array.isArray(d.pricing) && d.pricing.length > 0) ? d.pricing : [
+          { duration: "1 Year",  hosting: "PKR 4,500",  domain: "PKR 2,500" },
+          { duration: "2 Years", hosting: "PKR 8,000",  domain: "PKR 4,500" },
+          { duration: "3 Years", hosting: "PKR 11,500", domain: "PKR 6,500" },
+          { duration: "4 Years", hosting: "PKR 14,500", domain: "PKR 8,000" }
+        ];
+
+        if (pricingWrap && pricingBody) {
           pricingWrap.style.display = "block";
-          pricingBody.innerHTML = d.pricing.map((row, i) => {
+          pricingBody.innerHTML = pricingList.map((row) => {
             const hVal = row.hosting || '—';
             const dVal = row.domain  || '—';
             let totalHtml = '—';
@@ -1524,11 +1550,7 @@
               <td style="padding:0.6rem 0.9rem;font-size:0.82rem;">${totalHtml}</td>
             </tr>`;
           }).join('');
-        } else if (pricingWrap) {
-          pricingWrap.style.display = "none";
         }
-      } else if (domSection) {
-        domSection.style.display = "none";
       }
 
       /* ══════════════════════════════════════════════
@@ -1536,9 +1558,14 @@
       ═══════════════════════════════════════════════ */
       const addonsSection = document.getElementById("pkgAddonsSection");
       const addonsBody    = document.getElementById("pkgAddonsBody");
-      const addons = pkg.additionalCosts;
+      const addons = (Array.isArray(pkg.additionalCosts) && pkg.additionalCosts.length > 0)
+        ? pkg.additionalCosts
+        : [
+            { service: "Monthly Website Maintenance", price: "PKR 5,000/mo", note: "Includes security patches, speed optimization & backups" },
+            { service: "Technical & On-Page SEO Setup", price: "PKR 10,000", note: "Google Search Console indexing & sitemap submission" }
+          ];
 
-      if (Array.isArray(addons) && addons.length > 0 && addonsSection && addonsBody) {
+      if (addonsSection && addonsBody) {
         addonsSection.style.display = "block";
         addonsBody.innerHTML = addons.map(item =>
           `<div style="display:flex;align-items:center;justify-content:space-between;background:var(--surface2);border-radius:8px;padding:0.55rem 0.85rem;gap:1rem;">
@@ -1552,8 +1579,6 @@
             ${item.price ? `<div style="font-size:0.84rem;font-weight:700;color:var(--gold);white-space:nowrap;">${escapeHtml(item.price)}</div>` : ''}
           </div>`
         ).join('');
-      } else if (addonsSection) {
-        addonsSection.style.display = "none";
       }
 
       if (modalEl) {
