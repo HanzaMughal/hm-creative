@@ -1580,6 +1580,13 @@
       if (e.target && e.target.id === "pkgDetailsModal") closePkgDetailsModal();
     });
 
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closePkgDetailsModal();
+        closePackageOrderModal();
+      }
+    });
+
     document.getElementById("orderFromDetailsBtn")?.addEventListener("click", () => {
       closePkgDetailsModal();
       if (currentViewedPackageKey) {

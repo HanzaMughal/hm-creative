@@ -2501,6 +2501,8 @@ footer {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .auth-gate-overlay.open {
@@ -2519,6 +2521,7 @@ footer {
   box-shadow: 0 32px 80px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(245, 166, 35, 0.08);
   animation: authCardIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
+  margin: auto;
 }
 
 @keyframes authCardIn {
