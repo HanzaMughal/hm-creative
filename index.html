@@ -481,9 +481,10 @@
       </div>
 
       <!-- Body -->
-      <div style="padding:1.5rem 1.75rem;max-height:65vh;overflow-y:auto;">
+      <div style="padding:1.5rem 1.75rem;max-height:72vh;overflow-y:auto;">
         <p id="pkgDetailsDesc" style="color:var(--text-dim);font-size:0.93rem;line-height:1.6;margin-bottom:1.5rem;"></p>
 
+        <!-- What's Included + Package Info -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem;">
 
           <!-- Features -->
@@ -498,6 +499,47 @@
             <div id="pkgDetailsInfo" style="display:flex;flex-direction:column;gap:0.65rem;"></div>
           </div>
         </div>
+
+        <!-- ── SECTION 1: Hosting Details ── -->
+        <div id="pkgHostingSection" style="display:none;margin-bottom:1.25rem;">
+          <div style="font-weight:700;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-dim);margin-bottom:0.75rem;border-top:1px solid var(--border);padding-top:1rem;">
+            <i class="fas fa-server" style="color:var(--gold);margin-right:0.4rem;"></i>Hosting Details
+          </div>
+          <div id="pkgHostingBody" style="display:grid;grid-template-columns:1fr 1fr;gap:0.55rem;"></div>
+          <div id="pkgHostingNotes" style="margin-top:0.65rem;font-size:0.82rem;color:var(--text-dim);line-height:1.5;background:rgba(245,166,35,0.05);border:1px solid rgba(245,166,35,0.15);border-radius:8px;padding:0.65rem 0.85rem;display:none;"></div>
+        </div>
+
+        <!-- ── SECTION 2: Domain Details & Pricing ── -->
+        <div id="pkgDomainSection" style="display:none;margin-bottom:1.25rem;">
+          <div style="font-weight:700;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-dim);margin-bottom:0.75rem;border-top:1px solid var(--border);padding-top:1rem;">
+            <i class="fas fa-globe" style="color:var(--gold);margin-right:0.4rem;"></i>Domain Details &amp; Pricing
+          </div>
+          <div id="pkgDomainMeta" style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:0.85rem;"></div>
+          <div id="pkgDomainNotes" style="font-size:0.82rem;color:var(--text-dim);line-height:1.5;background:rgba(245,166,35,0.05);border:1px solid rgba(245,166,35,0.15);border-radius:8px;padding:0.65rem 0.85rem;margin-bottom:0.85rem;display:none;"></div>
+          <!-- Pricing Table -->
+          <div id="pkgPricingTableWrap" style="display:none;overflow:hidden;border-radius:10px;border:1px solid var(--border);">
+            <table style="width:100%;border-collapse:collapse;font-size:0.82rem;">
+              <thead>
+                <tr style="background:rgba(245,166,35,0.1);">
+                  <th style="padding:0.6rem 0.9rem;text-align:left;color:var(--gold);font-weight:700;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;">Duration</th>
+                  <th style="padding:0.6rem 0.9rem;text-align:left;color:var(--gold);font-weight:700;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;"><i class="fas fa-server" style="margin-right:0.3rem;"></i>Hosting</th>
+                  <th style="padding:0.6rem 0.9rem;text-align:left;color:var(--gold);font-weight:700;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;"><i class="fas fa-globe" style="margin-right:0.3rem;"></i>Domain</th>
+                  <th style="padding:0.6rem 0.9rem;text-align:left;color:var(--gold);font-weight:700;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;">Total</th>
+                </tr>
+              </thead>
+              <tbody id="pkgPricingTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ── SECTION 3: Additional Costs / Services ── -->
+        <div id="pkgAddonsSection" style="display:none;margin-bottom:0.5rem;">
+          <div style="font-weight:700;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-dim);margin-bottom:0.75rem;border-top:1px solid var(--border);padding-top:1rem;">
+            <i class="fas fa-circle-plus" style="color:var(--gold);margin-right:0.4rem;"></i>Additional Costs &amp; Services
+          </div>
+          <div id="pkgAddonsBody" style="display:flex;flex-direction:column;gap:0.45rem;"></div>
+        </div>
+
       </div>
 
       <!-- Footer -->
@@ -1052,10 +1094,6 @@
         // Render Reviews
         renderReviews(data.reviews || {});
       });
-
-      // Load Services & Packages nodes
-      loadServices();
-      loadPackages();
     }
 
     /* ── Load Dynamic Services for About Me ── */
@@ -1191,11 +1229,14 @@
 
     /* ── Package Details Modal ── */
     let currentViewedPackageKey = null;
-    const pkgDetailsModal = document.getElementById("pkgDetailsModal");
 
     function viewPackageDetails(pkgKey) {
+      const modalEl = document.getElementById("pkgDetailsModal");
       const pkg = cachedPackagesData[pkgKey];
-      if (!pkg) return;
+      if (!pkg) {
+        console.warn("Package not found in cachedPackagesData for key:", pkgKey);
+        return;
+      }
       currentViewedPackageKey = pkgKey;
 
       // Populate banner
@@ -1212,9 +1253,12 @@
         }
       }
 
-      document.getElementById("pkgDetailsName").textContent = pkg.name || "";
-      document.getElementById("pkgDetailsPrice").textContent = pkg.price || "";
-      document.getElementById("pkgDetailsDesc").textContent = pkg.description || "";
+      const nameEl  = document.getElementById("pkgDetailsName");
+      const priceEl = document.getElementById("pkgDetailsPrice");
+      const descEl  = document.getElementById("pkgDetailsDesc");
+      if (nameEl)  nameEl.textContent  = pkg.name || "";
+      if (priceEl) priceEl.textContent = pkg.price || "";
+      if (descEl)  descEl.textContent  = pkg.description || "";
 
       // Features list
       const featuresList = document.getElementById("pkgDetailsFeatures");
@@ -1250,21 +1294,161 @@
         ).join('');
       }
 
-      if (pkgDetailsModal) {
-        pkgDetailsModal.classList.add("open");
+      /* ══════════════════════════════════════════════
+         SECTION 1: Hosting Details
+      ═══════════════════════════════════════════════ */
+      const hostSection = document.getElementById("pkgHostingSection");
+      const hostBody    = document.getElementById("pkgHostingBody");
+      const hostNotes   = document.getElementById("pkgHostingNotes");
+      const h = pkg.hostingDetails || {};
+      const isSsl = h.ssl === true || h.ssl === "true";
+      const isCdn = h.cdn === true || h.cdn === "true";
+
+      const hostItems = [
+        h.provider  && { icon: 'fa-building', label: 'Provider',   value: h.provider },
+        h.planName  && { icon: 'fa-layer-group', label: 'Plan',    value: h.planName },
+        h.storage   && { icon: 'fa-hard-drive', label: 'Storage',  value: h.storage },
+        h.bandwidth && { icon: 'fa-arrows-alt-h', label: 'Bandwidth', value: h.bandwidth },
+        h.websites  && { icon: 'fa-globe',       label: 'Websites', value: h.websites },
+        h.email     && { icon: 'fa-envelope',    label: 'Email Accounts', value: h.email },
+        typeof h.ssl !== 'undefined' && { icon: 'fa-lock', label: 'Free SSL', value: isSsl ? 'Included ✅' : 'Not included' },
+        typeof h.cdn !== 'undefined' && isCdn && { icon: 'fa-bolt', label: 'Free CDN', value: 'Included ✅' },
+      ].filter(Boolean);
+
+      if (hostItems.length > 0 && hostSection && hostBody) {
+        hostSection.style.display = "block";
+        hostBody.innerHTML = hostItems.map(item =>
+          `<div style="display:flex;align-items:flex-start;gap:0.5rem;background:var(--surface2);border-radius:8px;padding:0.55rem 0.7rem;">
+            <div style="width:26px;height:26px;background:rgba(245,166,35,0.1);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <i class="fas ${item.icon}" style="color:var(--gold);font-size:0.72rem;"></i>
+            </div>
+            <div>
+              <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-dim);font-weight:600;">${item.label}</div>
+              <div style="font-size:0.82rem;color:var(--text);font-weight:600;margin-top:0.05rem;">${escapeHtml(item.value)}</div>
+            </div>
+          </div>`
+        ).join('');
+
+        if (h.notes && hostNotes) {
+          hostNotes.style.display = "block";
+          hostNotes.innerHTML = `<i class="fas fa-circle-info" style="color:var(--gold);margin-right:0.4rem;"></i>${escapeHtml(h.notes)}`;
+        } else if (hostNotes) {
+          hostNotes.style.display = "none";
+        }
+      } else if (hostSection) {
+        hostSection.style.display = "none";
+      }
+
+      /* ══════════════════════════════════════════════
+         SECTION 2: Domain Details & Pricing
+      ═══════════════════════════════════════════════ */
+      const domSection  = document.getElementById("pkgDomainSection");
+      const domMeta     = document.getElementById("pkgDomainMeta");
+      const domNotes    = document.getElementById("pkgDomainNotes");
+      const pricingWrap = document.getElementById("pkgPricingTableWrap");
+      const pricingBody = document.getElementById("pkgPricingTableBody");
+      const d = pkg.domainDetails || {};
+      const isDomInc = d.included === true || d.included === "true";
+
+      const hasDomainData = d.extension || d.notes || (Array.isArray(d.pricing) && d.pricing.length > 0);
+      if (hasDomainData && domSection) {
+        domSection.style.display = "block";
+
+        // Meta chips
+        if (domMeta) {
+          const chips = [];
+          if (typeof d.included !== 'undefined') {
+            chips.push(`<span style="background:${isDomInc ? 'rgba(76,175,80,0.15)' : 'rgba(255,82,82,0.1)'};color:${isDomInc ? '#4caf50' : '#ff5252'};border:1px solid ${isDomInc ? 'rgba(76,175,80,0.3)' : 'rgba(255,82,82,0.3)'};padding:0.2rem 0.7rem;border-radius:99px;font-size:0.75rem;font-weight:600;"><i class="fas ${isDomInc ? 'fa-circle-check' : 'fa-circle-xmark'}" style="margin-right:0.3rem;"></i>Domain ${isDomInc ? 'Included' : 'Not Included'}</span>`);
+          }
+          if (d.extension) {
+            chips.push(`<span style="background:rgba(245,166,35,0.1);color:var(--gold);border:1px solid rgba(245,166,35,0.2);padding:0.2rem 0.7rem;border-radius:99px;font-size:0.75rem;font-weight:600;">${escapeHtml(d.extension)}</span>`);
+          }
+          domMeta.innerHTML = chips.join('');
+        }
+
+        if (d.notes && domNotes) {
+          domNotes.style.display = "block";
+          domNotes.innerHTML = `<i class="fas fa-circle-info" style="color:var(--gold);margin-right:0.4rem;"></i>${escapeHtml(d.notes)}`;
+        } else if (domNotes) {
+          domNotes.style.display = "none";
+        }
+
+        // Pricing table
+        if (Array.isArray(d.pricing) && d.pricing.length > 0 && pricingWrap && pricingBody) {
+          pricingWrap.style.display = "block";
+          pricingBody.innerHTML = d.pricing.map((row, i) => {
+            const hVal = row.hosting || '—';
+            const dVal = row.domain  || '—';
+            let totalHtml = '—';
+            const hNum = parseInt((row.hosting || '').replace(/[^0-9]/g, ''));
+            const dNum = parseInt((row.domain  || '').replace(/[^0-9]/g, ''));
+            if (!isNaN(hNum) && !isNaN(dNum)) {
+              totalHtml = `<strong style="color:var(--gold);">PKR ${(hNum + dNum).toLocaleString()}</strong>`;
+            } else if (!isNaN(hNum)) {
+              totalHtml = `<strong style="color:var(--gold);">PKR ${hNum.toLocaleString()}</strong>`;
+            }
+            return `<tr style="border-top:1px solid var(--border);">
+              <td style="padding:0.6rem 0.9rem;font-weight:600;color:var(--text);font-size:0.82rem;">${escapeHtml(row.duration || '')}</td>
+              <td style="padding:0.6rem 0.9rem;color:var(--text-muted);font-size:0.82rem;">${escapeHtml(hVal)}</td>
+              <td style="padding:0.6rem 0.9rem;color:var(--text-muted);font-size:0.82rem;">${escapeHtml(dVal)}</td>
+              <td style="padding:0.6rem 0.9rem;font-size:0.82rem;">${totalHtml}</td>
+            </tr>`;
+          }).join('');
+        } else if (pricingWrap) {
+          pricingWrap.style.display = "none";
+        }
+      } else if (domSection) {
+        domSection.style.display = "none";
+      }
+
+      /* ══════════════════════════════════════════════
+         SECTION 3: Additional Costs / Services
+      ═══════════════════════════════════════════════ */
+      const addonsSection = document.getElementById("pkgAddonsSection");
+      const addonsBody    = document.getElementById("pkgAddonsBody");
+      const addons = pkg.additionalCosts;
+
+      if (Array.isArray(addons) && addons.length > 0 && addonsSection && addonsBody) {
+        addonsSection.style.display = "block";
+        addonsBody.innerHTML = addons.map(item =>
+          `<div style="display:flex;align-items:center;justify-content:space-between;background:var(--surface2);border-radius:8px;padding:0.55rem 0.85rem;gap:1rem;">
+            <div style="display:flex;align-items:center;gap:0.6rem;">
+              <i class="fas fa-circle-dot" style="color:var(--gold);font-size:0.7rem;flex-shrink:0;"></i>
+              <div>
+                <div style="font-size:0.84rem;color:var(--text);font-weight:600;">${escapeHtml(item.service || '')}</div>
+                ${item.note ? `<div style="font-size:0.75rem;color:var(--text-dim);margin-top:0.1rem;">${escapeHtml(item.note)}</div>` : ''}
+              </div>
+            </div>
+            ${item.price ? `<div style="font-size:0.84rem;font-weight:700;color:var(--gold);white-space:nowrap;">${escapeHtml(item.price)}</div>` : ''}
+          </div>`
+        ).join('');
+      } else if (addonsSection) {
+        addonsSection.style.display = "none";
+      }
+
+      if (modalEl) {
+        modalEl.classList.add("open");
         document.body.style.overflow = "hidden";
       }
     }
 
     function closePkgDetailsModal() {
-      if (pkgDetailsModal) {
-        pkgDetailsModal.classList.remove("open");
+      const modalEl = document.getElementById("pkgDetailsModal");
+      if (modalEl) {
+        modalEl.classList.remove("open");
         document.body.style.overflow = "";
       }
     }
 
+    // Attach to global window object
+    window.viewPackageDetails = viewPackageDetails;
+    window.closePkgDetailsModal = closePkgDetailsModal;
+
     document.getElementById("closePkgDetailsModal")?.addEventListener("click", closePkgDetailsModal);
     document.getElementById("cancelPkgDetailsBtn")?.addEventListener("click", closePkgDetailsModal);
+    document.getElementById("pkgDetailsModal")?.addEventListener("click", (e) => {
+      if (e.target && e.target.id === "pkgDetailsModal") closePkgDetailsModal();
+    });
 
     document.getElementById("orderFromDetailsBtn")?.addEventListener("click", () => {
       closePkgDetailsModal();
@@ -2013,6 +2197,8 @@
 
     /* ── Init ── */
     loadSiteSettings();
+    loadServices();
+    loadPackages();
     loadPortfolio();
     loadSocialLinks();
   </script>
