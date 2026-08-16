@@ -1295,9 +1295,15 @@
       const keys = Object.keys(pkgs);
 
       const activePkgs = keys
-        .map(k => ({ key: k, ...pkgs[k] }))
+        .map(k => ({ key: String(k), ...pkgs[k] }))
         .filter(pkg => pkg.enabled !== false)
         .sort((a, b) => (a.order || 99) - (b.order || 99));
+
+      // Build dictionary map for 100% accurate key lookup
+      cachedPackagesData = {};
+      activePkgs.forEach(pkg => {
+        cachedPackagesData[pkg.key] = pkg;
+      });
 
       if (activePkgs.length === 0) {
         container.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:var(--text-dim);padding:3rem;">
@@ -1312,14 +1318,14 @@
         const badgeHtml = pkg.badge ? `<div class="offer-badge-ribbon">${escapeHtml(pkg.badge)}</div>` : '';
         const iconClass = pkg.icon || 'fas fa-box';
 
-        // Show first 3 features as a preview
+        // Show first 4 features as a preview
         const previewFeatures = (pkg.features || '').split('\n').filter(f => f.trim() !== '').slice(0, 4);
         const featuresList = previewFeatures.map(f =>
           `<li><i class="fas fa-check-circle"></i> <span>${escapeHtml(f.trim())}</span></li>`
         ).join('');
 
         return `
-          <div class="offer-card${isFeatured}" onclick="viewPackageDetails('${pkg.key}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')viewPackageDetails('${pkg.key}')">
+          <div class="offer-card${isFeatured}" data-key="${escapeHtml(pkg.key)}" onclick="viewPackageDetails(this.dataset.key)" role="button" tabindex="0" onkeydown="if(event.key==='Enter')viewPackageDetails(this.dataset.key)">
             ${badgeHtml}
 
             <div>
@@ -1343,7 +1349,7 @@
                 ${pkg.delivery ? `<span><i class="fas fa-truck-fast"></i> ${escapeHtml(pkg.delivery)}</span>` : ''}
                 ${pkg.revisions ? `<span><i class="fas fa-rotate"></i> ${escapeHtml(pkg.revisions)}</span>` : ''}
               </div>
-              <button class="btn ${pkg.featured ? 'btn-gold' : 'btn-outline'} btn-sm" onclick="event.stopPropagation();viewPackageDetails('${pkg.key}')">
+              <button type="button" class="btn ${pkg.featured ? 'btn-gold' : 'btn-outline'} btn-sm" onclick="event.stopPropagation(); viewPackageDetails(this.closest('.offer-card').dataset.key)">
                 <i class="fas fa-eye"></i> View Details
               </button>
             </div>
