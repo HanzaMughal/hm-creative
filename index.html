@@ -284,6 +284,16 @@
         <h2 class="section-title">My <span>Offers</span></h2>
         <div class="gold-line" style="margin:0.75rem auto 0;"></div>
         <p class="section-subtitle">Choose a service package designed for your brand's growth. Click any package to see full details and order.</p>
+
+        <!-- Category Tabs -->
+        <div class="offers-tabs" style="display:flex;justify-content:center;gap:0.75rem;margin-top:1.5rem;" id="pkgCategoryTabs">
+          <button type="button" class="btn btn-gold btn-sm offer-tab-btn active" data-cat="website" style="border-radius:99px;padding:0.5rem 1.35rem;font-weight:600;">
+            <i class="fas fa-globe"></i> Website Packages
+          </button>
+          <button type="button" class="btn btn-outline btn-sm offer-tab-btn" data-cat="ad" style="border-radius:99px;padding:0.5rem 1.35rem;font-weight:600;">
+            <i class="fas fa-film"></i> Ad Packages
+          </button>
+        </div>
       </div>
 
       <div class="offers-grid" id="offersGrid">
@@ -614,139 +624,6 @@
         navLinks.classList.remove("open");
       })
     );
-
-    /* ── Load Dynamic Packages into existing #offers section ── */
-    let cachedPackagesData = {};
-
-    const DEFAULT_SAMPLE_PACKAGES = {
-      "def_pkg_1": {
-        name: "Starter Ad Pack",
-        price: "PKR 35,000",
-        badge: "Basic",
-        description: "Perfect for small businesses looking for a high-converting digital video ad.",
-        features: "1 High-Impact Video Ad (15-30s)\nProfessional Motion Graphics\nCustom Script & Voiceover\nHD 1080p Export\n3 Days Fast Delivery\n2 Revisions Included",
-        delivery: "3 Days Delivery",
-        revisions: "2 Revisions",
-        icon: "fas fa-paper-plane",
-        order: 1,
-        featured: false,
-        enabled: true,
-        hostingDetails: {
-          provider: "Hostinger",
-          planName: "Single Web Hosting",
-          storage: "50 GB SSD",
-          bandwidth: "100 GB",
-          websites: "1 Website",
-          email: "1 Email Account",
-          ssl: true,
-          cdn: false,
-          notes: "Includes free SSL certificate & 99.9% uptime guarantee."
-        },
-        domainDetails: {
-          included: true,
-          extension: ".com / .pk",
-          notes: "Free domain registration for the 1st year.",
-          pricing: [
-            { duration: "1 Year",  hosting: "PKR 3,500",  domain: "PKR 2,200" },
-            { duration: "2 Years", hosting: "PKR 6,000",  domain: "PKR 4,000" },
-            { duration: "3 Years", hosting: "PKR 8,500",  domain: "PKR 5,800" },
-            { duration: "4 Years", hosting: "PKR 10,800", domain: "PKR 7,200" }
-          ]
-        },
-        additionalCosts: [
-          { service: "Monthly Site Maintenance", price: "PKR 5,000/mo", note: "Includes weekly updates & security patches" }
-        ]
-      },
-      "def_pkg_2": {
-        name: "Pro Performance Campaign",
-        price: "PKR 85,000",
-        badge: "Most Popular",
-        description: "Complete ad suite for scaling brands across Meta, Instagram, & TikTok.",
-        features: "3 Variations of Video Ads (A/B testing ready)\nCustom Thumbnail Designs\nPremium Voiceover & Sound Design\nFull HD & Vertical Formats (9:16 + 16:9)\n5 Days Delivery\nUnlimited Revisions",
-        delivery: "5 Days Delivery",
-        revisions: "Unlimited Revisions",
-        icon: "fas fa-rocket",
-        order: 2,
-        featured: true,
-        enabled: true,
-        hostingDetails: {
-          provider: "Hostinger",
-          planName: "Premium Shared Hosting",
-          storage: "100 GB SSD",
-          bandwidth: "Unlimited",
-          websites: "100 Websites",
-          email: "100 Email Accounts",
-          ssl: true,
-          cdn: true,
-          notes: "Includes daily backups & free domain name."
-        },
-        domainDetails: {
-          included: true,
-          extension: ".com, .net, .pk",
-          notes: "Free domain for 1 year with annual hosting plan.",
-          pricing: [
-            { duration: "1 Year",  hosting: "PKR 7,500",  domain: "PKR 2,500" },
-            { duration: "2 Years", hosting: "PKR 13,000", domain: "PKR 4,500" },
-            { duration: "3 Years", hosting: "PKR 18,000", domain: "PKR 6,500" },
-            { duration: "4 Years", hosting: "PKR 22,000", domain: "PKR 8,000" }
-          ]
-        },
-        additionalCosts: [
-          { service: "Social Media Setup & Pixel Tracking", price: "PKR 10,000", note: "One-time setup fee for Meta & TikTok pixel" },
-          { service: "Monthly Maintenance & Content Backup", price: "PKR 8,000/mo", note: "Includes 24/7 priority support" }
-        ]
-      },
-      "def_pkg_3": {
-        name: "Full Brand & Web Suite",
-        price: "PKR 175,000",
-        badge: "Enterprise",
-        description: "All-in-one digital identity, ad campaign, and modern high-converting website.",
-        features: "Full Brand Identity Guidelines\n5 High-Converting Video & Carousel Ads\nCustom Landing Page / Web Application\nDedicated Account Support\n7 Days Priority Delivery\nUnlimited Revisions",
-        delivery: "7 Days Delivery",
-        revisions: "Unlimited Revisions",
-        icon: "fas fa-crown",
-        order: 3,
-        featured: false,
-        enabled: true,
-        hostingDetails: {
-          provider: "Hostinger / Cloudways",
-          planName: "Business Cloud Hosting",
-          storage: "200 GB NVMe SSD",
-          bandwidth: "Unlimited",
-          websites: "100 Websites",
-          email: "Free Professional Email",
-          ssl: true,
-          cdn: true,
-          notes: "Dedicated IP, automated daily backups, and Cloudflare Enterprise CDN."
-        },
-        domainDetails: {
-          included: true,
-          extension: ".com, .org, .pk",
-          notes: "Free domain for 2 years with custom DNS management.",
-          pricing: [
-            { duration: "1 Year",  hosting: "PKR 15,000", domain: "Free" },
-            { duration: "2 Years", hosting: "PKR 26,000", domain: "Free" },
-            { duration: "3 Years", hosting: "PKR 35,000", domain: "PKR 3,000" },
-            { duration: "4 Years", hosting: "PKR 42,000", domain: "PKR 5,000" }
-          ]
-        },
-        additionalCosts: [
-          { service: "SEO & Google Indexing Setup", price: "PKR 15,000", note: "Comprehensive Technical & On-Page SEO" },
-          { service: "Dedicated Server Maintenance", price: "PKR 15,000/mo", note: "Dedicated developer & instant emergency fixes" }
-        ]
-      }
-    };
-
-    function loadPackages() {
-      rtdb.ref("packages").on("value", (snap) => {
-        let pkgs = snap.val();
-        if (!pkgs || Object.keys(pkgs).length === 0) {
-          pkgs = DEFAULT_SAMPLE_PACKAGES;
-        }
-        cachedPackagesData = pkgs;
-        renderOffersGrid(pkgs);
-      });
-    }
 
     /* ── Counter animation ── */
     function animateCounters() {
@@ -1288,15 +1165,119 @@
     }
 
     /* ── Load Dynamic Packages into existing #offers section ── */
+    let allFetchedPackages = {};
+    let cachedPackagesData = {};
+    let activeOffersTab = 'website';
+    let isPkgNavigating = false;
 
-    function renderOffersGrid(pkgs) {
+    // Reset navigation lock when user returns via browser back button
+    window.addEventListener("pageshow", () => {
+      isPkgNavigating = false;
+    });
+
+    const DEFAULT_FALLBACK_PACKAGES = {
+      "def_pkg_web1": {
+        name: "Starter Website Package",
+        price: "PKR 35,000",
+        badge: "Basic",
+        category: "website",
+        description: "Ideal for small businesses needing a clean, professional web presence.",
+        features: "Custom Responsive Web Design\nDomain & Hosting Setup\nSSL Certificate Included\nSEO-Friendly Architecture\n3 Days Delivery\n2 Revisions Included",
+        delivery: "3 Days Delivery",
+        revisions: "2 Revisions",
+        icon: "fas fa-globe",
+        order: 1,
+        featured: false,
+        enabled: true
+      },
+      "def_pkg_web2": {
+        name: "Pro Business Suite",
+        price: "PKR 75,000",
+        badge: "Most Popular",
+        category: "website",
+        description: "Complete web solution with high performance hosting and domain suite.",
+        features: "Dynamic Web Application\nFree Domain & Premium Hosting (1 Yr)\nDatabase & API Integration\nSpeed Optimization & Security\n5 Days Delivery\nUnlimited Revisions",
+        delivery: "5 Days Delivery",
+        revisions: "Unlimited Revisions",
+        icon: "fas fa-rocket",
+        order: 2,
+        featured: true,
+        enabled: true
+      },
+      "def_pkg_ad1": {
+        name: "Starter Video Ad Pack",
+        price: "PKR 25,000",
+        badge: "Popular",
+        category: "ad",
+        description: "High-impact short-form video ad for Meta, Instagram Reels, & TikTok.",
+        features: "1 High-Impact Video Ad (15-30s)\nProfessional Motion Graphics\nCustom Script & Voiceover\nHD 1080p & 9:16 Vertical Format\n3 Days Fast Delivery\n2 Revisions Included",
+        delivery: "3 Days Delivery",
+        revisions: "2 Revisions",
+        icon: "fas fa-film",
+        order: 1,
+        featured: false,
+        enabled: true,
+        adDetails: {
+          duration: "15-30 Seconds",
+          resolution: "1080p Full HD",
+          aspectRatio: "9:16 Vertical & 16:9 Landscape",
+          voiceover: "Custom Script & Voiceover Included",
+          motionGraphics: "2D Motion & Visual FX",
+          platforms: "Meta, Instagram Reels, TikTok"
+        }
+      },
+      "def_pkg_ad2": {
+        name: "Pro Performance Ad Campaign",
+        price: "PKR 65,000",
+        badge: "Best Value",
+        category: "ad",
+        description: "Comprehensive ad campaign suite with multiple video variations for A/B testing.",
+        features: "3 Variations of Video Ads (A/B testing ready)\nCustom Thumbnail Designs\nPremium Voiceover & Sound Design\nFull HD & Vertical Formats (9:16 + 16:9)\n5 Days Delivery\nUnlimited Revisions",
+        delivery: "5 Days Delivery",
+        revisions: "Unlimited Revisions",
+        icon: "fas fa-clapperboard",
+        order: 2,
+        featured: true,
+        enabled: true,
+        adDetails: {
+          duration: "30-60 Seconds (3 Variations)",
+          resolution: "4K & 1080p Full HD",
+          aspectRatio: "9:16 Vertical, 16:9 & 1:1 Square",
+          voiceover: "Professional Copywriting & Voiceover",
+          motionGraphics: "Advanced 2D/3D VFX & Motion Graphics",
+          platforms: "Meta Ads, TikTok, YouTube, Instagram"
+        }
+      }
+    };
+
+    function loadPackages() {
+      rtdb.ref("packages").on("value", (snap) => {
+        const data = snap.val();
+        if (data && Object.keys(data).length > 0) {
+          allFetchedPackages = data;
+        } else {
+          allFetchedPackages = DEFAULT_FALLBACK_PACKAGES;
+        }
+        renderOffersGrid();
+      }, (err) => {
+        console.warn("Packages load failed, fallback to defaults:", err);
+        allFetchedPackages = DEFAULT_FALLBACK_PACKAGES;
+        renderOffersGrid();
+      });
+    }
+
+    function renderOffersGrid() {
       const container = document.getElementById("offersGrid");
       if (!container) return;
-      const keys = Object.keys(pkgs);
 
+      const keys = Object.keys(allFetchedPackages);
       const activePkgs = keys
-        .map(k => ({ key: String(k), ...pkgs[k] }))
-        .filter(pkg => pkg.enabled !== false)
+        .map(k => ({ key: String(k), ...allFetchedPackages[k] }))
+        .filter(pkg => {
+          if (pkg.enabled === false) return false;
+          const cat = pkg.category || (pkg.adDetails || (pkg.name || '').toLowerCase().includes('ad') ? 'ad' : 'website');
+          return cat === activeOffersTab;
+        })
         .sort((a, b) => (a.order || 99) - (b.order || 99));
 
       // Build dictionary map for 100% accurate key lookup
@@ -1308,7 +1289,7 @@
       if (activePkgs.length === 0) {
         container.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:var(--text-dim);padding:3rem;">
           <i class="fas fa-box-open" style="font-size:2.5rem;opacity:0.2;display:block;margin-bottom:0.75rem;"></i>
-          No packages available at the moment. Check back soon!
+          No ${activeOffersTab === 'ad' ? 'Ad' : 'Website'} packages available at the moment. Check back soon!
         </div>`;
         return;
       }
@@ -1316,7 +1297,7 @@
       container.innerHTML = activePkgs.map(pkg => {
         const isFeatured = pkg.featured ? ' featured' : '';
         const badgeHtml = pkg.badge ? `<div class="offer-badge-ribbon">${escapeHtml(pkg.badge)}</div>` : '';
-        const iconClass = pkg.icon || 'fas fa-box';
+        const iconClass = pkg.icon || (activeOffersTab === 'ad' ? 'fas fa-film' : 'fas fa-box');
 
         // Show first 4 features as a preview
         const previewFeatures = (pkg.features || '').split('\n').filter(f => f.trim() !== '').slice(0, 4);
@@ -1357,383 +1338,52 @@
       }).join("");
     }
 
-    // Single Click Listener for Offer Package Cards & View Details Buttons
-    document.addEventListener("click", (e) => {
-      const card = e.target.closest(".offer-card");
+    // Category Tabs Click Listeners
+    document.getElementById("pkgCategoryTabs")?.addEventListener("click", (e) => {
+      const tabBtn = e.target.closest(".offer-tab-btn");
+      if (!tabBtn) return;
+      document.querySelectorAll("#pkgCategoryTabs .offer-tab-btn").forEach(b => {
+        b.classList.remove("active", "btn-gold");
+        b.classList.add("btn-outline");
+      });
+      tabBtn.classList.remove("btn-outline");
+      tabBtn.classList.add("active", "btn-gold");
+      activeOffersTab = tabBtn.dataset.cat || 'website';
+      renderOffersGrid();
+    });
+
+
+
+    function handleOfferCardInteraction(targetEl) {
+      if (isPkgNavigating) return;
+      const card = targetEl.closest(".offer-card");
       if (card) {
         const key = card.getAttribute("data-pkg-key");
-        if (key && typeof window.viewPackageDetails === "function") {
-          window.viewPackageDetails(key);
+        if (key) {
+          isPkgNavigating = true;
+          window.location.href = `package-detail?key=${encodeURIComponent(key)}`;
         }
+      }
+    }
+
+    document.addEventListener("click", (e) => {
+      handleOfferCardInteraction(e.target);
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if ((e.key === "Enter" || e.key === " ") && e.target && e.target.classList && e.target.classList.contains("offer-card")) {
+        e.preventDefault();
+        handleOfferCardInteraction(e.target);
       }
     });
 
-    /* ── Package Details Modal ── */
-    let currentViewedPackageKey = null;
-
+    /* ── Package Details Page Navigation Helper ── */
     function viewPackageDetails(pkgKey) {
-      const modalEl = document.getElementById("pkgDetailsModal");
-      let pkg = cachedPackagesData ? cachedPackagesData[pkgKey] : null;
-
-      // Fallback 1: Match by property key / id / name
-      if (!pkg && cachedPackagesData) {
-        const allPkgs = Object.values(cachedPackagesData);
-        pkg = allPkgs.find(p => String(p.key) === String(pkgKey) || String(p.id) === String(pkgKey) || p.name === pkgKey);
-      }
-
-      // Fallback 2: Match by numeric index
-      if (!pkg && cachedPackagesData && !isNaN(pkgKey)) {
-        const allPkgs = Object.values(cachedPackagesData);
-        pkg = allPkgs[parseInt(pkgKey)];
-      }
-
-      if (!pkg) {
-        console.warn("Package not found in cachedPackagesData for key:", pkgKey);
-        return;
-      }
-      currentViewedPackageKey = pkg.key || pkgKey;
-
-      // Populate banner
-      const iconEl = document.getElementById("pkgDetailsBannerIcon");
-      if (iconEl) iconEl.innerHTML = `<i class="${escapeHtml(pkg.icon || 'fas fa-box')}"></i>`;
-
-      const badgeEl = document.getElementById("pkgDetailsBadge");
-      if (badgeEl) {
-        if (pkg.badge) {
-          badgeEl.textContent = pkg.badge;
-          badgeEl.style.display = "block";
-        } else {
-          badgeEl.style.display = "none";
-        }
-      }
-
-      const nameEl  = document.getElementById("pkgDetailsName");
-      const priceEl = document.getElementById("pkgDetailsPrice");
-      const descEl  = document.getElementById("pkgDetailsDesc");
-      if (nameEl)  nameEl.textContent  = pkg.name || "";
-      if (priceEl) priceEl.textContent = pkg.price || "";
-      if (descEl)  descEl.textContent  = pkg.description || "";
-
-      // Features list
-      const featuresList = document.getElementById("pkgDetailsFeatures");
-      if (featuresList) {
-        const feats = (pkg.features || '').split('\n').filter(f => f.trim());
-        featuresList.innerHTML = feats.map(f =>
-          `<li style="font-size:0.86rem;color:var(--text-muted);margin-bottom:0.6rem;display:flex;align-items:flex-start;gap:0.5rem;line-height:1.4;">
-            <i class="fas fa-check-circle" style="color:var(--gold);font-size:0.82rem;margin-top:0.2rem;"></i>
-            <span>${escapeHtml(f.trim())}</span>
-          </li>`
-        ).join('');
-      }
-
-      // Package info panel
-      const infoEl = document.getElementById("pkgDetailsInfo");
-      if (infoEl) {
-        const infoItems = [];
-        if (pkg.delivery) infoItems.push({ icon: 'fa-truck-fast', label: 'Delivery', value: pkg.delivery });
-        if (pkg.revisions) infoItems.push({ icon: 'fa-rotate', label: 'Revisions', value: pkg.revisions });
-        if (pkg.price) infoItems.push({ icon: 'fa-tag', label: 'Price', value: pkg.price });
-        if (pkg.featured) infoItems.push({ icon: 'fa-star', label: 'Status', value: 'Featured Package' });
-
-        infoEl.innerHTML = infoItems.map(item =>
-          `<div style="display:flex;align-items:flex-start;gap:0.6rem;">
-            <div style="width:30px;height:30px;background:rgba(245,166,35,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-              <i class="fas ${item.icon}" style="color:var(--gold);font-size:0.8rem;"></i>
-            </div>
-            <div>
-              <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-dim);font-weight:600;">${item.label}</div>
-              <div style="font-size:0.88rem;color:var(--text);font-weight:600;">${escapeHtml(item.value)}</div>
-            </div>
-          </div>`
-        ).join('');
-      }
-
-      /* ══════════════════════════════════════════════
-         SECTION 1: Hosting Details
-      ═══════════════════════════════════════════════ */
-      const hostSection = document.getElementById("pkgHostingSection");
-      const hostBody    = document.getElementById("pkgHostingBody");
-      const hostNotes   = document.getElementById("pkgHostingNotes");
-
-      const h = (pkg.hostingDetails && (pkg.hostingDetails.provider || pkg.hostingDetails.planName))
-        ? pkg.hostingDetails
-        : {
-            provider: "Hostinger / High-Speed Cloud",
-            planName: "Standard Web Package",
-            storage: "50 GB NVMe SSD",
-            bandwidth: "Unlimited",
-            websites: "1 Website Included",
-            email: "Free Professional Email",
-            ssl: true,
-            cdn: true,
-            notes: "Includes 99.9% Uptime Guarantee, Free SSL Certificate, and Automated Backups."
-          };
-
-      const isSsl = h.ssl === true || h.ssl === "true" || typeof h.ssl === 'undefined';
-      const isCdn = h.cdn === true || h.cdn === "true" || typeof h.cdn === 'undefined';
-
-      const hostItems = [
-        { icon: 'fa-building', label: 'Provider',   value: h.provider || "Hostinger" },
-        { icon: 'fa-layer-group', label: 'Plan',    value: h.planName || "Standard Package" },
-        { icon: 'fa-hard-drive', label: 'Storage',  value: h.storage || "50 GB SSD" },
-        { icon: 'fa-arrows-alt-h', label: 'Bandwidth', value: h.bandwidth || "Unlimited" },
-        { icon: 'fa-globe',       label: 'Websites', value: h.websites || "1 Website" },
-        { icon: 'fa-envelope',    label: 'Email Accounts', value: h.email || "Included" },
-        { icon: 'fa-lock', label: 'Free SSL', value: isSsl ? 'Included ✅' : 'Not included' },
-        { icon: 'fa-bolt', label: 'Free CDN', value: isCdn ? 'Included ✅' : 'Not included' },
-      ];
-
-      if (hostSection && hostBody) {
-        hostSection.style.display = "block";
-        hostBody.innerHTML = hostItems.map(item =>
-          `<div style="display:flex;align-items:flex-start;gap:0.5rem;background:var(--surface2);border-radius:8px;padding:0.55rem 0.7rem;">
-            <div style="width:26px;height:26px;background:rgba(245,166,35,0.1);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-              <i class="fas ${item.icon}" style="color:var(--gold);font-size:0.72rem;"></i>
-            </div>
-            <div>
-              <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-dim);font-weight:600;">${item.label}</div>
-              <div style="font-size:0.82rem;color:var(--text);font-weight:600;margin-top:0.05rem;">${escapeHtml(item.value)}</div>
-            </div>
-          </div>`
-        ).join('');
-
-        if (h.notes && hostNotes) {
-          hostNotes.style.display = "block";
-          hostNotes.innerHTML = `<i class="fas fa-circle-info" style="color:var(--gold);margin-right:0.4rem;"></i>${escapeHtml(h.notes)}`;
-        } else if (hostNotes) {
-          hostNotes.style.display = "none";
-        }
-      }
-
-      /* ══════════════════════════════════════════════
-         SECTION 2: Domain Details & Pricing
-      ═══════════════════════════════════════════════ */
-      const domSection  = document.getElementById("pkgDomainSection");
-      const domMeta     = document.getElementById("pkgDomainMeta");
-      const domNotes    = document.getElementById("pkgDomainNotes");
-      const pricingWrap = document.getElementById("pkgPricingTableWrap");
-      const pricingBody = document.getElementById("pkgPricingTableBody");
-
-      const d = (pkg.domainDetails && (pkg.domainDetails.extension || (pkg.domainDetails.pricing && pkg.domainDetails.pricing.length)))
-        ? pkg.domainDetails
-        : {
-            included: true,
-            extension: ".com / .pk",
-            notes: "Domain pricing breakdown based on selected Hostinger / Registrar duration plan.",
-            pricing: [
-              { duration: "1 Year",  hosting: "PKR 4,500",  domain: "PKR 2,500" },
-              { duration: "2 Years", hosting: "PKR 8,000",  domain: "PKR 4,500" },
-              { duration: "3 Years", hosting: "PKR 11,500", domain: "PKR 6,500" },
-              { duration: "4 Years", hosting: "PKR 14,500", domain: "PKR 8,000" }
-            ]
-          };
-
-      const isDomInc = d.included === true || d.included === "true" || typeof d.included === 'undefined';
-
-      if (domSection) {
-        domSection.style.display = "block";
-
-        if (domMeta) {
-          domMeta.innerHTML = `
-            <span style="background:${isDomInc ? 'rgba(76,175,80,0.15)' : 'rgba(255,82,82,0.1)'};color:${isDomInc ? '#4caf50' : '#ff5252'};border:1px solid ${isDomInc ? 'rgba(76,175,80,0.3)' : 'rgba(255,82,82,0.3)'};padding:0.2rem 0.7rem;border-radius:99px;font-size:0.75rem;font-weight:600;"><i class="fas ${isDomInc ? 'fa-circle-check' : 'fa-circle-xmark'}" style="margin-right:0.3rem;"></i>Domain ${isDomInc ? 'Included' : 'Not Included'}</span>
-            ${d.extension ? `<span style="background:rgba(245,166,35,0.1);color:var(--gold);border:1px solid rgba(245,166,35,0.2);padding:0.2rem 0.7rem;border-radius:99px;font-size:0.75rem;font-weight:600;">${escapeHtml(d.extension)}</span>` : ''}
-          `;
-        }
-
-        if (d.notes && domNotes) {
-          domNotes.style.display = "block";
-          domNotes.innerHTML = `<i class="fas fa-circle-info" style="color:var(--gold);margin-right:0.4rem;"></i>${escapeHtml(d.notes)}`;
-        } else if (domNotes) {
-          domNotes.style.display = "none";
-        }
-
-        const pricingList = (Array.isArray(d.pricing) && d.pricing.length > 0) ? d.pricing : [
-          { duration: "1 Year",  hosting: "PKR 4,500",  domain: "PKR 2,500" },
-          { duration: "2 Years", hosting: "PKR 8,000",  domain: "PKR 4,500" },
-          { duration: "3 Years", hosting: "PKR 11,500", domain: "PKR 6,500" },
-          { duration: "4 Years", hosting: "PKR 14,500", domain: "PKR 8,000" }
-        ];
-
-        if (pricingWrap && pricingBody) {
-          pricingWrap.style.display = "block";
-          pricingBody.innerHTML = pricingList.map((row) => {
-            const hVal = row.hosting || '—';
-            const dVal = row.domain  || '—';
-            let totalHtml = '—';
-            const hNum = parseInt((row.hosting || '').replace(/[^0-9]/g, ''));
-            const dNum = parseInt((row.domain  || '').replace(/[^0-9]/g, ''));
-            if (!isNaN(hNum) && !isNaN(dNum)) {
-              totalHtml = `<strong style="color:var(--gold);">PKR ${(hNum + dNum).toLocaleString()}</strong>`;
-            } else if (!isNaN(hNum)) {
-              totalHtml = `<strong style="color:var(--gold);">PKR ${hNum.toLocaleString()}</strong>`;
-            }
-            return `<tr style="border-top:1px solid var(--border);">
-              <td style="padding:0.6rem 0.9rem;font-weight:600;color:var(--text);font-size:0.82rem;">${escapeHtml(row.duration || '')}</td>
-              <td style="padding:0.6rem 0.9rem;color:var(--text-muted);font-size:0.82rem;">${escapeHtml(hVal)}</td>
-              <td style="padding:0.6rem 0.9rem;color:var(--text-muted);font-size:0.82rem;">${escapeHtml(dVal)}</td>
-              <td style="padding:0.6rem 0.9rem;font-size:0.82rem;">${totalHtml}</td>
-            </tr>`;
-          }).join('');
-        }
-      }
-
-      /* ══════════════════════════════════════════════
-         SECTION 3: Additional Costs / Services
-      ═══════════════════════════════════════════════ */
-      const addonsSection = document.getElementById("pkgAddonsSection");
-      const addonsBody    = document.getElementById("pkgAddonsBody");
-      const addons = (Array.isArray(pkg.additionalCosts) && pkg.additionalCosts.length > 0)
-        ? pkg.additionalCosts
-        : [
-            { service: "Monthly Website Maintenance", price: "PKR 5,000/mo", note: "Includes security patches, speed optimization & backups" },
-            { service: "Technical & On-Page SEO Setup", price: "PKR 10,000", note: "Google Search Console indexing & sitemap submission" }
-          ];
-
-      if (addonsSection && addonsBody) {
-        addonsSection.style.display = "block";
-        addonsBody.innerHTML = addons.map(item =>
-          `<div style="display:flex;align-items:center;justify-content:space-between;background:var(--surface2);border-radius:8px;padding:0.55rem 0.85rem;gap:1rem;">
-            <div style="display:flex;align-items:center;gap:0.6rem;">
-              <i class="fas fa-circle-dot" style="color:var(--gold);font-size:0.7rem;flex-shrink:0;"></i>
-              <div>
-                <div style="font-size:0.84rem;color:var(--text);font-weight:600;">${escapeHtml(item.service || '')}</div>
-                ${item.note ? `<div style="font-size:0.75rem;color:var(--text-dim);margin-top:0.1rem;">${escapeHtml(item.note)}</div>` : ''}
-              </div>
-            </div>
-            ${item.price ? `<div style="font-size:0.84rem;font-weight:700;color:var(--gold);white-space:nowrap;">${escapeHtml(item.price)}</div>` : ''}
-          </div>`
-        ).join('');
-      }
-
-      if (modalEl) {
-        modalEl.classList.add("open");
-        document.body.style.overflow = "hidden";
-      }
+      if (!pkgKey) return;
+      window.location.href = `package-detail?key=${encodeURIComponent(pkgKey)}`;
     }
 
-    function closePkgDetailsModal() {
-      const modalEl = document.getElementById("pkgDetailsModal");
-      if (modalEl) {
-        modalEl.classList.remove("open");
-        document.body.style.overflow = "";
-      }
-    }
-
-    // Attach to global window object
-    window.viewPackageDetails = viewPackageDetails;
-    window.closePkgDetailsModal = closePkgDetailsModal;
-
-    document.getElementById("closePkgDetailsModal")?.addEventListener("click", closePkgDetailsModal);
-    document.getElementById("cancelPkgDetailsBtn")?.addEventListener("click", closePkgDetailsModal);
-    document.getElementById("pkgDetailsModal")?.addEventListener("click", (e) => {
-      if (e.target && e.target.id === "pkgDetailsModal") closePkgDetailsModal();
-    });
-
-    window.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        closePkgDetailsModal();
-        closePackageOrderModal();
-      }
-    });
-
-    document.getElementById("orderFromDetailsBtn")?.addEventListener("click", () => {
-      closePkgDetailsModal();
-      if (currentViewedPackageKey) {
-        setTimeout(() => selectPackageForOrder(currentViewedPackageKey), 100);
-      }
-    });
-
-    /* ── Package Order Confirmation System ── */
-    let selectedPackageForOrder = null;
-    const orderModal = document.getElementById("packageOrderModal");
-
-    function selectPackageForOrder(pkgKey) {
-      const user = firebase.auth().currentUser;
-      const pkg = cachedPackagesData[pkgKey];
-      if (!pkg) return;
-
-      if (!user) {
-        // Guest → prompt auth, save pending order
-        sessionStorage.setItem("pendingOrder", JSON.stringify({ packageId: pkgKey }));
-        sessionStorage.setItem("redirectAfterLogin", window.location.href + "#offers");
-        openAuthGateModal("package", pkgKey);
-        return;
-      }
-
-      // Snapshot price and details at time of order (important for historical accuracy)
-      selectedPackageForOrder = { key: pkgKey, ...pkg };
-
-      document.getElementById("orderModalPkgName").textContent = pkg.name;
-      document.getElementById("orderModalPkgPrice").textContent = pkg.price;
-
-      const featuresSummary = (pkg.features || '').split('\n').filter(f => f.trim()).map(f => `• ${f.trim()}`).join('\n');
-      document.getElementById("orderModalPkgDetails").innerHTML = `
-        <div style="margin-bottom:0.5rem;"><strong>Package:</strong> ${escapeHtml(pkg.name)} — <strong style="color:var(--gold)">${escapeHtml(pkg.price)}</strong></div>
-        ${pkg.delivery ? `<div><i class="fas fa-truck-fast"></i> ${escapeHtml(pkg.delivery)}${pkg.revisions ? ` &nbsp;|&nbsp; <i class="fas fa-rotate"></i> ${escapeHtml(pkg.revisions)}` : ''}</div>` : ''}
-        ${featuresSummary ? `<div style="margin-top:0.4rem;white-space:pre-line;font-size:0.82rem;">${escapeHtml(featuresSummary)}</div>` : ''}
-      `;
-
-      document.getElementById("orderNotesInput").value = "";
-      if (orderModal) {
-        orderModal.classList.add("open");
-        document.body.style.overflow = "hidden";
-      }
-    }
-
-    function closePackageOrderModal() {
-      if (orderModal) {
-        orderModal.classList.remove("open");
-        document.body.style.overflow = "";
-      }
-    }
-
-    document.getElementById("closeOrderModal")?.addEventListener("click", closePackageOrderModal);
-    document.getElementById("cancelOrderBtn")?.addEventListener("click", closePackageOrderModal);
-
-    document.getElementById("confirmOrderBtn")?.addEventListener("click", async () => {
-      const user = firebase.auth().currentUser;
-      if (!user || !selectedPackageForOrder) return;
-
-      const notes = document.getElementById("orderNotesInput").value.trim();
-      const btn = document.getElementById("confirmOrderBtn");
-      btn.disabled = true;
-      btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Placing Order...`;
-
-      try {
-        let userName = user.displayName;
-        try {
-          const snap = await db.collection("users").doc(user.uid).get();
-          if (snap.exists && snap.data().name) userName = snap.data().name;
-        } catch (e) {}
-
-        // Snapshot package info at order time — price/name won't change even if admin edits later
-        const orderObj = {
-          userId: user.uid,
-          userName: userName || user.email || "Customer",
-          userEmail: user.email || "",
-          packageId: selectedPackageForOrder.key,
-          packageName: selectedPackageForOrder.name,
-          packagePrice: selectedPackageForOrder.price,
-          packageDescription: selectedPackageForOrder.description || "",
-          delivery: selectedPackageForOrder.delivery || "",
-          revisions: selectedPackageForOrder.revisions || "",
-          features: selectedPackageForOrder.features || "",
-          notes: notes,
-          status: "Pending",
-          createdAt: firebase.database.ServerValue.TIMESTAMP
-        };
-
-        await rtdb.ref("orders").push(orderObj);
-        closePackageOrderModal();
-        showToast("🎉 Order placed successfully! We will contact you soon.", "success");
-      } catch (err) {
-        showToast("Failed to place order: " + err.message, "error");
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = `<i class="fas fa-check"></i> Place Order Now`;
-      }
-    });
-
+    /* ── Pending Order Redirect (after login) ── */
     function checkPendingOrder() {
       const pendingOrderStr = sessionStorage.getItem("pendingOrder");
       if (!pendingOrderStr) return;
@@ -1743,10 +1393,11 @@
       try {
         const { packageId } = JSON.parse(pendingOrderStr);
         sessionStorage.removeItem("pendingOrder");
-        setTimeout(() => {
-          // Show details first then order
-          viewPackageDetails(packageId);
-        }, 800);
+        if (packageId) {
+          setTimeout(() => {
+            window.location.href = `package-detail?key=${encodeURIComponent(packageId)}`;
+          }, 500);
+        }
       } catch (e) {
         sessionStorage.removeItem("pendingOrder");
       }

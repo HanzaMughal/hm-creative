@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Package Details — HM Creative</title>
+  <meta name="description" content="View complete package specifications, hosting options, domain breakdown, and features by HM Creative." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Firebase CDN (compat mode) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <script src="js/firebase-config.js"></script>
+</head>
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">HM <span>Creative</span></a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html#home">Home</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#offers" class="active">Offers</a></li>
+        <li><a href="index.html#portfolio">Portfolio</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <div id="navAuthArea"></div>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── PACKAGE DETAIL CONTENT ── -->
+  <section class="package-detail-section">
+    <div class="container" style="max-width: 1040px;">
+
+      <!-- Top Back Navigation -->
+      <div style="margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+        <a href="index.html#offers" class="btn btn-ghost btn-sm" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none;">
+          <i class="fas fa-arrow-left"></i> Back to All Offers
+        </a>
+      </div>
+
+      <!-- Hero Banner Showcase with Ambient Image Blur -->
+      <div class="pkg-detail-hero fade-in-up">
+        <div class="pkg-ambient-blur-wrapper">
+          <!-- Background Ambient Blurred Image Layer -->
+          <div class="pkg-blurred-image-backdrop" id="pkgAmbientBlurImage"></div>
+
+          <!-- Glassmorphic Showcase Foreground Card -->
+          <div class="pkg-showcase-content">
+            <div class="pkg-showcase-icon-box" id="pkgShowcaseIcon">
+              <i class="fas fa-box-open"></i>
+            </div>
+            <div style="flex: 1;">
+              <div id="pkgBadgeWrap" style="display: none;">
+                <span class="pkg-detail-badge" id="pkgBadgeText">Featured</span>
+              </div>
+              <h1 class="pkg-detail-title" id="pkgName">Loading Package...</h1>
+              <div class="pkg-detail-price" id="pkgPrice"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Detail Grid Layout -->
+      <div class="pkg-detail-grid fade-in-up">
+        <!-- Left Content Area -->
+        <div>
+          <!-- Package Description -->
+          <div class="card" style="margin-bottom: 1.75rem; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 1.75rem;">
+            <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fas fa-align-left" style="color: var(--gold);"></i> Package Overview
+            </h3>
+            <p style="color: var(--text-dim); font-size: 0.95rem; line-height: 1.7; margin: 0;" id="pkgDescription">Loading details...</p>
+          </div>
+
+          <!-- What's Included (Features) -->
+          <div class="card" style="margin-bottom: 1.75rem; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 1.75rem;">
+            <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fas fa-list-check" style="color: var(--gold);"></i> What's Included in This Package
+            </h3>
+            <ul id="pkgFeaturesList" style="list-style: none; padding: 0; margin: 0;"></ul>
+          </div>
+
+          <!-- Section 1: Hosting Details -->
+          <div id="pkgHostingSection" class="card" style="margin-bottom: 1.75rem; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 1.75rem; display: none;">
+            <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fas fa-server" style="color: var(--gold);"></i> Hosting Specifications &amp; Features
+            </h3>
+            <div id="pkgHostingBody" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin-bottom: 0.85rem;"></div>
+            <div id="pkgHostingNotes" style="font-size: 0.84rem; color: var(--text-dim); line-height: 1.5; background: rgba(245, 166, 35, 0.06); border: 1px solid rgba(245, 166, 35, 0.18); border-radius: 10px; padding: 0.75rem 1rem; display: none;"></div>
+          </div>
+
+          <!-- Section 2: Domain Details & Duration Pricing Matrix -->
+          <div id="pkgDomainSection" class="card" style="margin-bottom: 1.75rem; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 1.75rem; display: none;">
+            <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fas fa-globe" style="color: var(--gold);"></i> Domain Registration &amp; Duration Pricing
+            </h3>
+            <div id="pkgDomainMeta" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.85rem;"></div>
+            <div id="pkgDomainNotes" style="font-size: 0.84rem; color: var(--text-dim); line-height: 1.5; background: rgba(245, 166, 35, 0.06); border: 1px solid rgba(245, 166, 35, 0.18); border-radius: 10px; padding: 0.75rem 1rem; margin-bottom: 1rem; display: none;"></div>
+            <div id="pkgPricingTableWrap" style="overflow: hidden; border-radius: 12px; border: 1px solid var(--border); display: none;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                <thead>
+                  <tr style="background: rgba(245, 166, 35, 0.12);">
+                    <th style="padding: 0.75rem 1rem; text-align: left; color: var(--gold); font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Duration</th>
+                    <th style="padding: 0.75rem 1rem; text-align: left; color: var(--gold); font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;"><i class="fas fa-server" style="margin-right: 0.3rem;"></i>Hosting</th>
+                    <th style="padding: 0.75rem 1rem; text-align: left; color: var(--gold); font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;"><i class="fas fa-globe" style="margin-right: 0.3rem;"></i>Domain</th>
+                    <th style="padding: 0.75rem 1rem; text-align: left; color: var(--gold); font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Total</th>
+                  </tr>
+                </thead>
+                <tbody id="pkgPricingTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Section 3: Ad Specifications & Video Deliverables -->
+          <div id="pkgAdSection" class="card" style="margin-bottom: 1.75rem; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 1.75rem; display: none;">
+            <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fas fa-film" style="color: var(--gold);"></i> Ad Specifications &amp; Video Deliverables
+            </h3>
+            <div id="pkgAdBody" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;"></div>
+          </div>
+
+          <!-- Section 4: Additional Services & Addons -->
+          <div id="pkgAddonsSection" class="card" style="margin-bottom: 1.75rem; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 1.75rem; display: none;">
+            <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fas fa-circle-plus" style="color: var(--gold);"></i> Additional Services &amp; Maintenance Addons
+            </h3>
+            <div id="pkgAddonsBody" style="display: flex; flex-direction: column; gap: 0.6rem;"></div>
+          </div>
+        </div>
+
+        <!-- Right Column: Sidebar Action Panel -->
+        <div style="position: sticky; top: 100px;">
+          <div class="card" style="background: var(--surface); border: 1px solid rgba(245, 166, 35, 0.3); border-radius: 20px; padding: 1.75rem; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);">
+            <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); font-weight: 700; margin-bottom: 0.35rem;">Order Summary</div>
+            <div style="font-size: 1.75rem; font-weight: 800; color: var(--gold); margin-bottom: 1.25rem;" id="sidePkgPrice">PKR 0</div>
+
+            <!-- Quick Specs -->
+            <div id="sidePkgSpecs" style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem; font-size: 0.88rem; color: var(--text-muted);">
+              <!-- Rendered via JS -->
+            </div>
+
+            <button type="button" class="btn btn-gold full-btn" id="orderPkgBtn" style="width: 100%; padding: 0.85rem 1.25rem; font-size: 0.95rem; font-weight: 700;">
+              <i class="fas fa-cart-shopping"></i> Order This Package Now
+            </button>
+
+            <div style="margin-top: 1.25rem; text-align: center; font-size: 0.78rem; color: var(--text-dim); display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+              <i class="fas fa-shield-halved" style="color: var(--gold);"></i> 100% Satisfaction Guarantee &amp; Fast Support
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── PACKAGE ORDER MODAL ── -->
+  <div class="auth-gate-overlay" id="packageOrderModal">
+    <div class="auth-gate-card" style="max-width: 520px; text-align: left;">
+      <button class="auth-gate-dismiss" id="closeOrderModal" aria-label="Close"><i class="fas fa-times"></i></button>
+
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+        <div style="width: 44px; height: 44px; background: rgba(245, 166, 35, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 1.2rem;">
+          <i class="fas fa-box-open"></i>
+        </div>
+        <div>
+          <h3 style="margin: 0; font-size: 1.2rem; font-weight: 700; color: var(--text);">Confirm Your Order</h3>
+          <div style="font-size: 0.82rem; color: var(--text-dim);">Finalize requirements before placing order</div>
+        </div>
+      </div>
+
+      <div id="orderModalPkgDetails" style="background: var(--surface2); padding: 0.85rem; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 1rem; font-size: 0.84rem; line-height: 1.6; color: var(--text-dim);">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label style="color: var(--text); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; display: block;">
+          Project Brief / Special Instructions <span style="color: var(--text-dim); font-weight: 400;">(Optional)</span>
+        </label>
+        <textarea id="orderNotesInput" rows="3" style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 0.65rem; border-radius: 8px; font-size: 0.85rem; outline: none; resize: vertical;" placeholder="e.g. Target audience, brand colors, reference examples, any special requirements..."></textarea>
+      </div>
+
+      <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+        <button type="button" class="btn btn-ghost" id="cancelOrderBtn">Cancel</button>
+        <button type="button" class="btn btn-gold" id="confirmOrderBtn">
+          <i class="fas fa-check"></i> Place Order Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- Scripts -->
+  <script src="js/auth.js"></script>
+  <script src="js/package-detail.js"></script>
+</body>
+</html>

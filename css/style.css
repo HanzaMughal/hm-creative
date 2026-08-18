@@ -2491,18 +2491,20 @@ footer {
   position: fixed;
   inset: 0;
   z-index: 99998;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(10, 10, 14, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  will-change: opacity, visibility;
+  transform: translateZ(0);
 }
 
 .auth-gate-overlay.open {
@@ -2924,10 +2926,13 @@ footer {
   position: relative;
   cursor: pointer;
   transition: var(--transition);
+  will-change: transform, border-color, box-shadow;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .offer-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-6px) translateZ(0);
   border-color: rgba(245, 166, 35, 0.45);
   box-shadow: 0 12px 35px rgba(245, 166, 35, 0.14);
 }
@@ -3036,4 +3041,123 @@ footer {
   border-color: var(--gold) !important;
   box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.15);
 }
+
+/* ============================================================
+   PACKAGE DETAIL PAGE STYLES & BLURRED IMAGE SHOWCASE
+   ============================================================ */
+.package-detail-section {
+  padding: 110px 0 70px;
+  min-height: 90vh;
+}
+
+.pkg-detail-hero {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(15, 15, 15, 0.95));
+  border: 1px solid rgba(245, 166, 35, 0.25);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  margin-bottom: 2.5rem;
+}
+
+.pkg-ambient-blur-wrapper {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0a0d;
+}
+
+/* Background Ambient Blurred Image Layer */
+.pkg-blurred-image-backdrop {
+  position: absolute;
+  inset: -25px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(32px) brightness(0.4) saturate(1.5);
+  transform: scale(1.15) translateZ(0);
+  will-change: transform, filter;
+  opacity: 0.88;
+}
+
+/* Foreground Glassmorphic Showcase Content */
+.pkg-showcase-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  padding: 2.25rem 2.5rem;
+  background: rgba(18, 18, 22, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  max-width: 90%;
+  width: 100%;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.pkg-showcase-icon-box {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, rgba(245, 166, 35, 0.25), rgba(245, 166, 35, 0.08));
+  border: 1px solid rgba(245, 166, 35, 0.4);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold);
+  font-size: 2.2rem;
+  flex-shrink: 0;
+  box-shadow: 0 8px 25px rgba(245, 166, 35, 0.2);
+}
+
+.pkg-detail-badge {
+  display: inline-block;
+  background: var(--gold);
+  color: #000;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.75rem;
+  border-radius: 99px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 0.5rem;
+}
+
+.pkg-detail-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 0.3rem 0;
+}
+
+.pkg-detail-price {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--gold);
+}
+
+.pkg-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 992px) {
+  .pkg-detail-grid {
+    grid-template-columns: 1fr;
+  }
+  .pkg-showcase-content {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.75rem 1.25rem;
+  }
+}
+
 
