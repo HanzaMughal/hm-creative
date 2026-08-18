@@ -1361,7 +1361,7 @@
         const key = card.getAttribute("data-pkg-key");
         if (key) {
           isPkgNavigating = true;
-          window.location.href = `package-detail?key=${encodeURIComponent(key)}`;
+          window.location.href = `package-detail.html?key=${encodeURIComponent(key)}`;
         }
       }
     }
@@ -1380,7 +1380,7 @@
     /* ── Package Details Page Navigation Helper ── */
     function viewPackageDetails(pkgKey) {
       if (!pkgKey) return;
-      window.location.href = `package-detail?key=${encodeURIComponent(pkgKey)}`;
+      window.location.href = `package-detail.html?key=${encodeURIComponent(pkgKey)}`;
     }
 
     /* ── Pending Order Redirect (after login) ── */
@@ -1395,7 +1395,7 @@
         sessionStorage.removeItem("pendingOrder");
         if (packageId) {
           setTimeout(() => {
-            window.location.href = `package-detail?key=${encodeURIComponent(packageId)}`;
+            window.location.href = `package-detail.html?key=${encodeURIComponent(packageId)}`;
           }, 500);
         }
       } catch (e) {
