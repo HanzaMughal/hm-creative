@@ -33,7 +33,10 @@
   <div class="auth-card">
 
     <!-- Logo -->
-    <a href="index.html" class="auth-logo">HM <span>Creative</span></a>
+    <a href="index.html" class="auth-logo">
+      <img src="HM Creatve logo.png" alt="HM Creative Logo" class="site-logo-img" style="height:44px;" />
+      <span>HM <span>Creative</span></span>
+    </a>
     <p class="auth-subtitle" id="loginSubtitle">Welcome back! Sign in to continue.</p>
 
     <!-- Email/Password Form -->
@@ -55,7 +58,10 @@
       </div>
 
       <div class="form-group">
-        <label for="loginPassword">Password</label>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
+          <label for="loginPassword" style="margin:0;">Password</label>
+          <a href="#" id="forgotPasswordBtn" style="font-size:0.78rem;color:var(--gold);">Forgot password?</a>
+        </div>
         <div class="input-wrap">
           <i class="fas fa-lock"></i>
           <input
@@ -66,25 +72,30 @@
             autocomplete="current-password"
             required
           />
-          <button
-            type="button"
-            class="password-toggle"
-            id="pwToggle"
-            aria-label="Show/hide password"
-          >
-            <i class="fas fa-eye" id="pwToggleIcon"></i>
+          <button type="button" class="password-toggle" id="pwToggle">
+            <i class="fas fa-eye" id="pwIcon"></i>
           </button>
         </div>
       </div>
 
       <button type="submit" class="btn btn-gold full-btn" id="loginBtn">
-        <i class="fas fa-sign-in-alt"></i> Sign In
+        <i class="fas fa-right-to-bracket"></i> Sign In
       </button>
+
     </form>
 
+    <!-- Google Sign-In -->
+    <div class="auth-divider"><span>or sign in with</span></div>
 
+    <button type="button" class="google-btn" id="googleBtn">
+      <img
+        src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+        alt="Google"
+      />
+      Continue with Google
+    </button>
 
-    <!-- Skip -->
+    <!-- Skip / Guest Button -->
     <button
       type="button"
       class="skip-btn"
@@ -98,6 +109,9 @@
     <p class="auth-footer-text">
       Don't have an account?
       <a href="register.html">Create one</a>
+    </p>
+    <p class="auth-footer-text" style="margin-top:0.4rem;font-size:0.78rem;">
+      <a href="terms.html" style="color:var(--text-dim);">Terms &amp; Conditions</a>
     </p>
 
   </div>

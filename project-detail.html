@@ -74,7 +74,10 @@
   <!-- ── NAVBAR ── -->
   <nav class="navbar" id="navbar">
     <div class="container nav-inner">
-      <a href="index.html" class="nav-logo">HM <span>Creative</span></a>
+      <a href="index.html" class="nav-logo">
+        <img src="HM Creatve logo.png" alt="HM Creative Logo" class="site-logo-img" />
+        <span>HM <span>Creative</span></span>
+      </a>
 
       <ul class="nav-links" id="navLinks">
         <li><a href="index.html#home">Home</a></li>
@@ -91,6 +94,14 @@
       </div>
     </div>
   </nav>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main class="detail-main" id="detailMain">
+    <div class="container">
+      <div class="skeleton-header skeleton"></div>
+      <div class="skeleton-body skeleton"></div>
+    </div>
+  </main>
 
   <!-- ── PROJECT DETAIL CONTENT ── -->
   <section class="project-detail-section">
@@ -153,21 +164,27 @@
   </section>
 
   <!-- ── FOOTER ── -->
-  <footer class="footer">
+  <footer>
     <div class="container">
-      <div class="footer-content">
-        <div class="footer-brand">
-          <a href="index.html" class="nav-logo">
-            <span class="logo-mark">HM</span>
-            <span class="logo-text">Creative<span class="logo-dot">.</span></span>
+      <div class="footer-inner">
+        <div class="footer-logo">
+          <a href="index.html" style="display:inline-flex;align-items:center;gap:0.6rem;text-decoration:none;color:inherit;">
+            <img src="HM Creatve logo.png" alt="HM Creative Logo" class="site-logo-img" style="height:34px;" />
+            <span>HM <span>Creative</span></span>
           </a>
         </div>
         <p class="footer-copy">
           © <span id="footerYear"></span> HM Creative. All rights reserved.
         </p>
+        <div class="footer-links">
+          <a href="index.html#portfolio">Work</a>
+          <a href="index.html#contact">Contact</a>
+          <a href="terms.html">Terms &amp; Conditions</a>
+        </div>
       </div>
     </div>
   </footer>
+
 
   <div class="toast" id="toast"></div>
 

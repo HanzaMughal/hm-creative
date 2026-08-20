@@ -1,0 +1,70 @@
+Terms & Conditions
+Last Updated: [Date]
+Welcome to **[Business Name]** (“we,” “us,” or “our”). By accessing our website, requesting a quotation, purchasing a service, or working with us, you agree to these Terms & Conditions.
+1. Our Services
+We provide digital creative and web-development services, which may include:
+?
+AI-assisted poster and graphic design
+?
+?
+AI-assisted advertising and promotional video creation
+?
+?
+Poster and marketing video packages
+?
+?
+Website design and development using HTML, CSS, JavaScript, and related technologies
+?
+?
+Backend integration and database setup, including Firebase or Supabase where requested by the client
+?
+?
+General website features based on the agreed project scope
+?
+Every project’s features, timeline, deliverables, revision limits, and price will be confirmed in a quotation, proposal, invoice, or written agreement before work begins.
+2. No Payment-Gateway Development
+We do not develop, integrate, configure, maintain, or take responsibility for payment gateways, online card payments, wallet payments, banking integrations, or payment-processing functionality.
+If a client requires payment-related functionality, it must be discussed separately and may require a third-party specialist. We are not responsible for any payment-provider account, transaction, chargeback, financial loss, compliance obligation, or technical issue connected to a payment gateway.
+3. Client Responsibilities
+The client is responsible for providing accurate content, branding materials, logos, images, text, product information, credentials, approvals, and feedback required for the project.
+The client confirms that they own, have permission to use, or are legally allowed to provide all material submitted to us. We are not responsible for copyright, trademark, privacy, or other legal claims arising from client-provided content.
+Delays in providing required information, access, approvals, or feedback may delay the project timeline.
+4. AI-Assisted Content
+We may use artificial-intelligence tools to assist with creative work, coding, visuals, videos, concepts, or other project tasks.
+AI-generated or AI-assisted work can require human review and may contain variations or limitations. We will make reasonable efforts to deliver professional work based on the agreed brief, but we cannot guarantee that AI-generated outputs are completely unique, error-free, free from third-party similarity, or suitable for every legal, advertising, or platform requirement.
+Clients must review and approve all final content before publishing, advertising, or commercial use.
+5. Revisions and Approval
+Reasonable revisions will be provided only as included in the agreed project scope. Requests that go beyond the approved scope, such as new pages, features, major redesigns, new content, or significant changes after approval, may require an additional quotation and timeline.
+Once the client approves a design, video, website, or other deliverable, later changes may be charged separately.
+6. Third-Party Services
+A project may involve third-party services such as hosting providers, domains, Firebase, Supabase, analytics tools, stock-media platforms, AI tools, or other software.
+The client is responsible for reviewing and accepting the terms, costs, subscriptions, security settings, and policies of those third-party services. We are not responsible for outages, price changes, data loss, account suspension, security incidents, policy changes, or technical failures caused by third-party providers.
+7. Website Content and Legal Compliance
+Unless specifically agreed in writing, we do not provide legal, financial, tax, cybersecurity, regulatory, medical, or business advice.
+The client is responsible for ensuring that their website, business content, privacy policy, terms, advertising, product claims, and use of customer data comply with applicable laws and platform rules.
+8. Intellectual Property
+After full payment for the agreed project, the client may use the final approved deliverables for their business or agreed purpose.
+We retain ownership of our pre-existing tools, code libraries, templates, processes, know-how, and reusable components. Any third-party assets, fonts, plugins, stock content, AI-tool outputs, or open-source software may be subject to their own licences and restrictions.
+Unless the client asks otherwise in writing, we may display completed work in our portfolio, website, social-media pages, or promotional materials.
+9. Payments and Refunds
+Payment terms, deposit requirements, milestones, and final payment details will be stated in the relevant quotation or invoice.
+Unless otherwise agreed in writing, payments will be made in the following three stages:
+
+?30% advance payment: Payable after the project deal and scope have been confirmed, and before work begins.
+
+?40% development payment: Payable once the agreed website, design, video, or other project work has been completed and presented to the client for review.
+
+?30% final payment: Payable upon final handover, after we provide the agreed files, website setup, credentials, access, and/or project deliverables to the client.
+Work may begin only after the 30% advance payment has been received. Final files, full website access, credentials, or ownership transfer may be withheld until the final payment has been received.
+Deposits cover time, planning, and resources reserved for the project and are generally non-refundable once work has started.
+Refund requests will be considered fairly based on completed work, expenses, and the agreed scope. No refund is guaranteed for completed, approved, delivered, or downloadable work.
+10. Limitation of Liability
+We will make reasonable efforts to provide quality services. However, we are not liable for indirect, incidental, special, business, data, revenue, reputation, or profit loss arising from the use of our services, website, designs, videos, code, or third-party tools.
+Our total liability for a specific project will not exceed the amount paid by the client to us for that project.
+11. Suspension or Termination
+We may suspend or terminate a project if a client does not make payment, provides unlawful or abusive content, violates these Terms, fails to cooperate, or requests work that we reasonably believe is illegal, harmful, deceptive, or inappropriate.
+12. Changes to These Terms
+We may update these Terms & Conditions from time to time. The latest version will be published on our website with an updated date.
+13. Contact Us
+If you have any questions about these Terms & Conditions, please contact us:
+HM Creative Email: hmcreative106@gmail.com Website: https://hm-creative.vercel.app 

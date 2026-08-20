@@ -26,7 +26,7 @@
   <script>
     window.APP_CONFIG = {
       WHATSAPP_NUMBER: "923068787931",
-      CONTACT_EMAIL: "hmdesigne102@gmail.com"
+      CONTACT_EMAIL: "hmcreative106@gmail.com"
     };
   </script>
   <script src="js/firebase-config.js"></script>
@@ -37,7 +37,10 @@
   <!-- ── NAVBAR ── -->
   <nav class="navbar" id="navbar">
     <div class="container nav-inner">
-      <a href="index.html" class="nav-logo">HM <span>Creative</span></a>
+      <a href="index.html" class="nav-logo">
+        <img src="HM Creatve logo.png" alt="HM Creative Logo" class="site-logo-img" />
+        <span>HM <span>Creative</span></span>
+      </a>
 
       <ul class="nav-links" id="navLinks">
         <li><a href="#about">About</a></li>
@@ -319,7 +322,7 @@
           <div class="contact-items">
             <div class="contact-item">
               <i class="fas fa-envelope"></i>
-              <span id="infoContactEmail">hmdesigne102@gmail.com</span>
+              <span id="infoContactEmail">hmcreative106@gmail.com</span>
             </div>
             <div class="contact-item">
               <i class="fas fa-map-marker-alt"></i>
@@ -366,15 +369,22 @@
   <footer>
     <div class="container">
       <div class="footer-inner">
-        <div class="footer-logo">HM <span>Creative</span></div>
+        <div class="footer-logo">
+          <a href="index.html" style="display:inline-flex;align-items:center;gap:0.6rem;text-decoration:none;color:inherit;">
+            <img src="HM Creatve logo.png" alt="HM Creative Logo" class="site-logo-img" style="height:34px;" />
+            <span>HM <span>Creative</span></span>
+          </a>
+        </div>
         <p class="footer-copy">
           © <span id="footerYear"></span> HM Creative. All rights reserved.
           Crafted with ♥ by Hamza Mughal.
         </p>
         <div class="footer-links">
           <a href="#about">About</a>
+          <a href="#offers">Offers</a>
           <a href="#portfolio">Work</a>
           <a href="#contact">Contact</a>
+          <a href="terms.html">Terms &amp; Conditions</a>
         </div>
       </div>
     </div>
@@ -1081,7 +1091,7 @@
 
         const emailEl = document.getElementById("infoContactEmail");
         if (emailEl) {
-          emailEl.textContent = data.contactEmail || (window.APP_CONFIG && window.APP_CONFIG.CONTACT_EMAIL) || "hmdesigne102@gmail.com";
+          emailEl.textContent = data.contactEmail || (window.APP_CONFIG && window.APP_CONFIG.CONTACT_EMAIL) || "hmcreative106@gmail.com";
         }
 
         if (data.workingHours) {
