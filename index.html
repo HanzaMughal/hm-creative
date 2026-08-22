@@ -25,7 +25,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <script>
     window.APP_CONFIG = {
-      WHATSAPP_NUMBER: "923068787931",
       CONTACT_EMAIL: "hmcreative106@gmail.com"
     };
   </script>
@@ -1949,7 +1948,7 @@
       }
     }
 
-    /* ── Contact form → WhatsApp + Firestore backup ── */
+    /* ── Contact form → Email (hmcreative106@gmail.com) + Firestore backup ── */
     document.getElementById("contactForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -1986,7 +1985,7 @@
 
       const btn = document.getElementById("contactSendBtn");
       btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Opening WhatsApp…';
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing Email…';
 
       try {
         // 4. Log to Firestore (record-keeping)
@@ -1994,25 +1993,26 @@
           name,
           email,
           message,
+          recipientEmail: "hmcreative106@gmail.com",
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         }).catch(err => console.warn("Firestore log skipped:", err));
 
         localStorage.setItem("lastContactSubmit", now.toString());
 
-        // 5. Build WhatsApp link
-        const waNumber = (window.APP_CONFIG && window.APP_CONFIG.WHATSAPP_NUMBER) || "923068787931";
-        const waText = encodeURIComponent(
-          `*New message from HM Creative website* 🎨\n\n` +
-          `👤 *Name:* ${name}\n` +
-          `📧 *Email:* ${email}\n\n` +
-          `💬 *Message:*\n${message}`
+        // 5. Build Mailto URL targeting hmcreative106@gmail.com
+        const targetEmail = (window.APP_CONFIG && window.APP_CONFIG.CONTACT_EMAIL) || "hmcreative106@gmail.com";
+        const emailSubject = encodeURIComponent(`New Contact Message from ${name}`);
+        const emailBody = encodeURIComponent(
+          `Sender Name: ${name}\n` +
+          `Sender Email: ${email}\n\n` +
+          `Message:\n${message}`
         );
-        const waUrl = `https://wa.me/${waNumber}?text=${waText}`;
+        const mailtoUrl = `mailto:${targetEmail}?subject=${emailSubject}&body=${emailBody}`;
 
-        // 6. Open WhatsApp (app on mobile, web on desktop)
-        window.open(waUrl, "_blank", "noopener,noreferrer");
+        // 6. Open default mail client directly to send to hmcreative106@gmail.com
+        window.location.href = mailtoUrl;
 
-        showToast("Opening WhatsApp… 🚀", "success");
+        showToast("Opening email composer to send to hmcreative106@gmail.com! ✉️", "success");
         e.target.reset();
       } catch (err) {
         showToast("Something went wrong. Please try again.", "error");
