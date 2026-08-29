@@ -35,8 +35,8 @@ function setLoading(btn, loading) {
 async function validateUserAccount(user) {
   if (!user) return { valid: false, reason: "no_user" };
   
-  // Master Administrator UID is always valid
-  if (user.uid === "gyugidvzamYHxJhBLVcrEvxjynI2") {
+  // Master Administrator / Sub-admin UID is always valid
+  if (user.uid === "gyugidvzamYHxJhBLVcrEvxjynI2" || user.uid === "VwxRpQIrfqg9oXoNcOdtmi9bflJ3") {
     return { valid: true, role: "admin", status: "active" };
   }
 

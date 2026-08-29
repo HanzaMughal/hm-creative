@@ -98,8 +98,8 @@
         return;
       }
 
-      // Master admin is exempt from doc check
-      const isMasterAdmin = (user.uid === "gyugidvzamYHxJhBLVcrEvxjynI2");
+      // Master admin / Sub-admin is exempt from doc check
+      const isMasterAdmin = (user.uid === "gyugidvzamYHxJhBLVcrEvxjynI2" || user.uid === "VwxRpQIrfqg9oXoNcOdtmi9bflJ3");
 
       // Fetch user profile from Firestore (Single Source of Truth)
       let displayName = user.displayName || "";
