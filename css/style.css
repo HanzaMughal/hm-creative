@@ -238,15 +238,17 @@ input, textarea { font-family: inherit; }
   right: 0;
   z-index: 1000;
   padding: 1rem 0;
-  transition: var(--transition);
+  background: transparent;
+  transition: background 0.35s ease, backdrop-filter 0.35s ease, padding 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
 .navbar.scrolled {
-  background: rgba(10, 10, 10, 0.9);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  padding: 0.65rem 0;
+  background: rgba(6, 6, 6, 0.92);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
+  padding: 0.6rem 0;
 }
 
 .nav-inner {
@@ -317,34 +319,290 @@ input, textarea { font-family: inherit; }
   gap: 0.75rem;
 }
 
-.nav-user {
+/* ── NAV USER PROFILE & POPUP CARD ── */
+.nav-user-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-user-btn {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  background: var(--surface);
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--border);
-  padding: 0.4rem 0.9rem 0.4rem 0.4rem;
+  padding: 0.35rem 0.75rem 0.35rem 0.35rem;
   border-radius: 99px;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  color: var(--text);
+  font-family: inherit;
+  transition: all 0.25s ease;
 }
 
-.nav-user img {
-  width: 28px;
-  height: 28px;
+.nav-user-btn:hover,
+.nav-user-btn.active {
+  background: rgba(245, 166, 35, 0.12);
+  border-color: var(--gold);
+  box-shadow: 0 0 12px rgba(245, 166, 35, 0.2);
+}
+
+.nav-user-avatar {
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   object-fit: cover;
-  border: 1px solid var(--gold);
+  border: 1.5px solid var(--gold);
+  background: var(--bg3);
 }
 
-.nav-user span { font-size: 0.8rem; font-weight: 500; }
+.nav-user-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.nav-user-caret {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  transition: transform 0.25s ease;
+}
+
+.nav-user-btn.active .nav-user-caret {
+  transform: rotate(180deg);
+  color: var(--gold);
+}
+
+/* Profile Popup Card */
+.profile-popup {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 290px;
+  max-width: calc(100vw - 32px);
+  background: rgba(18, 18, 24, 0.96);
+  border: 1px solid rgba(245, 166, 35, 0.25);
+  border-radius: 18px;
+  padding: 1.25rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 25px rgba(245, 166, 35, 0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 1100;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px) scale(0.95);
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.25s ease;
+  pointer-events: none;
+}
+
+.profile-popup.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Header */
+.profile-popup-header {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.profile-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.profile-popup-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--gold);
+  box-shadow: 0 4px 12px rgba(245, 166, 35, 0.25);
+}
+
+.profile-status-indicator {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 11px;
+  height: 11px;
+  background: #2ecc71;
+  border: 2px solid #121218;
+  border-radius: 50%;
+}
+
+.profile-popup-user-details {
+  overflow: hidden;
+}
+
+.profile-popup-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 2px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-popup-email {
+  font-size: 0.76rem;
+  color: var(--text-dim);
+  margin: 0 0 6px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-popup-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--gold);
+  background: rgba(245, 166, 35, 0.12);
+  border: 1px solid rgba(245, 166, 35, 0.3);
+  padding: 2px 8px;
+  border-radius: 99px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.profile-popup-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 0.9rem 0;
+}
+
+/* Info Details */
+.profile-popup-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.profile-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+}
+
+.detail-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(245, 166, 35, 0.1);
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.detail-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.detail-label {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.detail-value {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Actions */
+.profile-popup-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profile-popup-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.55rem;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+.profile-popup-action-btn.secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.profile-popup-action-btn.secondary:hover {
+  background: rgba(245, 166, 35, 0.15);
+  color: var(--gold);
+  border-color: rgba(245, 166, 35, 0.4);
+}
+
+.profile-logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.55rem;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: rgba(255, 77, 77, 0.08);
+  color: #ff5252;
+  border: 1px solid rgba(255, 77, 77, 0.25);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.profile-logout-btn:hover {
+  background: #ff5252;
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(255, 77, 77, 0.4);
+}
 
 .nav-toggle {
   display: none;
   flex-direction: column;
+  justify-content: center;
   gap: 5px;
   background: none;
   border: none;
-  padding: 4px;
+  padding: 8px;
+  z-index: 1001;
+  position: relative;
+  cursor: pointer;
 }
 
 .nav-toggle span {
@@ -353,7 +611,96 @@ input, textarea { font-family: inherit; }
   height: 2px;
   background: var(--text);
   border-radius: 99px;
-  transition: var(--transition);
+  transition: transform 0.35s ease, opacity 0.25s ease, background 0.25s ease;
+  transform-origin: center;
+}
+
+/* Hamburger → X animation */
+.nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.nav-toggle.open span { background: var(--gold); }
+
+/* ── Mobile nav overlay ── */
+.nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 998;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.nav-overlay.open {
+  display: block;
+  opacity: 1;
+}
+
+/* ============================================================
+   MOBILE RESPONSIVE NAVBAR
+   ============================================================ */
+@media (max-width: 768px) {
+  .nav-toggle { display: flex; }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -110%;
+    width: min(82vw, 320px);
+    height: 100dvh;
+    background: #0e0e0e;
+    border-left: 1px solid rgba(245, 166, 35, 0.18);
+    box-shadow: -12px 0 50px rgba(0, 0, 0, 0.7);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 5.5rem 1.75rem 2rem;
+    z-index: 999;
+    transition: right 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+  }
+
+  .nav-links.open { right: 0; }
+
+  .nav-links li { width: 100%; }
+
+  .nav-links a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 0.95rem 0.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    width: 100%;
+    transition: color 0.2s ease, padding-left 0.2s ease;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--gold);
+    padding-left: 0.5rem;
+  }
+
+  .nav-links a::after { display: none; }
+
+  /* Help button in drawer — highlighted */
+  .nav-links a[href="help.html"] {
+    color: var(--gold);
+    font-weight: 700;
+    border: 1px solid rgba(245, 166, 35, 0.25);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    margin-top: 1rem;
+    background: rgba(245, 166, 35, 0.06);
+  }
+  .nav-links a[href="help.html"]:hover {
+    background: rgba(245, 166, 35, 0.12);
+    padding-left: 1rem;
+  }
 }
 
 /* ============================================================
@@ -1850,9 +2197,11 @@ footer {
   .about-badge       { padding: 0.75rem 1rem; font-size: 0.8rem; bottom: -0.75rem; right: 0; }
   .about-badge strong{ font-size: 1.2rem; }
 
-  /* Nav user chip */
-  .nav-user span     { display: none; }
-  .nav-user          { padding: 0.35rem; }
+  /* Nav user profile button & popup responsive */
+  .nav-user-name     { display: none; }
+  .nav-user-caret    { display: none; }
+  .nav-user-btn      { padding: 0.25rem; }
+  .profile-popup     { right: -10px; width: 270px; }
 
   /* Categories — single col on very small */
   .categories-grid   { grid-template-columns: 1fr; max-width: 320px; margin: 0 auto; }

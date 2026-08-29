@@ -46,6 +46,7 @@
         <li><a href="#offers">Offers</a></li>
         <li><a href="#portfolio">Portfolio</a></li>
         <li><a href="#contact">Contact</a></li>
+        <li><a href="help.html"><i class="fas fa-circle-question"></i> Help</a></li>
       </ul>
 
       <div class="nav-actions">
@@ -57,6 +58,9 @@
       </div>
     </div>
   </nav>
+
+  <!-- ── MOBILE NAV OVERLAY ── -->
+  <div class="nav-overlay" id="navOverlay"></div>
 
   <!-- ── HERO ── -->
   <section class="hero" id="home">
@@ -607,32 +611,7 @@
 
   <!-- ── SCRIPTS ── -->
   <script>
-    /* ── Navbar scroll (throttled for 60/120fps smooth performance) ── */
-    const navbarEl = document.getElementById("navbar");
-    let isTicking = false;
-    window.addEventListener("scroll", () => {
-      if (!isTicking) {
-        window.requestAnimationFrame(() => {
-          if (navbarEl) navbarEl.classList.toggle("scrolled", window.scrollY > 50);
-          isTicking = false;
-        });
-        isTicking = true;
-      }
-    }, { passive: true });
-
-    /* ── Mobile nav toggle ── */
-    const navToggle = document.getElementById("navToggle");
-    const navLinks = document.getElementById("navLinks");
-    navToggle.addEventListener("click", () => {
-      navToggle.classList.toggle("open");
-      navLinks.classList.toggle("open");
-    });
-    navLinks.querySelectorAll("a").forEach(a =>
-      a.addEventListener("click", () => {
-        navToggle.classList.remove("open");
-        navLinks.classList.remove("open");
-      })
-    );
+    /* ── Navbar scroll + mobile drawer handled by js/navbar.js ── */
 
     /* ── Counter animation ── */
     function animateCounters() {
@@ -664,41 +643,17 @@
       setTimeout(() => t.classList.remove("show"), 3500);
     }
 
-    /* ── Auth state — Nav & Chat buttons ── */
-    const navAuthArea = document.getElementById("navAuthArea");
+    /* ── Auth state — Chat replies & pending actions (Navbar rendering handled by navbar.js) ── */
     let currentUser = null;
 
     auth.onAuthStateChanged(async (user) => {
       currentUser = user;
       if (user) {
-        let displayName = user.displayName;
-        try {
-          const userSnap = await db.collection("users").doc(user.uid).get();
-          if (userSnap.exists && userSnap.data().name) {
-            displayName = userSnap.data().name;
-          }
-        } catch (e) {
-          console.warn("Could not fetch user name from Firestore:", e);
-        }
-
-        const photoSrc = user.photoURL ||
-          `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName || "U")}&background=f5a623&color=000&bold=true`;
-        navAuthArea.innerHTML = `
-      <div class="nav-user">
-        <img src="${photoSrc}" alt="${displayName || 'User'}" />
-        <span>${(displayName || user.email || "User").split(" ")[0]}</span>
-      </div>`;
-
         // Start listening for admin replies
         listenForAdminReplies(user.uid);
         // Check if user came back from login with a pending like or order
         checkPendingLike();
         checkPendingOrder();
-      } else {
-        navAuthArea.innerHTML = `
-      <a href="login.html" class="btn btn-ghost" style="padding:0.45rem 1.1rem;font-size:0.82rem;">
-        <i class="fas fa-sign-in-alt"></i> Login
-      </a>`;
       }
     });
 
@@ -2049,6 +2004,9 @@
     loadPortfolio();
     loadSocialLinks();
   </script>
+
+  <script src="js/auth.js"></script>
+  <script src="js/navbar.js"></script>
 </body>
 
 </html>

@@ -41,6 +41,7 @@
         <li><a href="index.html#offers" class="active">Offers</a></li>
         <li><a href="index.html#portfolio">Portfolio</a></li>
         <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="help.html"><i class="fas fa-circle-question"></i> Help</a></li>
       </ul>
 
       <div class="nav-actions">
@@ -51,6 +52,9 @@
       </div>
     </div>
   </nav>
+
+  <!-- ── MOBILE NAV OVERLAY ── -->
+  <div class="nav-overlay" id="navOverlay"></div>
 
   <!-- ── PACKAGE DETAIL CONTENT ── -->
   <section class="package-detail-section">
@@ -197,11 +201,38 @@
       <div id="orderModalPkgDetails" style="background: var(--surface2); padding: 0.85rem; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 1rem; font-size: 0.84rem; line-height: 1.6; color: var(--text-dim);">
       </div>
 
+      <!-- Customer Contact Details -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label style="color: var(--text); font-size: 0.82rem; font-weight: 600; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.35rem;">
+            <i class="fas fa-user" style="color: var(--gold); font-size: 0.75rem;"></i> Your Name
+          </label>
+          <input type="text" id="orderNameInput" style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 0.75rem; border-radius: 8px; font-size: 0.85rem; outline: none;" placeholder="e.g. John Doe" />
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <label style="color: var(--text); font-size: 0.82rem; font-weight: 600; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.35rem;">
+            <i class="fas fa-envelope" style="color: var(--gold); font-size: 0.75rem;"></i> Email Address <span style="color: var(--gold); font-weight: 700;">*</span>
+          </label>
+          <input type="email" id="orderEmailInput" required style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 0.75rem; border-radius: 8px; font-size: 0.85rem; outline: none;" placeholder="you@example.com" />
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 0.85rem;">
+        <label style="color: var(--text); font-size: 0.82rem; font-weight: 600; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.35rem;">
+          <i class="fas fa-phone" style="color: var(--gold); font-size: 0.75rem;"></i> Phone Number / WhatsApp <span style="color: var(--gold); font-weight: 700;">*</span>
+        </label>
+        <input type="tel" id="orderPhoneInput" required style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 0.75rem; border-radius: 8px; font-size: 0.85rem; outline: none;" placeholder="e.g. +92 300 1234567 or 03001234567" />
+        <div style="font-size: 0.74rem; color: var(--text-dim); margin-top: 0.25rem;">
+          We will use this phone number / WhatsApp to contact you regarding your order specifications.
+        </div>
+      </div>
+
       <div class="form-group" style="margin-bottom: 1rem;">
-        <label style="color: var(--text); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; display: block;">
+        <label style="color: var(--text); font-size: 0.82rem; font-weight: 600; margin-bottom: 0.35rem; display: block;">
           Project Brief / Special Instructions <span style="color: var(--text-dim); font-weight: 400;">(Optional)</span>
         </label>
-        <textarea id="orderNotesInput" rows="3" style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 0.65rem; border-radius: 8px; font-size: 0.85rem; outline: none; resize: vertical;" placeholder="e.g. Target audience, brand colors, reference examples, any special requirements..."></textarea>
+        <textarea id="orderNotesInput" rows="2" style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 0.75rem; border-radius: 8px; font-size: 0.85rem; outline: none; resize: vertical;" placeholder="e.g. Target audience, brand colors, reference links, specific requirements..."></textarea>
       </div>
 
       <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
@@ -244,6 +275,7 @@
   <!-- Scripts -->
   <script src="js/auth.js"></script>
   <script src="js/package-detail.js"></script>
+  <script src="js/navbar.js"></script>
   <script>
     if (document.getElementById("footerYear")) {
       document.getElementById("footerYear").textContent = new Date().getFullYear();

@@ -463,38 +463,91 @@ function setupOrderModalListeners() {
       return;
     }
 
-    const notes = document.getElementById("orderNotesInput")?.value.trim() || "";
-    const btn   = document.getElementById("confirmOrderBtn");
+    const nameInput  = document.getElementById("orderNameInput");
+    const emailInput = document.getElementById("orderEmailInput");
+    const phoneInput = document.getElementById("orderPhoneInput");
+    const notesInput = document.getElementById("orderNotesInput");
 
+    const name  = (nameInput?.value || "").trim();
+    const email = (emailInput?.value || "").trim();
+    const phone = (phoneInput?.value || "").trim();
+    const notes = (notesInput?.value || "").trim();
+
+    // 1. Validation for Required Contact Fields
+    if (!email) {
+      showToast("Please enter your email address.", "error");
+      emailInput?.focus();
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showToast("Please enter a valid email address.", "error");
+      emailInput?.focus();
+      return;
+    }
+
+    if (!phone) {
+      showToast("Please enter your phone / WhatsApp number.", "error");
+      phoneInput?.focus();
+      return;
+    }
+
+    // Phone validation: allow digits, plus, dashes, parentheses, spaces; min 7 chars
+    const phoneDigitsOnly = phone.replace(/[^0-9]/g, "");
+    if (phoneDigitsOnly.length < 7 || phoneDigitsOnly.length > 18) {
+      showToast("Please enter a valid phone number with at least 7 digits.", "error");
+      phoneInput?.focus();
+      return;
+    }
+
+    const btn = document.getElementById("confirmOrderBtn");
     btn.disabled = true;
-    btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Placing Order...`;
+    btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Submitting Order...`;
 
     try {
-      let userName = user.displayName;
-      try {
-        const snap = await db.collection("users").doc(user.uid).get();
-        if (snap.exists && snap.data().name) userName = snap.data().name;
-      } catch (e) {}
-
       const orderObj = {
         userId: user.uid,
-        userName: userName || user.email || "Customer",
-        userEmail: user.email || "",
+        userName: name || user.displayName || (email ? email.split("@")[0] : "Customer"),
+        userEmail: email,
+        customerEmail: email,
+        phone: phone,
+        userPhone: phone,
+        customerPhone: phone,
         packageId: currentPackageKey,
         packageName: currentPackage.name || "Package",
         packagePrice: currentPackage.price || "Contact for Price",
+        packageCategory: currentPackage.category || "website",
         packageDetails: currentPackage,
+        delivery: currentPackage.delivery || "",
         notes: notes,
         status: "Pending",
         createdAt: firebase.database.ServerValue.TIMESTAMP
       };
 
+      // Push to Realtime Database /orders
       await rtdb.ref("orders").push(orderObj);
+
+      // Also persist phone & name to user profile for convenience
+      try {
+        const userUpdates = { phone: phone };
+        if (name) userUpdates.name = name;
+        if (email) userUpdates.email = email;
+        rtdb.ref("users/" + user.uid).update(userUpdates).catch(() => {});
+        if (typeof db !== "undefined" && db) {
+          db.collection("users").doc(user.uid).set(userUpdates, { merge: true }).catch(() => {});
+        }
+      } catch (e) {}
+
       if (typeof playNotificationSound === "function") playNotificationSound();
 
-      showToast("Order placed successfully! We will contact you shortly.", "success");
+      showToast("🎉 Order placed successfully! We have received your order and will contact you shortly.", "success");
       closeOrderModal();
+
+      // Clear notes after successful placement
+      if (notesInput) notesInput.value = "";
     } catch (err) {
+      console.error("Order error:", err);
       showToast("Failed to place order: " + err.message, "error");
     } finally {
       btn.disabled = false;
@@ -503,7 +556,7 @@ function setupOrderModalListeners() {
   });
 }
 
-function openOrderModal() {
+async function openOrderModal() {
   const user = firebase.auth().currentUser;
   if (!user) {
     sessionStorage.setItem("pendingOrder", JSON.stringify({ packageId: currentPackageKey }));
@@ -514,6 +567,34 @@ function openOrderModal() {
 
   const orderModal = document.getElementById("packageOrderModal");
   const detailsEl  = document.getElementById("orderModalPkgDetails");
+  const nameInput  = document.getElementById("orderNameInput");
+  const emailInput = document.getElementById("orderEmailInput");
+  const phoneInput = document.getElementById("orderPhoneInput");
+
+  // Pre-fill user data
+  if (emailInput && !emailInput.value && user.email) {
+    emailInput.value = user.email;
+  }
+  if (nameInput && !nameInput.value && user.displayName) {
+    nameInput.value = user.displayName;
+  }
+
+  // Fetch additional profile data (like saved phone) from RTDB
+  try {
+    const snap = await rtdb.ref("users/" + user.uid).once("value");
+    if (snap.exists()) {
+      const uData = snap.val();
+      if (nameInput && !nameInput.value && (uData.name || uData.displayName)) {
+        nameInput.value = uData.name || uData.displayName;
+      }
+      if (emailInput && !emailInput.value && uData.email) {
+        emailInput.value = uData.email;
+      }
+      if (phoneInput && !phoneInput.value && (uData.phone || uData.customerPhone || uData.phoneNumber)) {
+        phoneInput.value = uData.phone || uData.customerPhone || uData.phoneNumber;
+      }
+    }
+  } catch (e) {}
 
   if (detailsEl && currentPackage) {
     const featuresSummary = (currentPackage.features || '').split('\n').filter(f => f.trim()).map(f => `• ${f.trim()}`).join('\n');

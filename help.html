@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Help & Support — HM Creative</title>
+  <meta name="description" content="Get help, report an issue, or ask a question. HM Creative support page." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Firebase CDN -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+
+  <style>
+    /* ── Help Page Specific Styles ── */
+    .help-hero {
+      padding: 8rem 0 3rem;
+      text-align: center;
+      background: radial-gradient(circle at 50% 0%, rgba(245, 166, 35, 0.12) 0%, transparent 65%);
+    }
+
+    .help-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(245, 166, 35, 0.12);
+      border: 1px solid rgba(245, 166, 35, 0.3);
+      padding: 0.4rem 1rem;
+      border-radius: 99px;
+      font-size: 0.82rem;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+    }
+
+    .help-form-section {
+      padding: 2rem 0 5rem;
+    }
+
+    .help-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 2.5rem;
+      max-width: 720px;
+      margin: 0 auto 3rem;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
+      transition: border-color 0.3s ease;
+    }
+
+    .help-field {
+      margin-bottom: 1.4rem;
+    }
+
+    .help-field label {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 0.55rem;
+      letter-spacing: 0.02em;
+    }
+
+    .help-field label i {
+      color: var(--gold);
+    }
+
+    .help-field input,
+    .help-field textarea,
+    .help-field select {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.9rem 1.1rem;
+      color: var(--text);
+      font-size: 0.95rem;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+      outline: none;
+      resize: none;
+      font-family: inherit;
+    }
+
+    .help-field input:focus,
+    .help-field textarea:focus,
+    .help-field select:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.15);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .help-field select option {
+      background: #1a1a1a;
+      color: var(--text);
+    }
+
+    /* Auth gate */
+    .help-auth-gate {
+      text-align: center;
+      padding: 3.5rem 2rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      max-width: 520px;
+      margin: 0 auto;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .help-auth-gate i {
+      font-size: 3.2rem;
+      color: var(--gold);
+      margin-bottom: 1.25rem;
+      display: block;
+    }
+
+    /* Success banner after submission */
+    .help-success-banner {
+      background: rgba(76, 175, 80, 0.08);
+      border: 1px solid rgba(76, 175, 80, 0.3);
+      border-radius: 16px;
+      padding: 1.75rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .help-success-banner i {
+      font-size: 2.5rem;
+      color: #4caf50;
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+
+    /* ── Support Tickets Section ── */
+    .support-history-section {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .section-header-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-header-wrap h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0;
+    }
+
+    .section-header-wrap h3 i {
+      color: var(--gold);
+    }
+
+    /* Filter Tabs */
+    .ticket-filter-tabs {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .ticket-filter-btn {
+      padding: 0.35rem 0.85rem;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .ticket-filter-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .ticket-filter-btn.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #000;
+      font-weight: 700;
+    }
+
+    /* Ticket Card */
+    .ticket-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    }
+
+    .ticket-card:hover {
+      border-color: rgba(245, 166, 35, 0.4);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .ticket-card.has-reply {
+      border-color: rgba(245, 166, 35, 0.3);
+    }
+
+    .ticket-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .ticket-title-area {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .ticket-subject {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+      line-height: 1.4;
+    }
+
+    .ticket-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+
+    .ticket-category-tag {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      padding: 0.15rem 0.6rem;
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.85rem;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+
+    .status-badge.open {
+      background: rgba(33, 150, 243, 0.12);
+      border: 1px solid rgba(33, 150, 243, 0.35);
+      color: #2196f3;
+    }
+
+    .status-badge.replied {
+      background: rgba(76, 175, 80, 0.14);
+      border: 1px solid rgba(76, 175, 80, 0.4);
+      color: #4caf50;
+    }
+
+    .ticket-user-message-box {
+      background: rgba(255, 255, 255, 0.02);
+      border-left: 3px solid var(--border);
+      padding: 0.85rem 1.1rem;
+      border-radius: 0 10px 10px 0;
+      margin: 1rem 0;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* ── Prominent Admin Reply Box ── */
+    .admin-reply-container {
+      background: linear-gradient(145deg, rgba(245, 166, 35, 0.08) 0%, rgba(245, 166, 35, 0.02) 100%);
+      border: 1px solid rgba(245, 166, 35, 0.35);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      margin-top: 1.25rem;
+      box-shadow: 0 4px 20px rgba(245, 166, 35, 0.06);
+      position: relative;
+    }
+
+    .admin-reply-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .admin-responder-info {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .admin-avatar-small {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      object-fit: cover;
+    }
+
+    .admin-responder-title {
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .admin-verified-badge {
+      font-size: 0.72rem;
+      color: #4caf50;
+    }
+
+    .admin-reply-timestamp {
+      font-size: 0.76rem;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .admin-reply-content {
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-break: break-word;
+      padding-left: 0.25rem;
+    }
+
+    /* Pending Notice Box */
+    .admin-pending-notice {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(33, 150, 243, 0.05);
+      border: 1px dashed rgba(33, 150, 243, 0.3);
+      border-radius: 10px;
+      padding: 0.85rem 1.1rem;
+      margin-top: 1rem;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .admin-pending-notice i {
+      color: #2196f3;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    /* Empty state */
+    .empty-tickets-card {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      color: var(--text-dim);
+    }
+
+    .empty-tickets-card i {
+      font-size: 2.8rem;
+      color: var(--border);
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .empty-tickets-card p {
+      font-size: 0.92rem;
+      max-width: 420px;
+      margin: 0 auto;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="HM Creatve logo.png" alt="HM Creative Logo" class="site-logo-img" />
+        <span>HM <span>Creative</span></span>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html#home">Home</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#offers">Offers</a></li>
+        <li><a href="index.html#portfolio">Portfolio</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="help.html" class="active"><i class="fas fa-circle-question"></i> Help</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <div id="navAuthArea"></div>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── MOBILE NAV OVERLAY ── -->
+  <div class="nav-overlay" id="navOverlay"></div>
+
+  <!-- ── HERO ── -->
+  <section class="help-hero">
+    <div class="container">
+      <div class="help-hero-badge">
+        <i class="fas fa-headset"></i> Help &amp; Support Desk
+      </div>
+      <h1 class="section-title">
+        How Can We <span>Help You?</span>
+      </h1>
+      <div class="gold-line" style="margin: 0.75rem auto 1.25rem;"></div>
+      <p style="color: var(--text-dim); max-width: 580px; margin: 0 auto; font-size: 1rem; line-height: 1.7;">
+        Submit your question, project requirement, or inquiry below. Our team answers each request directly and you can track responses right here in real time.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── HELP CONTENT ── -->
+  <section class="help-form-section">
+    <div class="container">
+
+      <!-- Not logged in gate -->
+      <div class="help-auth-gate" id="helpAuthGate" style="display:none;">
+        <i class="fas fa-lock"></i>
+        <h3 style="font-size: 1.35rem; font-weight: 700; margin-bottom: 0.6rem; color:var(--text);">Sign In Required</h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
+          Please sign in to submit a help request and view your personal support history and admin replies.
+        </p>
+        <div style="display:flex; gap:0.85rem; justify-content:center; flex-wrap:wrap;">
+          <a href="login.html" class="btn btn-gold">
+            <i class="fas fa-sign-in-alt"></i> Sign In
+          </a>
+          <a href="register.html" class="btn btn-outline">
+            <i class="fas fa-user-plus"></i> Create Account
+          </a>
+        </div>
+      </div>
+
+      <!-- Loading state -->
+      <div id="helpLoadingState" style="text-align:center; padding:4rem 0;">
+        <i class="fas fa-spinner fa-spin" style="font-size:2.2rem; color:var(--gold);"></i>
+        <p style="margin-top:1rem; color:var(--text-dim); font-size:0.9rem;">Connecting to Help Desk…</p>
+      </div>
+
+      <!-- Logged-in content -->
+      <div id="helpLoggedInContent" style="display:none;">
+
+        <!-- New request form card -->
+        <div class="help-card" id="helpFormCard">
+          <div style="display:flex; align-items:center; gap:0.85rem; margin-bottom:1.75rem;">
+            <div style="width:48px; height:48px; background:rgba(245,166,35,0.12); border-radius:12px; display:flex; align-items:center; justify-content:center; color:var(--gold); font-size:1.35rem; flex-shrink:0;">
+              <i class="fas fa-paper-plane"></i>
+            </div>
+            <div>
+              <h2 style="font-size:1.25rem; font-weight:700; margin-bottom:0.15rem; color:var(--text);">Send a Help Request</h2>
+              <p style="font-size:0.84rem; color:var(--text-dim);">Fill in the details below — we'll reply directly to your account.</p>
+            </div>
+          </div>
+
+          <!-- Success Banner (shown after successful submission) -->
+          <div id="helpSuccessBanner" class="help-success-banner" style="display:none;">
+            <i class="fas fa-circle-check"></i>
+            <h3 style="font-size:1.18rem; font-weight:700; color:var(--text); margin-bottom:0.35rem;">Request Sent Successfully!</h3>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1.25rem;">
+              Your request has been received. Our team will review and reply to it shortly. Check the response in your tickets list below.
+            </p>
+            <button type="button" class="btn btn-outline" id="submitAnotherBtn" style="font-size:0.85rem; padding:0.5rem 1.25rem;">
+              <i class="fas fa-plus"></i> Submit Another Request
+            </button>
+          </div>
+
+          <form id="helpRequestForm" novalidate>
+            <div class="help-field">
+              <label for="helpCategory"><i class="fas fa-tag"></i> Category</label>
+              <select id="helpCategory" required>
+                <option value="" disabled selected>Select a category…</option>
+                <option value="General Question">General Question</option>
+                <option value="Order / Package Issue">Order / Package Issue</option>
+                <option value="Payment Issue">Payment Issue</option>
+                <option value="Project Complaint">Project Complaint</option>
+                <option value="Technical Problem">Technical Problem</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="help-field">
+              <label for="helpSubject"><i class="fas fa-heading"></i> Subject</label>
+              <input type="text" id="helpSubject" placeholder="Brief summary of your issue" maxlength="120" required />
+            </div>
+
+            <div class="help-field">
+              <label for="helpMessage"><i class="fas fa-comment-dots"></i> Message</label>
+              <textarea id="helpMessage" rows="5" placeholder="Describe your question or issue in detail…" maxlength="2000" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-gold" id="helpSubmitBtn" style="width:100%; margin-top:0.5rem;">
+              <i class="fas fa-paper-plane"></i> Send Help Request
+            </button>
+          </form>
+        </div>
+
+        <!-- ── USER'S PREVIOUS TICKETS & ADMIN RESPONSES ── -->
+        <div class="support-history-section" id="my-requests">
+          <div class="section-header-wrap">
+            <h3>
+              <i class="fas fa-clock-rotate-left"></i> Your Help Requests &amp; Replies
+            </h3>
+            <div class="ticket-filter-tabs">
+              <button type="button" class="ticket-filter-btn active" data-filter="all" id="filterBtnAll">All (<span id="countAll">0</span>)</button>
+              <button type="button" class="ticket-filter-btn" data-filter="replied" id="filterBtnReplied">Replied (<span id="countReplied">0</span>)</button>
+              <button type="button" class="ticket-filter-btn" data-filter="open" id="filterBtnOpen">Pending (<span id="countOpen">0</span>)</button>
+            </div>
+          </div>
+
+          <div id="ticketsListContainer">
+            <!-- Dynamic tickets list injected here -->
+            <div style="text-align:center; padding:2.5rem 0; color:var(--text-dim);">
+              <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; color:var(--gold);"></i>
+              <p style="margin-top:0.5rem; font-size:0.88rem;">Loading your support history…</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">
+          <a href="index.html" style="display:inline-flex;align-items:center;gap:0.6rem;text-decoration:none;color:inherit;">
+            <img src="HM Creatve logo.png" alt="HM Creative Logo" class="site-logo-img" style="height:34px;" />
+            <span>HM <span>Creative</span></span>
+          </a>
+        </div>
+        <p class="footer-copy">
+          © <span id="footerYear"></span> HM Creative. All rights reserved.
+          Crafted with ♥ by Hamza Mughal.
+        </p>
+        <div class="footer-links">
+          <a href="index.html#about">About</a>
+          <a href="index.html#offers">Offers</a>
+          <a href="index.html#portfolio">Work</a>
+          <a href="index.html#contact">Contact</a>
+          <a href="terms.html">Terms &amp; Conditions</a>
+          <a href="help.html" style="color:var(--gold);font-weight:600;">Help</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- Scripts -->
+  <script src="js/auth.js"></script>
+  <script src="js/navbar.js"></script>
+  <script>
+    document.getElementById("footerYear").textContent = new Date().getFullYear();
+
+    /* ── State ── */
+    let currentUser = null;
+    let userTickets = [];
+    let activeFilter = "all";
+
+    /* ── Toast Helper ── */
+    function showToast(msg, type = "success") {
+      const t = document.getElementById("toast");
+      if (!t) return;
+      t.textContent = msg;
+      t.className = `toast ${type} show`;
+      setTimeout(() => t.classList.remove("show"), 3500);
+    }
+
+    /* ── Escape HTML ── */
+    function esc(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    /* ── Format Timestamp ── */
+    function fmtDate(ts) {
+      if (!ts) return "—";
+      let d;
+      if (typeof ts === "number") {
+        d = new Date(ts);
+      } else if (ts.toDate) {
+        d = ts.toDate();
+      } else {
+        d = new Date(ts);
+      }
+      if (isNaN(d.getTime())) return "—";
+      return d.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    /* ── Auth State Listener ── */
+    firebase.auth().onAuthStateChanged(async (user) => {
+      document.getElementById("helpLoadingState").style.display = "none";
+      currentUser = user;
+
+      if (!user) {
+        document.getElementById("helpAuthGate").style.display = "block";
+        document.getElementById("helpLoggedInContent").style.display = "none";
+        return;
+      }
+
+      document.getElementById("helpAuthGate").style.display = "none";
+      document.getElementById("helpLoggedInContent").style.display = "block";
+
+      // If URL has #my-requests, smooth scroll
+      if (window.location.hash === "#my-requests") {
+        setTimeout(() => {
+          document.getElementById("my-requests")?.scrollIntoView({ behavior: "smooth" });
+        }, 400);
+      }
+
+      initTicketsSync(user);
+    });
+
+    /* ── Real-Time Sync for User Tickets (RTDB + Firestore Backup) ── */
+    function initTicketsSync(user) {
+      let rtdbLoaded = false;
+
+      // 1. Primary: Realtime Database Listener
+      if (typeof rtdb !== "undefined" && rtdb) {
+        rtdb.ref("helpRequests").on("value", (snap) => {
+          rtdbLoaded = true;
+          const data = snap.val();
+          const list = [];
+          if (data) {
+            Object.keys(data).forEach((key) => {
+              const item = data[key];
+              if (item && (item.uid === user.uid || item.userId === user.uid)) {
+                list.push({ id: key, ...item });
+              }
+            });
+          }
+          // Sort descending by createdAt
+          list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+          userTickets = list;
+          renderTickets();
+        }, (err) => {
+          console.warn("RTDB load error on user help tickets:", err);
+          if (!rtdbLoaded) loadFromFirestore(user);
+        });
+      } else {
+        loadFromFirestore(user);
+      }
+    }
+
+    /* ── Firestore Fallback Loader ── */
+    function loadFromFirestore(user) {
+      if (typeof db === "undefined" || !db) return;
+      db.collection("helpRequests")
+        .where("uid", "==", user.uid)
+        .onSnapshot((snap) => {
+          const list = [];
+          snap.forEach((doc) => {
+            const data = doc.data();
+            let createdTs = Date.now();
+            if (data.createdAt && data.createdAt.toMillis) {
+              createdTs = data.createdAt.toMillis();
+            } else if (typeof data.createdAt === "number") {
+              createdTs = data.createdAt;
+            }
+            list.push({ id: doc.id, ...data, createdAt: createdTs });
+          });
+          list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+          userTickets = list;
+          renderTickets();
+        }, (err) => {
+          console.error("Firestore fallback error:", err);
+          renderTickets();
+        });
+    }
+
+    /* ── Render Tickets List ── */
+    function renderTickets() {
+      const container = document.getElementById("ticketsListContainer");
+      if (!container) return;
+
+      const totalCount   = userTickets.length;
+      const repliedCount = userTickets.filter(t => t.status === "replied" || !!t.adminReply).length;
+      const openCount    = userTickets.filter(t => t.status !== "replied" && !t.adminReply).length;
+
+      document.getElementById("countAll").textContent     = totalCount;
+      document.getElementById("countReplied").textContent = repliedCount;
+      document.getElementById("countOpen").textContent    = openCount;
+
+      const filtered = userTickets.filter((t) => {
+        const isReplied = t.status === "replied" || !!t.adminReply;
+        if (activeFilter === "replied") return isReplied;
+        if (activeFilter === "open")    return !isReplied;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        if (totalCount === 0) {
+          container.innerHTML = `
+            <div class="empty-tickets-card">
+              <i class="fas fa-inbox"></i>
+              <h4 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:0.4rem;">No Help Requests Yet</h4>
+              <p>You haven't submitted any questions or requests yet. Fill in the form above to reach our support team directly.</p>
+            </div>`;
+        } else {
+          container.innerHTML = `
+            <div class="empty-tickets-card">
+              <i class="fas fa-filter"></i>
+              <h4 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:0.4rem;">No ${activeFilter === "replied" ? "Replied" : "Pending"} Tickets</h4>
+              <p>No tickets matching the selected filter.</p>
+            </div>`;
+        }
+        return;
+      }
+
+      container.innerHTML = filtered.map((t) => {
+        const isReplied = t.status === "replied" || !!t.adminReply;
+        const statusBadgeHtml = isReplied
+          ? `<span class="status-badge replied"><i class="fas fa-circle-check"></i> Replied by Admin</span>`
+          : `<span class="status-badge open"><i class="fas fa-clock"></i> Pending Review</span>`;
+
+        let replyBoxHtml = "";
+        if (t.adminReply) {
+          replyBoxHtml = `
+            <div class="admin-reply-container">
+              <div class="admin-reply-top">
+                <div class="admin-responder-info">
+                  <img src="https://ui-avatars.com/api/?name=Hamza+Mughal&background=f5a623&color=000&bold=true&size=64" alt="Admin" class="admin-avatar-small" />
+                  <div>
+                    <div class="admin-responder-title">
+                      Hamza Mughal (Admin Support)
+                      <i class="fas fa-circle-check admin-verified-badge" title="Verified Admin"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="admin-reply-timestamp">
+                  <i class="fas fa-calendar-check"></i> ${fmtDate(t.repliedAt)}
+                </div>
+              </div>
+              <div class="admin-reply-content">${esc(t.adminReply)}</div>
+            </div>`;
+        } else {
+          replyBoxHtml = `
+            <div class="admin-pending-notice">
+              <i class="fas fa-hourglass-half"></i>
+              <span><strong>Status: Pending Response</strong> — Our team is reviewing your request and will reply here shortly.</span>
+            </div>`;
+        }
+
+        return `
+          <div class="ticket-card ${isReplied ? 'has-reply' : ''}" id="ticket-${t.id}">
+            <div class="ticket-card-header">
+              <div class="ticket-title-area">
+                <div class="ticket-subject">${esc(t.subject || "(No Subject)")}</div>
+                <div class="ticket-meta">
+                  <span class="ticket-category-tag"><i class="fas fa-tag" style="color:var(--gold);margin-right:0.3rem;"></i>${esc(t.category || "General")}</span>
+                  <span><i class="fas fa-clock" style="margin-right:0.3rem;"></i>${fmtDate(t.createdAt)}</span>
+                </div>
+              </div>
+              <div>${statusBadgeHtml}</div>
+            </div>
+
+            <div class="ticket-user-message-box">
+              <div style="font-size:0.75rem; font-weight:700; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.35rem;">
+                <i class="fas fa-user" style="margin-right:0.3rem;"></i>Your Message:
+              </div>
+              ${esc(t.message)}
+            </div>
+
+            ${replyBoxHtml}
+          </div>
+        `;
+      }).join("");
+    }
+
+    /* ── Filter Buttons Click Handler ── */
+    document.querySelectorAll(".ticket-filter-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".ticket-filter-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeFilter = btn.dataset.filter;
+        renderTickets();
+      });
+    });
+
+    /* ── Submit Another Request Button ── */
+    document.getElementById("submitAnotherBtn")?.addEventListener("click", () => {
+      document.getElementById("helpSuccessBanner").style.display = "none";
+      const form = document.getElementById("helpRequestForm");
+      form.style.display = "block";
+      form.reset();
+      document.getElementById("helpSubject").focus();
+    });
+
+    /* ── Submit Help Request ── */
+    document.getElementById("helpRequestForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const user = firebase.auth().currentUser;
+      if (!user) {
+        showToast("Please sign in to submit a request.", "error");
+        return;
+      }
+
+      /* Rate-limit check: one submission per 45s */
+      const lastSubmit = localStorage.getItem("lastHelpSubmit");
+      const now = Date.now();
+      if (lastSubmit && (now - parseInt(lastSubmit, 10)) < 45000) {
+        const wait = Math.ceil((45000 - (now - parseInt(lastSubmit, 10))) / 1000);
+        showToast(`Please wait ${wait}s before sending another request.`, "error");
+        return;
+      }
+
+      const category = document.getElementById("helpCategory").value.trim();
+      const subject  = document.getElementById("helpSubject").value.trim();
+      const message  = document.getElementById("helpMessage").value.trim();
+
+      if (!category || !subject || !message) {
+        showToast("Please fill in all required fields.", "error");
+        return;
+      }
+
+      const btn = document.getElementById("helpSubmitBtn");
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting…';
+
+      const helpData = {
+        uid:         user.uid,
+        userId:      user.uid,
+        displayName: user.displayName || user.email || "User",
+        email:       user.email || "",
+        category,
+        subject,
+        message,
+        status:      "open",
+        adminReply:  "",
+        createdAt:   Date.now(),
+        repliedAt:   null,
+      };
+
+      try {
+        // 1. Primary storage: Firebase Realtime Database
+        if (typeof rtdb !== "undefined" && rtdb) {
+          await rtdb.ref("helpRequests").push(helpData);
+        }
+
+        // 2. Secondary backup: Firestore
+        if (typeof db !== "undefined" && db) {
+          db.collection("helpRequests").add({
+            ...helpData,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          }).catch(err => console.warn("Firestore backup skipped:", err));
+        }
+
+        localStorage.setItem("lastHelpSubmit", now.toString());
+
+        // Switch to success banner
+        document.getElementById("helpRequestForm").style.display = "none";
+        document.getElementById("helpSuccessBanner").style.display = "block";
+        showToast("Help request submitted successfully! ✅", "success");
+
+        // Smooth scroll to tickets list
+        setTimeout(() => {
+          document.getElementById("my-requests")?.scrollIntoView({ behavior: "smooth" });
+        }, 500);
+
+      } catch (err) {
+        console.error("Help request submission error:", err);
+        showToast("Failed to submit request. Please try again.", "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Help Request';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -32,12 +32,12 @@ let userDisplayName = "User";
 async function initChat() {
   userDisplayName = currentUser.displayName || "User";
   try {
-    const userSnap = await db.collection("users").doc(currentUser.uid).get();
-    if (userSnap.exists && userSnap.data().name) {
-      userDisplayName = userSnap.data().name;
+    const userSnap = await rtdb.ref("users/" + currentUser.uid).once("value");
+    if (userSnap.exists() && (userSnap.val().name || userSnap.val().displayName)) {
+      userDisplayName = userSnap.val().name || userSnap.val().displayName;
     }
   } catch (e) {
-    console.warn("Could not fetch user name from Firestore:", e);
+    console.warn("Could not fetch user name from RTDB:", e);
   }
 
   if (userNameEl) userNameEl.textContent = userDisplayName;

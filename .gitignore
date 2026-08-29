@@ -1,13 +1,39 @@
+# Firebase Security Rules
 database.rules.json
 firestore.rules
-image.png
-admin/
+
+# Environment & Private Configuration Files
 .env
 .env.*
 !.env.example
+js/config.js
+!js/config.example.js
+
+# Firebase Private Service Accounts & Logs
 firebase-adminsdk-*.json
 serviceAccountKey.json
+*.serviceaccount.json
+*.pem
+*.key
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
+
+# Admin / Sensitive Assets
+admin/
+image.png
+
+# Dependencies & Deployment Artifacts
 node_modules/
-.vercel
-# Configuration
-js/config.example.js
+.vercel/
+.cache/
+dist/
+build/
+
+# System & Editor Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log

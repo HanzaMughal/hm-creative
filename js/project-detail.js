@@ -185,24 +185,6 @@ function listenToComments(itemId) {
 function initAuthObserver() {
   auth.onAuthStateChanged((user) => {
     const wrap = document.getElementById("pCommentFormWrap");
-    const navAuthArea = document.getElementById("navAuthArea");
-
-    if (navAuthArea) {
-      if (user) {
-        const displayName = user.displayName || user.email.split("@")[0];
-        const photoSrc = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=f5a623&color=000&bold=true`;
-        navAuthArea.innerHTML = `
-          <div class="nav-user">
-            <img src="${photoSrc}" alt="${escapeHtml(displayName)}" />
-            <span>${escapeHtml(displayName.split(" ")[0])}</span>
-          </div>`;
-      } else {
-        navAuthArea.innerHTML = `
-          <a href="login.html" class="btn btn-ghost" style="padding:0.45rem 1.1rem;font-size:0.82rem;">
-            <i class="fas fa-sign-in-alt"></i> Login
-          </a>`;
-      }
-    }
 
     if (!wrap) return;
 

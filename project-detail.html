@@ -84,6 +84,7 @@
         <li><a href="index.html#about">About</a></li>
         <li><a href="index.html#portfolio" class="active">Portfolio</a></li>
         <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="help.html"><i class="fas fa-circle-question"></i> Help</a></li>
       </ul>
 
       <div class="nav-actions">
@@ -94,6 +95,9 @@
       </div>
     </div>
   </nav>
+
+  <!-- ── MOBILE NAV OVERLAY ── -->
+  <div class="nav-overlay" id="navOverlay"></div>
 
   <!-- ── MAIN CONTENT ── -->
   <main class="detail-main" id="detailMain">
@@ -190,15 +194,9 @@
 
   <script src="js/auth.js"></script>
   <script src="js/project-detail.js"></script>
+  <script src="js/navbar.js"></script>
   <script>
     document.getElementById("footerYear").textContent = new Date().getFullYear();
-    /* Mobile nav toggle */
-    const navToggle = document.getElementById("navToggle");
-    const navLinks = document.getElementById("navLinks");
-    navToggle?.addEventListener("click", () => {
-      navToggle.classList.toggle("open");
-      navLinks.classList.toggle("open");
-    });
   </script>
 </body>
 </html>

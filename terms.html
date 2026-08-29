@@ -40,6 +40,7 @@
         <li><a href="index.html#offers">Offers</a></li>
         <li><a href="index.html#portfolio">Portfolio</a></li>
         <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="help.html"><i class="fas fa-circle-question"></i> Help</a></li>
       </ul>
 
       <div class="nav-actions">
@@ -50,6 +51,9 @@
       </div>
     </div>
   </nav>
+
+  <!-- ── MOBILE NAV OVERLAY ── -->
+  <div class="nav-overlay" id="navOverlay"></div>
 
   <!-- ── HERO SECTION ── -->
   <section class="terms-hero" style="padding: 9rem 0 3rem; background: radial-gradient(circle at 50% 20%, rgba(245, 166, 35, 0.08) 0%, transparent 70%); text-align: center;">
@@ -336,6 +340,7 @@
 
   <!-- Scripts -->
   <script src="js/auth.js"></script>
+  <script src="js/navbar.js"></script>
   <script>
     if (document.getElementById("footerYear")) {
       document.getElementById("footerYear").textContent = new Date().getFullYear();

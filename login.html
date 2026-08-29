@@ -125,7 +125,7 @@
 /* ── Password visibility toggle ── */
 document.getElementById("pwToggle").addEventListener("click", () => {
   const input = document.getElementById("loginPassword");
-  const icon  = document.getElementById("pwToggleIcon");
+  const icon  = document.getElementById("pwIcon");
   const shown = input.type === "text";
   input.type  = shown ? "password" : "text";
   icon.className = shown ? "fas fa-eye" : "fas fa-eye-slash";
@@ -136,10 +136,20 @@ document.getElementById("skipBtn").addEventListener("click", () => {
   window.location.href = "index.html";
 });
 
-/* ── Redirect to intended page after login (if set) ── */
-// auth.js handles the redirect — after signIn it goes to index.html
-// Override: if sessionStorage has a pending redirect, pick it up
-const redirect = sessionStorage.getItem("redirectAfterLogin");
+/* ── Handle error query params (e.g. from navbar suspension kickout) ── */
+const urlParams = new URLSearchParams(window.location.search);
+const errParam = urlParams.get("error");
+if (errParam === "suspended") {
+  setTimeout(() => {
+    showToast("⛔ Your account has been suspended by an administrator. Please contact support.", "error");
+  }, 300);
+} else if (errParam === "account_not_found") {
+  setTimeout(() => {
+    showToast("❌ Account profile not found or access revoked. Please create a new account.", "error");
+  }, 300);
+}
+
+/* ── Update subtitle if coming from a pending like / order ── */
 const pendingLike = sessionStorage.getItem("pendingLike");
 const pendingOrder = sessionStorage.getItem("pendingOrder");
 
@@ -149,16 +159,6 @@ if (pendingLike) {
 } else if (pendingOrder) {
   const subtitle = document.getElementById("loginSubtitle");
   if (subtitle) subtitle.innerHTML = 'Sign in to <strong style="color:var(--gold);">📦 complete your package order</strong>!';
-}
-
-if (redirect) {
-  // Override auth.js redirect
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      sessionStorage.removeItem("redirectAfterLogin");
-      window.location.href = redirect;
-    }
-  });
 }
 </script>
 </body>

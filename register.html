@@ -194,17 +194,6 @@ if (pendingLike) {
   if (subtitle) subtitle.innerHTML = 'Create a free account to <strong style="color:var(--gold);">📦 complete your package order</strong>!';
 }
 
-/* ── Redirect to intended page after register (if set) ── */
-const redirect = sessionStorage.getItem("redirectAfterLogin");
-if (redirect) {
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      sessionStorage.removeItem("redirectAfterLogin");
-      window.location.href = redirect;
-    }
-  });
-}
-
 /* ── Password strength ── */
 document.getElementById("regPassword").addEventListener("input", (e) => {
   const pw  = e.target.value;
