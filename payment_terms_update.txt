@@ -1,0 +1,9 @@
+## 2. Payment-Gateway Development
+
+We do not generally develop, integrate, configure, maintain, or take responsibility for payment gateways, online card payments, wallet payments, banking integrations, or payment-processing functionality.
+
+However, we may integrate a payment gateway for a **Shopify store** where this service is specifically included in the agreed project scope.
+
+The client is responsible for creating and verifying their Shopify account, payment-provider account, business details, bank account, tax information, and all required verification documents. The client is also responsible for accepting and complying with Shopify's and the selected payment provider's terms, fees, policies, and legal requirements.
+
+We are not responsible for payment-provider approval or rejection, transaction failures, chargebacks, refunds, fraud, account suspension, tax obligations, financial losses, or changes made by Shopify or any payment provider.
