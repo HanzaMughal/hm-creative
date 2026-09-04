@@ -195,13 +195,19 @@
       </button>
     </div>
 
+    <!-- Social Media Attachment Chip -->
+    <div class="chat-social-attachment" id="socialAttachment"></div>
+
+    <!-- Social Media Mention Popup (@) -->
+    <div class="chat-social-popup" id="socialPopup"></div>
+
     <div class="chat-input-wrap">
       <button class="emoji-btn" type="button" title="Emoji (coming soon)" aria-label="Emoji">
         <i class="far fa-face-smile"></i>
       </button>
       <textarea
         id="chatInput"
-        placeholder="Type a message…"
+        placeholder="Type a message… (type @ to share social links)"
         rows="1"
         maxlength="500"
         aria-label="Chat message"
@@ -221,6 +227,7 @@
 
 </div><!-- end .chat-page -->
 
+<script src="js/chat-social-share.js"></script>
 <script src="js/chat.js"></script>
 <script>
 /* ── Auto-resize textarea ── */

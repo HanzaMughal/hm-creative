@@ -134,6 +134,16 @@ function listenMessages() {
   });
 }
 
+/* ── Init Social Quick-Share (@ Mention) ── */
+let chatSocial = null;
+if (window.ChatSocialShare) {
+  chatSocial = new window.ChatSocialShare({
+    inputEl: chatInput,
+    popupEl: document.getElementById("socialPopup"),
+    attachmentEl: document.getElementById("socialAttachment")
+  });
+}
+
 /* ── Build a single message element (does NOT append to DOM) ── */
 function buildMsgEl(msg) {
   const isMine = msg.senderId === currentUser?.uid;
@@ -154,6 +164,11 @@ function buildMsgEl(msg) {
       </div>`;
   }
 
+  let socialCardHTML = "";
+  if (msg.socialShare && window.ChatSocialShare) {
+    socialCardHTML = window.ChatSocialShare.renderCardHTML(msg.socialShare, isMine);
+  }
+
   const replyBtn = `<button class="msg-reply-btn" data-msg-id="${escapeAttr(msg.id)}" title="Reply"><i class="fas fa-reply"></i></button>`;
 
   div.innerHTML = `
@@ -161,7 +176,8 @@ function buildMsgEl(msg) {
       ${!isMine ? replyBtn : ""}
       <div class="msg-bubble">
         ${quoteHTML}
-        <span class="msg-text">${escapeHTML(msg.text || "")}</span>
+        ${msg.text ? `<span class="msg-text">${escapeHTML(msg.text)}</span>` : ""}
+        ${socialCardHTML}
         <span class="msg-meta">
           <span class="msg-time">${time}</span>
           ${isMine ? `<i class="fas fa-check${msg.isRead ? "-double read" : ""} msg-tick"></i>` : ""}
@@ -216,8 +232,10 @@ function scrollToMessage(msgId) {
 
 /* ── Send message ── */
 async function sendMessage() {
-  const text = chatInput?.value?.trim();
-  if (!text || !currentUser) return;
+  const text = chatInput?.value?.trim() || "";
+  const attachedSocial = chatSocial ? chatSocial.getAttachment() : null;
+
+  if ((!text && !attachedSocial) || !currentUser) return;
 
   chatInput.value = "";
   updateCharCount();
@@ -229,6 +247,11 @@ async function sendMessage() {
     timestamp:  firebase.database.ServerValue.TIMESTAMP,
     isRead:     false,
   };
+
+  if (attachedSocial) {
+    msgData.socialShare = { ...attachedSocial };
+    chatSocial.clearAttachment();
+  }
 
   if (replyingToMsg) {
     msgData.replyTo = replyingToMsg;
@@ -246,6 +269,9 @@ async function sendMessage() {
 sendBtn?.addEventListener("click", sendMessage);
 
 chatInput?.addEventListener("keydown", (e) => {
+  if (chatSocial && chatSocial.isOpen) {
+    return; // let ChatSocialShare handle Enter for selection
+  }
   if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 });
 

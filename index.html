@@ -958,22 +958,30 @@
         const links = snap.data();
         container.innerHTML = "";
 
-        Object.entries(links).forEach(([type, value]) => {
-          if (!value) return;
-          const info = iconMap[type.toLowerCase()] || { icon: "fas fa-link", color: "#f5a623" };
+        Object.entries(links).forEach(([type, rawVal]) => {
+          if (!rawVal) return;
+          const isObj = typeof rawVal === "object";
+          const valUrl = isObj ? (rawVal.url || rawVal.link || "") : String(rawVal);
+          if (!valUrl) return;
 
-          const href = type.toLowerCase() === "whatsapp"
-            ? `https://wa.me/${value.replace(/\D/g, "")}`
-            : value;
+          const defaultInfo = iconMap[type.toLowerCase()] || { icon: "fas fa-link", color: "#f5a623" };
+          const iconClass = (isObj && rawVal.icon) ? rawVal.icon : defaultInfo.icon;
+          const brandColor = (isObj && rawVal.color) ? rawVal.color : defaultInfo.color;
+          const title = (isObj && rawVal.name) ? rawVal.name : type;
+
+          const isWhatsApp = type.toLowerCase() === "whatsapp" || (isObj && rawVal.name && rawVal.name.toLowerCase().includes("whatsapp"));
+          const href = isWhatsApp && !valUrl.startsWith("http")
+            ? `https://wa.me/${valUrl.replace(/\D/g, "")}`
+            : (valUrl.startsWith("http") || valUrl.startsWith("tel:") ? valUrl : `https://${valUrl}`);
 
           const a = document.createElement("a");
           a.href   = href;
           a.target = "_blank";
           a.rel    = "noopener noreferrer";
           a.className = "social-icon-btn";
-          a.title  = type;
-          a.innerHTML = `<i class="${info.icon}"></i>`;
-          a.style.setProperty("--hover-color", info.color);
+          a.title  = title;
+          a.innerHTML = `<i class="${iconClass}"></i>`;
+          a.style.setProperty("--hover-color", brandColor);
           container.appendChild(a);
         });
 
