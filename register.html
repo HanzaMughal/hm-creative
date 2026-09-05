@@ -95,6 +95,56 @@
       </div>
 
       <div class="form-group">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
+          <label for="regPhone" style="margin:0;">WhatsApp / Phone Number</label>
+          <span style="font-size:0.72rem;color:#25D366;font-weight:600;"><i class="fab fa-whatsapp"></i> WhatsApp Preferred</span>
+        </div>
+        <div class="phone-input-row">
+          <div class="country-code-wrap">
+            <select id="regCountryCode" class="country-code-select" aria-label="Country Code">
+              <option value="+92" selected>🇵🇰 +92 (Pakistan)</option>
+              <option value="+91">🇮🇳 +91 (India)</option>
+              <option value="+93">🇦🇫 +93 (Afghanistan)</option>
+              <option value="+98">🇮🇷 +98 (Iran)</option>
+              <option value="+971">🇦🇪 +971 (UAE)</option>
+              <option value="+966">🇸🇦 +966 (Saudi Arabia)</option>
+              <option value="+974">🇶🇦 +974 (Qatar)</option>
+              <option value="+965">🇰🇼 +965 (Kuwait)</option>
+              <option value="+968">🇴🇲 +968 (Oman)</option>
+              <option value="+90">🇹🇷 +90 (Turkey)</option>
+              <option value="+86">🇨🇳 +86 (China)</option>
+              <option value="+81">🇯🇵 +81 (Japan)</option>
+              <option value="+44">🇬🇧 +44 (UK)</option>
+              <option value="+1">🇺🇸 +1 (USA)</option>
+              <option value="+1">🇨🇦 +1 (Canada)</option>
+              <option value="+49">🇩🇪 +49 (Germany)</option>
+              <option value="+33">🇫🇷 +33 (France)</option>
+              <option value="+39">🇮🇹 +39 (Italy)</option>
+              <option value="+34">🇪🇸 +34 (Spain)</option>
+              <option value="+61">🇦🇺 +61 (Australia)</option>
+              <option value="+52">🇲🇽 +52 (Mexico)</option>
+              <option value="+55">🇧🇷 +55 (Brazil)</option>
+              <option value="+504">🇭🇳 +504 (Honduras)</option>
+            </select>
+          </div>
+          <div class="input-wrap phone-number-wrap">
+            <i class="fab fa-whatsapp" style="color:#25D366;"></i>
+            <input
+              type="tel"
+              id="regPhone"
+              name="phone"
+              placeholder="e.g. 300 1234567"
+              autocomplete="tel-national"
+              required
+            />
+          </div>
+        </div>
+        <p style="font-size:0.75rem;color:var(--text-dim);margin-top:0.35rem;line-height:1.35;">
+          Select your country code and enter your WhatsApp number (or regular mobile number).
+        </p>
+      </div>
+
+      <div class="form-group">
         <label for="regPassword">Password</label>
         <div class="input-wrap">
           <i class="fas fa-lock"></i>
@@ -150,7 +200,16 @@
       </button>
     </form>
 
+    <!-- Google Sign-Up -->
+    <div class="auth-divider"><span>or sign up with</span></div>
 
+    <button type="button" class="google-btn" id="googleBtn">
+      <img
+        src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+        alt="Google"
+      />
+      Continue with Google
+    </button>
 
     <!-- Footer -->
     <p class="auth-footer-text">

@@ -1436,6 +1436,83 @@ footer {
   padding-left: 2.75rem;
 }
 
+/* ── Country Code & Phone Input Group ── */
+.phone-input-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.country-code-wrap {
+  flex: 0 0 140px;
+  position: relative;
+}
+
+.country-code-select {
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 500;
+  font-family: inherit;
+  padding: 0.75rem 1.7rem 0.75rem 0.7rem;
+  outline: none;
+  cursor: pointer;
+  transition: var(--transition);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.country-code-select:focus {
+  border-color: var(--gold);
+  background: rgba(245, 166, 35, 0.05);
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.1);
+}
+
+.country-code-select option {
+  background: #181818;
+  color: #f0f0f0;
+  padding: 8px 10px;
+  font-size: 0.88rem;
+}
+
+.country-code-wrap::after {
+  content: "\f078";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  position: absolute;
+  right: 0.7rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.country-code-wrap:focus-within::after {
+  color: var(--gold);
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.phone-number-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 380px) {
+  .country-code-wrap {
+    flex: 0 0 120px;
+  }
+}
+
 .password-toggle {
   position: absolute;
   right: 1rem;
@@ -1527,6 +1604,85 @@ footer {
   border-radius: var(--radius);
   padding: 0.9rem;
   font-size: 0.95rem;
+}
+
+/* ── Auth Phone Prompt Modal ── */
+.auth-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.auth-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.auth-modal-card {
+  width: 100%;
+  max-width: 440px;
+  background: rgba(18, 18, 18, 0.95);
+  border: 1px solid rgba(245, 166, 35, 0.35);
+  border-radius: 22px;
+  padding: 2.25rem 2rem;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.75), 0 0 45px rgba(245, 166, 35, 0.12);
+  transform: translateY(20px) scale(0.96);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+}
+
+.auth-modal-overlay.active .auth-modal-card {
+  transform: translateY(0) scale(1);
+}
+
+.auth-modal-icon-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(37, 211, 102, 0.12);
+  border: 1px solid rgba(37, 211, 102, 0.3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.auth-modal-icon-wrap i {
+  font-size: 2rem;
+  color: #25D366;
+}
+
+.auth-modal-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.auth-modal-subtitle {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.auth-modal-card .form-group {
+  text-align: left;
+  margin-bottom: 1.25rem;
+}
+
+.auth-modal-card .skip-btn {
+  margin-top: 0.75rem;
 }
 
 /* ============================================================

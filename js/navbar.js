@@ -104,6 +104,7 @@
       // Fetch user profile from Firestore (Single Source of Truth)
       let displayName = user.displayName || "";
       let userRole = "Client";
+      let userPhone = "";
       let joinedDateStr = "";
       let isSuspended = false;
       let profileDocFound = false;
@@ -119,6 +120,7 @@
               isSuspended = true;
             }
             if (data.name || data.displayName) displayName = data.name || data.displayName;
+            if (data.phone || data.phoneNumber) userPhone = data.phone || data.phoneNumber;
             if (data.role === "admin") {
               userRole = "Administrator";
             } else if (data.role) {
@@ -171,11 +173,22 @@
               const data = userSnap.val() || {};
               if (data.name || data.displayName) displayName = data.name || data.displayName;
               if (data.role) userRole = data.role.charAt(0).toUpperCase() + data.role.slice(1);
+              if (data.phone || data.phoneNumber) userPhone = data.phone || data.phoneNumber;
               if (data.createdAt) {
                 const d = new Date(data.createdAt);
                 if (!isNaN(d)) joinedDateStr = d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
               }
             }
+          } catch (e) {}
+        }
+      }
+
+      if (!userPhone) {
+        const rtdbInstance = window.rtdb || (typeof firebase.database === "function" ? firebase.database() : null);
+        if (rtdbInstance) {
+          try {
+            const phoneSnap = await rtdbInstance.ref("users/" + user.uid + "/phone").once("value");
+            if (phoneSnap.exists() && phoneSnap.val()) userPhone = phoneSnap.val();
           } catch (e) {}
         }
       }
@@ -231,6 +244,14 @@
                 <div class="detail-info">
                   <span class="detail-label">Email Address</span>
                   <span class="detail-value">${escapeHtml(email)}</span>
+                </div>
+              </div>
+
+              <div class="profile-detail-row">
+                <div class="detail-icon"><i class="fab fa-whatsapp" style="color:#25D366;"></i></div>
+                <div class="detail-info">
+                  <span class="detail-label">WhatsApp / Phone</span>
+                  <span class="detail-value">${escapeHtml(userPhone || "Not provided")}</span>
                 </div>
               </div>
 
