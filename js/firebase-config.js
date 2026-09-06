@@ -23,26 +23,55 @@ const rtdb = firebase.database();
 
 
 
-// Premium Web Audio synthesized notification sound
+// Premium WhatsApp-style Web Audio synthesized notification sound
 function playNotificationSound() {
   try {
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
-    osc.frequency.setValueAtTime(880.00, audioCtx.currentTime + 0.1); // A5
-    
-    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
-    
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.35);
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    const audioCtx = new AudioContextClass();
+    const now = audioCtx.currentTime;
+
+    // Tone 1 (Pop 1: 880Hz, A5)
+    const osc1 = audioCtx.createOscillator();
+    const gain1 = audioCtx.createGain();
+    osc1.type = "sine";
+    osc1.frequency.setValueAtTime(880, now);
+    gain1.gain.setValueAtTime(0.35, now);
+    gain1.gain.exponentialRampToValueAtTime(0.005, now + 0.07);
+    osc1.connect(gain1);
+    gain1.connect(audioCtx.destination);
+    osc1.start(now);
+    osc1.stop(now + 0.07);
+
+    // Tone 2 (Pop 2: 1318.5Hz, E6)
+    const osc2 = audioCtx.createOscillator();
+    const gain2 = audioCtx.createGain();
+    osc2.type = "sine";
+    osc2.frequency.setValueAtTime(1318.5, now + 0.065);
+    gain2.gain.setValueAtTime(0.45, now + 0.065);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+    osc2.connect(gain2);
+    gain2.connect(audioCtx.destination);
+    osc2.start(now + 0.065);
+    osc2.stop(now + 0.35);
+
+    // Subtle 2nd harmonic
+    const oscH = audioCtx.createOscillator();
+    const gainH = audioCtx.createGain();
+    oscH.type = "sine";
+    oscH.frequency.setValueAtTime(2637, now + 0.065);
+    gainH.gain.setValueAtTime(0.12, now + 0.065);
+    gainH.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+    oscH.connect(gainH);
+    gainH.connect(audioCtx.destination);
+    oscH.start(now + 0.065);
+    oscH.stop(now + 0.22);
   } catch (e) {
-    console.warn("Audio notification failed:", e);
+    try {
+      const audio = new Audio("audio/whatsapp-notification.wav");
+      audio.volume = 0.8;
+      audio.play().catch(() => {});
+    } catch (err) {}
   }
 }
+
