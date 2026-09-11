@@ -21,7 +21,7 @@ firestore-debug.log*
 ui-debug.log*
 
 # Admin / Sensitive Assets
-admin/
+# admin/ (Allowed for Vercel deployment)
 image.png
 
 # Dependencies & Deployment Artifacts
