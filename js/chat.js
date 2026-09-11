@@ -135,13 +135,23 @@ function listenMessages() {
 }
 
 /* ── Init Social Quick-Share (@ Mention) ── */
+// Deferred to DOMContentLoaded to avoid a race condition on production (Vercel/HTTP2)
+// where chat-social-share.js may not yet be fully parsed at synchronous execution time.
 let chatSocial = null;
-if (window.ChatSocialShare) {
-  chatSocial = new window.ChatSocialShare({
-    inputEl: chatInput,
-    popupEl: document.getElementById("socialPopup"),
-    attachmentEl: document.getElementById("socialAttachment")
-  });
+function initChatSocial() {
+  if (window.ChatSocialShare) {
+    chatSocial = new window.ChatSocialShare({
+      inputEl: chatInput,
+      popupEl: document.getElementById("socialPopup"),
+      attachmentEl: document.getElementById("socialAttachment")
+    });
+  }
+}
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initChatSocial);
+} else {
+  // DOM is already ready (e.g. script loaded late); run immediately
+  initChatSocial();
 }
 
 /* ── Build a single message element (does NOT append to DOM) ── */
